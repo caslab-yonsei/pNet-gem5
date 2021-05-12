@@ -206,6 +206,9 @@ class Request
         /** The request aborts a HTM transaction */
         HTM_ABORT                   = 0x0000080000000000,
 
+        /** Is MSI Request */
+        MSI_REQUEST                   = 0x0000100000000000,
+
         // What is the different between HTM cancel and abort?
         //
         // HTM_CANCEL will originate from a user instruction, e.g.

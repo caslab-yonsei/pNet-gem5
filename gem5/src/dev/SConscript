@@ -32,12 +32,14 @@ SimObject('Device.py')
 Source('io_device.cc')
 Source('isa_fake.cc')
 Source('dma_device.cc')
+Source('dma_engine.cc')
 
 SimObject('IntPin.py')
 Source('intpin.cc')
 
 DebugFlag('IsaFake')
 DebugFlag('DMA')
+DebugFlag('MSI_DEVICE')
 
 SimObject('Platform.py')
 Source('platform.cc')

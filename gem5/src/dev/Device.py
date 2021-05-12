@@ -101,6 +101,16 @@ class DmaDevice(PioDevice):
         if self._iommu is not None:
             node.append(FdtPropertyWords("iommus",
                 [ state.phandle(self._iommu), self.sid ]))
+class MultiDmaEngine(DmaDevice):
+    type = 'MultiDmaEngine'
+    cxx_header = "dev/dma_engine.hh"
+    #abstract = True
+    msiport_engineside = MasterPort("port")
+
+# class MultiDmaEngineLinker(ClockedObject):
+#     type = 'MultiDmaEngineLinker'
+#     cxx_header = "dev/dma_engine.hh"
+#     abstract = True
 
 class IsaFake(BasicPioDevice):
     type = 'IsaFake'

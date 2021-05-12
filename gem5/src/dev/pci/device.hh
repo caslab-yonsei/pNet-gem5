@@ -63,6 +63,84 @@
 
 #define BAR_NUMBER(x) (((x) - PCI0_BASE_ADDR0) >> 0x2);
 
+#define BAR_IO_MASK 0x3
+#define BAR_MEM_MASK 0xF
+#define BAR_IO_SPACE_BIT 0x1
+#define BAR_IO_SPACE(x) ((x) & BAR_IO_SPACE_BIT)
+#define BAR_NUMBER(x) (((x) - PCI0_BASE_ADDR0) >> 0x2);
+#define MSI_SET 1
+#define MSI_CLEAR 0
+
+class MsiMesgData
+{
+  public:
+    /**
+     * Pointer to packet data will be deleted
+     */
+    uint8_t *data;
+
+    /**
+     * Total size of the allocated data buffer.
+     */
+    unsigned bufLength;
+
+    /**
+     * Amount of space occupied by the payload in the data buffer
+     */
+    unsigned length;
+
+    /**
+     * Effective length, used for modeling timing in the simulator.
+     * This could be different from length if the packets are assumed
+     * to use a tightly packed or compressed format, but it's not worth
+     * the performance/complexity hit to perform that packing or compression
+     * in the simulation.
+     */
+    unsigned simLength;
+
+    MsiMesgData()
+        : data(nullptr), bufLength(0), length(0), simLength(0)
+    { }
+
+    explicit MsiMesgData(unsigned size)
+        : data(new uint8_t[size]), bufLength(size), length(0), simLength(0)
+    { }
+
+    ~MsiMesgData() { if (data) delete [] data; }
+
+    void serialize(const std::string &base, CheckpointOut &cp) const;
+    void unserialize(const std::string &base, CheckpointIn &cp);
+};
+
+typedef std::shared_ptr<MsiMesgData> MsiMesgPtr;
+
+/**
+ * PCI device, base implementation is only config space.
+ */
+
+class MsiSended{
+  public:
+    int localnum=0;
+    bool sended = true;
+    bool cleaned = true;
+    PciDevice* host;
+    EventFunctionWrapper msisend;
+    EventFunctionWrapper msiclean;
+    void msiComplete();
+    void msiCleanComplete();
+    MsiSended(int local)
+      : msisend([this]{msiComplete();}, "sended."+std::to_string(local)),
+      msiclean([this]{msiCleanComplete();}, "sended."+std::to_string(local))
+    {localnum=local;}
+
+    //void Comlpete_of_child(void*) virtual
+    //void CleanComlpete_of_child(void*) virtual
+
+};
+
+class MultiDmaEngine;
+class MultiDmaEngineMasterPort;
+
 class PciBar : public SimObject
 {
   protected:
@@ -270,7 +348,17 @@ class PciDevice : public DmaDevice
 
     /** The current config space.  */
     PCIConfig config;
+    char extended[0x1000-0x40];
 
+    // SHIN. Test
+    bool send = true;
+
+    std::vector<MsiSended*> msi_sended;
+
+    // std::vector<MultiDmaEngine*> dma_engines;
+    // std::vector<MultiDmaEngine*> msi_engines;
+    std::vector<SlavePort*> msi_engines_ports;
+    std::vector<SlavePort*> dma_engines_ports;
     /** The capability list structures and base addresses
      * @{
      */
@@ -344,6 +432,32 @@ class PciDevice : public DmaDevice
      * @param pkt packet containing the write the offset into config space
      */
     virtual Tick readConfig(PacketPtr pkt);
+
+    /**
+     * COMMON CAPABILITY CONTROLL FUNCTIONS
+     */
+    int findCapability(int offset);
+    void writeCapability(PacketPtr pkt);
+    void readCapability(PacketPtr pkt);
+    void controlPM(PacketPtr pkt){}
+    void controlMSI(PacketPtr pkt){}
+    void controlMSIX(PacketPtr pkt){}
+    void controlPX(PacketPtr pkt){}
+    std::string getCapabilityName(int type);
+
+    /**
+     * MSI 방식의 인터럽트 동작
+     * 인터럽트 시그널을 만들어 내는 것은 아니지만 MMIO 방식으로 데이터를 기록하여 동작
+     * 장치별로 동작이 다를 수도 있기에 여기에는 가장 기본적인 내용만을 작성한다.
+     */
+    virtual Tick sendingMSI(int int_local_num);
+    virtual Tick clearMSI(int int_local_num);
+
+    /** 
+     * MSI packet이 보내지면 불릴 함수 
+     * 패킷이 전송 되었음을 장치가 알아야 한다.
+    */
+    void msiComplete();
 
   protected:
     PciHost::DeviceInterface hostInterface;

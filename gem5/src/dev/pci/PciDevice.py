@@ -178,3 +178,8 @@ class PciDevice(DmaDevice):
     PXCAPLinkStatus = Param.UInt16(0x0000, "PCIe Link Status")
     PXCAPDevCap2 = Param.UInt32(0x00000000, "PCIe Device Capabilities 2")
     PXCAPDevCtrl2 = Param.UInt32(0x00000000, "PCIe Device Control 2")
+
+    # SHIN. For Higher BW
+    num_msi_engine = Param.UInt32(0, "Number of MSI engines")
+    num_dma_engine = Param.UInt32(0, "Number of DMA engines")
+    msiport_devside = VectorSlavePort('Slave port')

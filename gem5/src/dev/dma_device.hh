@@ -48,6 +48,7 @@
 #include "base/chunk_generator.hh"
 #include "base/circlebuf.hh"
 #include "dev/io_device.hh"
+
 #include "mem/backdoor.hh"
 #include "params/DmaDevice.hh"
 #include "sim/drain.hh"
@@ -192,18 +193,30 @@ class DmaPort : public RequestPort, public Drainable
               uint8_t *data, uint32_t sid, uint32_t ssid, Tick delay,
               Request::Flags flag=0);
 
+    void
+    msiAction(Packet::Command cmd, Addr addr, int size, Event *event,
+              uint8_t *data, Tick delay, Request::Flags flag=Request::MSI_REQUEST);
+
+    void
+    msiAction(Packet::Command cmd, Addr addr, int size, Event *event,
+              uint8_t *data, uint32_t sid, uint32_t ssid, Tick delay,
+              Request::Flags flag=Request::MSI_REQUEST);
+
     bool dmaPending() const { return pendingCount > 0; }
 
     DrainState drain() override;
+
+    bool is_msi = false;
 };
 
 class DmaDevice : public PioDevice
 {
    protected:
     DmaPort dmaPort;
+    DmaPort msiPort;
 
   public:
-    typedef DmaDeviceParams Params;
+    PARAMS(DmaDevice);
     DmaDevice(const Params &p);
     virtual ~DmaDevice() = default;
 
@@ -219,6 +232,13 @@ class DmaDevice : public PioDevice
     dmaWrite(Addr addr, int size, Event *event, uint8_t *data, Tick delay=0)
     {
         dmaPort.dmaAction(MemCmd::WriteReq, addr, size, event, data, delay);
+    }
+
+    void 
+    msiWrite(Addr addr, int size, Event *event, uint8_t *data,
+                  Tick delay = 0)
+    {
+        msiPort.msiAction(MemCmd::WriteReq, addr, size, event, data, delay, Request::UNCACHEABLE || Request::MSI_REQUEST);
     }
 
     void

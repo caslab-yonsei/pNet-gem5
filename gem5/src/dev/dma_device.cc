@@ -48,6 +48,7 @@
 #include "base/logging.hh"
 #include "base/trace.hh"
 #include "debug/DMA.hh"
+#include "debug/MSI_DEVICE.hh"
 #include "debug/Drain.hh"
 #include "sim/clocked_object.hh"
 #include "sim/system.hh"
@@ -138,7 +139,7 @@ DmaPort::recvTimingResp(PacketPtr pkt)
 }
 
 DmaDevice::DmaDevice(const Params &p)
-    : PioDevice(p), dmaPort(this, sys, p.sid, p.ssid)
+    : PioDevice(p), dmaPort(this, sys, p.sid, p.ssid), msiPort(this, sys, p.sid, p.ssid)
 { }
 
 void
@@ -194,6 +195,37 @@ DmaPort::dmaAction(Packet::Command cmd, Addr addr, int size, Event *event,
                    uint8_t *data, Tick delay, Request::Flags flag)
 {
     dmaAction(cmd, addr, size, event, data,
+              defaultSid, defaultSSid, delay, flag);
+}
+
+void
+DmaPort::msiAction(Packet::Command cmd, Addr addr, int size, Event *event,
+              uint8_t *data, uint32_t sid, uint32_t ssid, Tick delay,
+              Request::Flags flag)
+{
+    DPRINTF(MSI_DEVICE, "Starting MSI for addr: %#x size: %d sched: %d\n", addr, size,
+            event ? event->scheduled() : -1);
+
+    // One DMA request sender state for every action, that is then
+    // split into many requests and packets based on the block size,
+    // i.e. cache line size.
+
+    transmitList.push_back(
+            new DmaReqState(cmd, addr, cacheLineSize, size,
+                data, flag, requestorId, sid, ssid, event, delay));
+    pendingCount++;
+
+    // In zero time, also initiate the sending of the packets for the request
+    // we have just created. For atomic this involves actually completing all
+    // the requests.
+    sendDma();
+}
+
+void
+DmaPort::msiAction(Packet::Command cmd, Addr addr, int size, Event *event,
+              uint8_t *data, Tick delay, Request::Flags flag)
+{
+    msiAction(cmd, addr, size, event, data,
               defaultSid, defaultSSid, delay, flag);
 }
 
@@ -361,6 +393,10 @@ DmaDevice::getPort(const std::string &if_name, PortID idx)
 {
     if (if_name == "dma") {
         return dmaPort;
+    }
+    else if (if_name == "msi") {
+        msiPort.is_msi = true;
+        return msiPort;
     }
     return PioDevice::getPort(if_name, idx);
 }

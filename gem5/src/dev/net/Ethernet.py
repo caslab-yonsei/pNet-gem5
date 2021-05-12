@@ -181,6 +181,102 @@ class IGbE_igb(IGbE):
     phy_pid = 0x0141
     phy_epid = 0x0CC0
 
+class NepGbE(EtherDevice):
+    type = 'NepGbE'
+    cxx_header = "dev/net/nep_GBe.hh"
+
+    hardware_address = Param.EthernetAddr(NextEthernetAddr,
+        "Ethernet Hardware Address")
+    rx_fifo_size = Param.MemorySize('384kB', "Size of the rx FIFO")
+    tx_fifo_size = Param.MemorySize('384kB', "Size of the tx FIFO")
+    rx_desc_cache_size = Param.Int(64,
+        "Number of enteries in the rx descriptor cache")
+    tx_desc_cache_size = Param.Int(64,
+        "Number of enteries in the rx descriptor cache")
+    VendorID = 0x8086
+    SubsystemID = 0x1008
+    SubsystemVendorID = 0x8086
+    Status = 0x0000 # Capability bit 3
+    SubClassCode = 0x00
+    ClassCode = 0x02
+    ProgIF = 0x00
+    BAR0 = PciMemBar(size='16MiB')
+    MaximumLatency = 0x00
+    MinimumGrant = 0xff
+    InterruptLine = 0x1e
+    InterruptPin = 0x01
+    wb_delay = Param.Latency('10ns', "delay before desc writeback occurs")
+    fetch_delay = Param.Latency('10ns', "delay before desc fetch occurs")
+    fetch_comp_delay = Param.Latency('10ns', "delay after desc fetch occurs")
+    wb_comp_delay = Param.Latency('10ns', "delay after desc wb occurs")
+    tx_read_delay = Param.Latency('0ns', "delay after tx dma read")
+    rx_write_delay = Param.Latency('0ns', "delay after rx dma read")
+    phy_pid = Param.UInt16("Phy PID that corresponds to device ID")
+    phy_epid = Param.UInt16("Phy EPID that corresponds to device ID")
+
+
+    # Options For MultiQueue
+    num_of_queues = Param.UInt32(1, "Number of HW queues")
+    CapabilityPtr = 0x40
+
+    # Capabilities List structures for PCIe devices
+    # PMCAP - PCI Power Management Capability
+    PMCAPBaseOffset = 0x40
+    PMCAPNextCapability = 0x50
+    PMCAPCapId = 0x01
+    PMCAPCapabilities = 0x0000
+    PMCAPCtrlStatus = 0x0000
+
+    # MSICAP - Message Signaled Interrupt Capability
+    MSICAPBaseOffset = 0x50
+    MSICAPNextCapability = 0x00
+    MSICAPCapId = 0x05
+    MSICAPMsgCtrl = 0x018b   #0x8001 #32 vectors
+    MSICAPMsgAddr = 0x00000000
+    MSICAPMsgUpperAddr = 0x00000000
+    MSICAPMsgData = 0x0000
+    MSICAPMaskBits = 0x00000000
+    MSICAPPendingBits = 0x00000000
+
+    # MSIXCAP - MSI-X Capability
+    MSIXCAPBaseOffset = 0x00 #90
+    MSIXCAPNextCapability = 0x00 #c0
+    MSIXCAPCapId = 0x11
+    MSIXMsgCtrl = 0x0200
+    MSIXTableOffset = 0x00000000
+    MSIXPbaOffset = 0x00000000
+
+    # PXCAP - PCI Express Capability
+    PXCAPBaseOffset = 0x00
+    PXCAPNextCapability = 0xf0
+    PXCAPCapId = 0x10
+    PXCAPCapabilities = 0x0000
+    PXCAPDevCapabilities = 0x00000000
+    PXCAPDevCtrl = 0x0000
+    PXCAPDevStatus = 0x0000
+    PXCAPLinkCap = 0x00000000
+    PXCAPLinkCtrl = 0x0000
+    PXCAPLinkStatus = 0x0000
+    PXCAPDevCap2 = 0x00000000
+    PXCAPDevCtrl2 = 0x00000000
+    #msi0 = MasterPort("MSI port")
+    
+    
+class NepGbE_base(NepGbE):
+    # MSI support NIC
+    DeviceID = 0x1075
+    phy_pid = 0x02A8
+    phy_epid = 0x0380
+
+    #DeviceID = 0x10C9
+    #phy_pid = 0x0141
+    #phy_epid = 0x0CC0
+
+    Status = 0x0010 # Capability bit 4
+
+    
+
+
 class EtherDevBase(EtherDevice):
     type = 'EtherDevBase'
     abstract = True

@@ -324,12 +324,17 @@ class Packet : public Printable
 
         // Signal block present to squash prefetch and cache evict packets
         // through express snoop flag
-        BLOCK_CACHED          = 0x00010000
+        BLOCK_CACHED          = 0x00010000,
+
+        MSI_MESSAGE           = 0x00020000
     };
 
     Flags flags;
 
   public:
+    bool isMsiMsg(){return flags.isSet(MSI_MESSAGE);}
+    void setMsiMsg(){flags.set(MSI_MESSAGE);}
+    void clearMsiMsg(){flags.clear(MSI_MESSAGE);}
     typedef MemCmd::Command Command;
 
     /// The command field of the packet.

@@ -162,6 +162,9 @@ union PCIConfig {
 #define PCI_DEVICE_SPECIFIC             0x40    // 192 bytes
 #define PCI_CONFIG_SIZE         0xFF
 
+// NEPU PCIe Extended
+#define PCI_CONFIG_EXTENDED_SIZE 0x1000
+
 // Some Vendor IDs
 #define PCI_VENDOR_DEC                  0x1011
 #define PCI_VENDOR_NCR                  0x101A
@@ -211,6 +214,12 @@ union PCIConfig {
 #define PXCAP_PXDCAP2 0x24
 #define PXCAP_PXDC2 0x28
 #define PXCAP_SIZE 0x30
+
+#define CAPA_ID_NULL -1
+#define CAPA_ID_MSI 0x05
+#define CAPA_ID_MSIX 0xc0
+#define CAPA_ID_PM 0x01
+#define CAPA_ID_PX 0x10
 
 /** @struct PMCAP
  *  Defines the Power Management capability register and all its associated

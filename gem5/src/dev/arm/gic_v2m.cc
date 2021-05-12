@@ -128,13 +128,33 @@ Gicv2m::write(PacketPtr pkt)
 
     Addr offset = pkt->getAddr() - frames[frame]->addr;
 
+    DPRINTF(GICV2M, "NEPU test : pkt addr %#x, size %d\n", pkt->getAddr(), pkt->getSize());
+    DPRINTF(GICV2M, "NEPU test : curr_frame addr %#x\n", frames[frame]->addr);
+
     if (offset == MSI_SETSPI_NSR) {
         /* Is payload SPI number within range? */
-        uint32_t m = pkt->getLE<uint32_t>();
+        uint32_t data = pkt->getLE<uint32_t>();
+        uint32_t m = data >> 16;
+        bool is_send = data & 1;
+
+        // NEPU
+        DPRINTF(GICV2M, "OH MSI OH! %#x\n", pkt->getAddr());
+        DPRINTF(GICV2M, "OH MSI M! %#x, spi_base! %#x\n", data, frames[frame]->spi_base);
+
         if (m >= frames[frame]->spi_base &&
             m < (frames[frame]->spi_base + frames[frame]->spi_len)) {
             DPRINTF(GICV2M, "GICv2m: Frame %d raising MSI %d\n", frame, m);
-            gic->sendInt(m);
+
+            if(is_send){
+                DPRINTF(GICV2M, "GICv2m: Send MSI %d\n", m);
+                //gic->clearInt(m);
+                gic->sendInt(m);
+                //gic->clearInt(m);
+            }
+            else{
+                DPRINTF(GICV2M, "GICv2m: Clear MSI %d\n", m);
+                gic->clearInt(m);
+            }
         }
     } else {
         DPRINTF(GICV2M, "GICv2m: Write of unk reg %#x\n", offset);

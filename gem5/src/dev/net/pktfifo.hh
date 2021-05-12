@@ -88,6 +88,8 @@ class PacketFifo
     unsigned _size;
     unsigned _reserved;
 
+    int idx;
+
   public:
     explicit PacketFifo(int max)
         : _counter(0), _maxsize(max), _size(0), _reserved(0) {}
@@ -100,6 +102,9 @@ class PacketFifo
     unsigned avail() const { return _maxsize - _size - _reserved; }
     bool empty() const { return size() <= 0; }
     bool full() const { return avail() <= 0; }
+
+    void setIdx(int _idx) {idx = _idx;}
+    int getIdx() {return idx;}
 
     unsigned
     reserve(unsigned len = 0)

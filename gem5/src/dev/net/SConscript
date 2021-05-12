@@ -78,6 +78,19 @@ Source('i8254xGBe.cc')
 Source('ns_gige.cc')
 Source('sinic.cc')
 
+Source('nep_GBe.cc')
+Source('nep_GBe_Policy_RSS.cc')
+
+DebugFlag('NepNicRxManager')
+DebugFlag('NepNicIGBe')
+DebugFlag('NepNicOthers')
+DebugFlag('NepLoadGenerator')
+DebugFlag('NepNicRxPolicy')
+DebugFlag('NepNicRxPolicyRss')
+DebugFlag('NepNicIntr')
+DebugFlag('NepNicIntrMsi')
+DebugFlag('NepTx')
+DebugFlag('NepMsi')
 
 
 CompoundFlag('EthernetAll', [ 'Ethernet', 'EthernetPIO', 'EthernetDMA',

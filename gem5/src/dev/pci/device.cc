@@ -54,10 +54,13 @@
 #include "base/str.hh"
 #include "base/trace.hh"
 #include "debug/PciDevice.hh"
+#include "debug/NepMsi.hh"
 #include "mem/packet.hh"
 #include "mem/packet_access.hh"
 #include "sim/byteswap.hh"
 #include "sim/core.hh"
+
+#include "dev/dma_engine.hh"
 
 PciDevice::PciDevice(const PciDeviceParams &p)
     : DmaDevice(p),
@@ -204,6 +207,16 @@ PciDevice::PciDevice(const PciDeviceParams &p)
     pxcap.pxls = p.PXCAPLinkStatus;
     pxcap.pxdcap2 = p.PXCAPDevCap2;
     pxcap.pxdc2 = p.PXCAPDevCtrl2;
+
+    for (int i = 0; i <32 ; i++){
+        msi_sended.push_back(new MsiSended(i));
+        msi_sended[i]->host=this;
+        msi_sended[i]->cleaned=true;
+    }
+
+    for(int i = 0; i < p.num_msi_engine; i++){
+        msi_engines_ports.push_back(new MultiDmaEngineSlavePort(p.name + "msiport_devside", *this));
+    }
 }
 
 Tick
@@ -393,6 +406,338 @@ PciDevice::writeConfig(PacketPtr pkt)
     }
     pkt->makeAtomicResponse();
     return configDelay;
+}
+
+// NEPU CAPABILITY GAY
+/**
+ * 결국에는 이것도 일반적인 write에 통합이 되어야하지만
+ * 우선은 MSI만 간단하게 만들 것이니까 여기서 대충 해결하자.
+ */
+int
+PciDevice::findCapability(int offset)
+{
+    // 1. Find CAPA type 일단 PCIe 확장 영역은 무시하고 진행
+    int type = CAPA_ID_NULL;
+    if (PMCAP_BASE && offset >= PMCAP_BASE && offset < PMCAP_BASE + sizeof(PMCAP))    type = CAPA_ID_PM;
+    if (MSICAP_BASE && offset >= MSICAP_BASE && offset < MSICAP_BASE + sizeof(MSICAP))    type = CAPA_ID_MSI;
+    if (MSIXCAP_BASE && offset >= MSIXCAP_BASE && offset < MSIXCAP_BASE + sizeof(MSIXCAP))    type = CAPA_ID_MSIX;
+    if (PXCAP_BASE && offset >= PXCAP_BASE && offset < PXCAP_BASE + sizeof(PXCAP))    type = CAPA_ID_PX;
+    
+    DPRINTF(PciDevice,
+        "Find CAPA dev %#x func %#x reg %x type = %s\n",
+        _busAddr.dev, _busAddr.func, offset, getCapabilityName(type));
+    DPRINTF(PciDevice, "BASE %x size %x\n", MSICAP_BASE, sizeof(MSICAP));
+        
+    return type;
+}
+
+std::string
+PciDevice::getCapabilityName(int type)
+{
+    switch(type){
+        case CAPA_ID_NULL:
+            return "ERR";
+        case CAPA_ID_PM:
+            return "PM";
+        case CAPA_ID_MSI:
+            return "MSI";
+        case CAPA_ID_MSIX:
+            return "MSIX";
+        case CAPA_ID_PX:
+            return "PX";
+        default:
+            return "UNKNOWN";
+    }
+}
+
+/**
+ * PCI 의 Capability 를 고려해서 쓰기요청을 수행
+ * PCIe의 확장 영역은 아직 미구현 상태
+ */
+void
+PciDevice::writeCapability(PacketPtr pkt)
+{
+    // 1. Find CAPA type 일단 PCIe 확장 영역은 무시하고 진행
+    // 나중에 PCIe 영역 지원을 추가한다면 
+    int offset = pkt->getAddr() & PCI_CONFIG_SIZE;//(PCI_CONFIG_EXTENDED_SIZE-1);
+    int type = findCapability(offset);
+    int base;
+    int inter_pos;
+    int pkt_size = pkt->getSize();
+
+    // 2. 유형에 따른 처리를 하자
+
+    // 2-1 적당한 기록 위치를 찾는다. 정확한 구현을 위해서는 각 지점마다 RW 여부를 알아야한다.
+    // 우선은 gem5의 동작이 완전하다고 가정하고 쓰기를 항상 허용한다.
+    switch(pkt_size){
+        case sizeof(uint8_t):
+            switch(type){
+                case CAPA_ID_NULL:
+                    panic("This is not a capability field!! Maybe RO area!");
+                    break;
+                case CAPA_ID_PM:
+                    base = PMCAP_BASE;
+                    break;
+                case CAPA_ID_MSI:
+                    base = MSICAP_BASE;
+                    inter_pos = offset - base;
+                    *(uint8_t *)(msicap.data + inter_pos) = pkt->getLE<uint8_t>();
+                    break;
+                case CAPA_ID_MSIX:
+                    base = MSIXCAP_BASE;
+                    break;
+                case CAPA_ID_PX:
+                    base = PXCAP_BASE;
+                    break;
+                default:
+                    panic("This capability is not implemanted!");
+            }
+            break;
+        case sizeof(uint16_t):
+            switch(type){
+                case CAPA_ID_NULL:
+                    panic("This is not a capability field!! Maybe RO area!");
+                    break;
+                case CAPA_ID_PM:
+                    base = PMCAP_BASE;
+                    break;
+                case CAPA_ID_MSI:
+                    base = MSICAP_BASE;
+                    inter_pos = offset - base;
+                    *(uint16_t *)(msicap.data + inter_pos) = pkt->getLE<uint16_t>();
+                    break;
+                case CAPA_ID_MSIX:
+                    base = MSIXCAP_BASE;
+                    break;
+                case CAPA_ID_PX:
+                    base = PXCAP_BASE;
+                    break;
+                default:
+                    panic("This capability is not implemanted!");
+            }
+            break;
+        case sizeof(uint32_t):
+            switch(type){
+                case CAPA_ID_NULL:
+                    panic("This is not a capability field!! Maybe RO area!");
+                    break;
+                case CAPA_ID_PM:
+                    base = PMCAP_BASE;
+                    break;
+                case CAPA_ID_MSI:
+                    base = MSICAP_BASE;
+                    inter_pos = offset - base;
+                    *(uint32_t *)(msicap.data + inter_pos) = pkt->getLE<uint32_t>();
+                    break;
+                case CAPA_ID_MSIX:
+                    base = MSIXCAP_BASE;
+                    break;
+                case CAPA_ID_PX:
+                    base = PXCAP_BASE;
+                    break;
+                default:
+                    panic("This capability is not implemanted!");
+            }
+            break;
+    }
+
+    inter_pos = offset - base;
+}
+
+/**
+ * PCI 의 Capability 를 고려해서 읽기요청을 수행
+ * 기존의 주소 방식은 구조체에서 순서대로 아무 거나 읽어온 것에 가까움
+ * 즉, config의 data를 초과한 것임.
+ * 따라서 기본 영역을 벗어난 경우에 대해서는 아래와 같은 함수를 써서 처리하도록 함
+ * PCIe 는 일단 신경 쓰지 말자.
+ */
+void
+PciDevice::readCapability(PacketPtr pkt)
+{
+    int offset = pkt->getAddr() & (PCI_CONFIG_EXTENDED_SIZE-1);
+    
+    // 1. 유형 찾기
+    //int type = findCapability(offset);
+
+    /* Return 0 for accesses to unimplemented PCI configspace areas */
+    /* 이 부분에서 처리 */
+    if (offset >= PCI_DEVICE_SPECIFIC &&
+        offset < PCI_CONFIG_SIZE) {
+        warn_once("Device specific PCI config space "
+                  "not implemented for %s!\n", this->name());
+        switch (pkt->getSize()) {
+            case sizeof(uint8_t):
+                pkt->setLE<uint8_t>(0);
+                break;
+            case sizeof(uint16_t):
+                pkt->setLE<uint16_t>(0);
+                break;
+            case sizeof(uint32_t):
+                pkt->setLE<uint32_t>(0);
+                break;
+            default:
+                panic("invalid access size(?) for PCI configspace!\n");
+        }
+    } else if (offset > PCI_CONFIG_SIZE) {
+        panic("Out-of-range access to PCI config space!\n");
+    }
+
+    switch (pkt->getSize()) {
+      case sizeof(uint8_t):
+        pkt->setLE<uint8_t>(config.data[offset]);
+        DPRINTF(PciDevice,
+            "readConfig:  dev %#x func %#x reg %#x 1 bytes: data = %#x\n",
+            _busAddr.dev, _busAddr.func, offset,
+            (uint32_t)pkt->getLE<uint8_t>());
+        break;
+      case sizeof(uint16_t):
+        pkt->setLE<uint16_t>(*(uint16_t*)&config.data[offset]);
+        DPRINTF(PciDevice,
+            "readConfig:  dev %#x func %#x reg %#x 2 bytes: data = %#x\n",
+            _busAddr.dev, _busAddr.func, offset,
+            (uint32_t)pkt->getLE<uint16_t>());
+        break;
+      case sizeof(uint32_t):
+        pkt->setLE<uint32_t>(*(uint32_t*)&config.data[offset]);
+        DPRINTF(PciDevice,
+            "readConfig:  dev %#x func %#x reg %#x 4 bytes: data = %#x\n",
+            _busAddr.dev, _busAddr.func, offset,
+            (uint32_t)pkt->getLE<uint32_t>());
+        break;
+      default:
+        panic("invalid access size(?) for PCI configspace!\n");
+    }
+    pkt->makeAtomicResponse();
+}
+
+Tick
+PciDevice::sendingMSI(int int_local_num=0)
+{
+    uint64_t addr;
+    int packet_size;
+    uint32_t data_val;
+    Tick latency = 0;
+
+    //if(!send) return 0;
+    send = false;
+
+    // 주소는 configuration 에서 들고오기
+    addr=msicap.mua;
+    addr <<= 32;
+    addr |= msicap.ma;
+
+    packet_size = 4;
+
+    //data = (uint8_t*)(&(msicap->md));
+    data_val = msicap.md;
+    data_val += int_local_num;
+    data_val <<= 16;
+    data_val |= MSI_SET;
+    //data_val = msicap->md;
+    //data_val |= MSI_SET;
+    //data_val <<= 16;
+    //data_val += int_local_num;
+
+    if(!msi_sended[int_local_num]->sended){
+        DPRINTF(NepMsi, "Send msg %d is ready already\n", int_local_num);
+        return 0;
+    }
+
+    //msi_sended[int_local_num]->cleaned=false;
+    
+    uint8_t *data = (uint8_t*)malloc(4);
+    
+    memcpy(data, &data_val, packet_size);
+    
+    DPRINTF(NepMsi, "Write DMA MSI SEND! ADDR %#x, DATA %#x, data_val %#x\n", addr, *(uint32_t*)data, data_val);
+    //dmaWrite(addr, packet_size, &msisend, data, 0);
+    //dmaWrite(addr, packet_size, nullptr, data, 0);
+    //msi_sended[int_local_num]->sended = false;
+    //msi_sended[int_local_num]->cleaned = false;
+    //msi_sended[int_local_num]->cleaned=false;
+    msi_sended[int_local_num]->sended=false;
+    // (((MultiDmaEngineMasterPort&)(msi_engines_ports[0]->getPort())).getDmaEngine())
+    //     .msiWrite(addr, packet_size, &msi_sended[int_local_num]->msisend, data, 0);
+    msiWrite(addr, packet_size, &msi_sended[int_local_num]->msisend, data, 0);
+    // if(msi_engines.size())
+    //     msi_engines[0]->msiWrite(addr, packet_size, &msi_sended[int_local_num]->msisend, data, 0);
+    // else
+    //     msiWrite(addr, packet_size, &msi_sended[int_local_num]->msisend, data, 0);
+    //msiWrite(addr, packet_size, nullptr, data, 0);
+    //void dmaWrite(Addr addr, int size, Event *event, uint8_t *data,
+    //        Tick delay = 0)
+    //Request::UNCACHEABLE
+
+    return latency;
+}
+
+Tick
+PciDevice::clearMSI(int int_local_num=0)
+{
+
+    if(msi_sended[int_local_num]->cleaned){
+        DPRINTF(NepMsi, "Clean msg %d is ready already\n", int_local_num);
+        //return 0;
+    }
+    
+
+
+    uint64_t addr;
+    int packet_size;
+    uint8_t *data = (uint8_t*)malloc(4);
+    uint32_t data_val;
+
+    Tick latency = 0;
+
+    // 주소는 configuration 에서 들고오기
+    addr=msicap.mua;
+    addr <<= 32;
+    addr |= msicap.ma;
+
+    packet_size = 4;
+
+    //data = (uint8_t*)(&(msicap->md));
+    data_val = msicap.md;
+    data_val += int_local_num;
+    data_val <<= 16;
+    data_val |= MSI_CLEAR;
+    //data_val = msicap->md;
+    //data_val |= MSI_CLEAR;
+    //data_val <<= 16;
+    //data_val += int_local_num;
+
+    memcpy(data, &data_val, packet_size);
+    
+    DPRINTF(NepMsi, "Write DMA MSI CLEAR! ADDR %#x, DATA %#x\n", addr, *(uint32_t*)data);
+    // msi_sended[int_local_num]->cleaned=true;
+    // msi_sended[int_local_num]->sended=false;
+    msiWrite(addr, packet_size, &msi_sended[int_local_num]->msiclean, data, 0);
+    //msiWrite(addr, packet_size, nullptr, data, 0);
+    //void dmaWrite(Addr addr, int size, Event *event, uint8_t *data,
+    //        Tick delay = 0)
+
+    return latency;
+}
+
+void
+MsiSended::msiComplete()
+{
+    // Interrupt Clear!
+    //uint32_t int_num = msicap->md;
+    DPRINTF(NepMsi,"MSI %d Sended\n", localnum);
+    //host->clearMSI(localnum);
+    sended=true;
+    //cleaned=false;
+}
+
+void
+MsiSended::msiCleanComplete()
+{
+    // Interrupt Clear!
+    //uint32_t int_num = msicap->md;
+    DPRINTF(NepMsi,"MSI %d Clean Sended\n", localnum);
+    //sended=false;
+    cleaned=true;
 }
 
 void
