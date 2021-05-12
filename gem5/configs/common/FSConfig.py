@@ -172,10 +172,11 @@ def makeSparcSystem(mem_mode, mdesc=None, cmdline=None):
 
     return self
 
-def makeArmSystem(mem_mode, machine_type, num_cpus=1, mdesc=None,
+
+def makeArmSystem__(mem_mode, machine_type, num_cpus=1, mdesc=None,
                   dtb_filename=None, bare_metal=False, cmdline=None,
                   external_memory="", ruby=False, security=False,
-                  vio_9p=None, bootloader=None):
+                  vio_9p=None, bootloader=None, num_nep_rx_q=1):
     assert machine_type
 
     pci_devices = []
@@ -206,6 +207,43 @@ def makeArmSystem(mem_mode, machine_type, num_cpus=1, mdesc=None,
 
     # Attach any PCI devices this platform supports
     self.realview.attachPciDevices()
+
+    if not hasattr(self.realview, "ethernet"):
+        #self.realview.dummy = IGbE_igb()
+        #self.realview.ethernet = NepGbE_base(num_of_queues=num_nep_rx_q)
+        #if bare_metal: 
+        # self.realview.dummy = IGbE_igb(pci_bus=0, pci_dev=0, pci_func=0,
+        #                            InterruptLine=1, InterruptPin=1)
+        if num_nep_rx_q > 0:
+            self.realview.ethernet = NepGbE_base(pci_bus=0, pci_dev=1, pci_func=0,
+                                   InterruptLine=1, InterruptPin=1, num_of_queues=num_nep_rx_q,
+                                   num_dma_engine = num_nep_rx_q, num_msi_engine = num_nep_rx_q)
+        else:
+            self.realview.ethernet = IGbE_e1000(pci_bus=0, pci_dev=1, pci_func=0,   
+                                       InterruptLine=1, InterruptPin=1)
+        
+        #self.realview.ethernet = IGbE_e1000(pci_bus=0, pci_dev=1, pci_func=0,
+        #                           InterruptLine=1, InterruptPin=1)
+        
+        #pci_devices.append(self.realview.dummy)
+        pci_devices.append(self.realview.ethernet)
+        self.realview.msiengine = MultiDmaEngine()
+        self.realview.ethernet.msiport_devside = self.realview.msiengine.msiport_engineside
+        self.realview.msiengine.pio = self.iobus.master
+        #self.realview.msiengine.msiport_engineside = self.membus.slave
+        self.realview.msiengine.dma = self.iobus.slave
+         
+        #self.realview.ethernet.msi1 = self.iobus.slave
+        #self.realview.ethernet.msi2 = self.iobus.slave
+        
+    #self.realview.attachOnChipIO(self.iobus)
+    # MSI ON ARM!
+    #self.realview.gicv2m.pio = self.iobus.master
+    self.realview.enableMSIX()
+    if bare_metal:
+        self.realview.enableMSIX()
+        #self.realview.gicv2m.frames = self.iobus.master
+        #self.realview.gicv2m.frames = self.iobus.slave
 
     disks = makeCowDisks(mdesc.disks())
     # Old platforms have a built-in IDE or CF controller. Default to
@@ -352,6 +390,12 @@ def makeArmSystem(mem_mode, machine_type, num_cpus=1, mdesc=None,
 
     return self
 
+def makeArmSystem(mem_mode, machine_type, num_cpus=1, mdesc=None,
+                  dtb_filename=None, bare_metal=False, cmdline=None,
+                  external_memory="", ruby=False, security=False):
+    return makeArmSystem__(mem_mode, machine_type, num_cpus, mdesc,
+                  dtb_filename, bare_metal, cmdline,
+                  external_memory, ruby, security,num_nep_rx_q=1)
 
 def makeLinuxMipsSystem(mem_mode, mdesc=None, cmdline=None):
     class BaseMalta(Malta):

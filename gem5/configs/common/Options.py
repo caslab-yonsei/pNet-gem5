@@ -442,6 +442,9 @@ def addFSOptions(parser):
             help="Stores changed frame buffers from the VNC server to compressed "\
             "files in the gem5 output directory")
 
+    parser.add_option("--num-nep-rx-q", default=1, action="store", type="int",
+                      help="Num of Queue of NepGbe")
+
     if buildEnv['TARGET_ISA'] == "arm":
         parser.add_option("--bare-metal", action="store_true",
                    help="Provide the raw system without the linux specific bits")

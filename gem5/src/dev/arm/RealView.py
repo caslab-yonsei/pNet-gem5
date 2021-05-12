@@ -1317,6 +1317,10 @@ class VExpress_GEM5_V1_Base(VExpress_GEM5_Base):
         return super(VExpress_GEM5_V1_Base,self)._on_chip_devices() + [
                 self.gic, self.vgic, self.gicv2m,
             ]
+    def setupFrameForMSI(self, bridge):
+        print("setupFrameForMSI called")
+        bridge.ranges.append(AddrRange(0x2c1c0000, size = 0x10000))
+
 
 class VExpress_GEM5_V1(VExpress_GEM5_V1_Base):
     """
