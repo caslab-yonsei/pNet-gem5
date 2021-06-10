@@ -221,7 +221,7 @@ def makeArmSystem__(mem_mode, machine_type, num_cpus=1, mdesc=None,
         #self.realview.ethernet = IGbE_igb()
         #pci_devices.append(self.realview.ethernet)
         
-        ethernets = []
+        #ethernets = []
 
         for i in range(num_nic):
             if True:
@@ -758,8 +758,8 @@ def makeDistRoot(testSystem,
         self.portlink0.int1 = Parent.testsys.pc.ethernet0.interface  # x86 Implementation #
         self.portlink1.int1 = Parent.testsys.pc.ethernet1.interface  # x86 Implementation #
     elif hasattr(testSystem, 'realview'):
-        for i in range(0, num_nics):
-                self.portlinks[i].int1 = Parent.testsys.realview.ethernets[i].interface
+        #for i in range(0, num_nics):
+        self.portlinks[i].int1 = Parent.testsys.realview.ethernet.interface
     elif hasattr(testSystem, 'tsunami'):
         self.etherlink.int0 = Parent.testsys.tsunami.ethernet.interface
     else:
