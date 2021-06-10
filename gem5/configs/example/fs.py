@@ -185,7 +185,7 @@ def build_test_system(np):
     else:
         if (options.caches or options.l2cache):
             # By default the IOCache runs at the system clock
-            ext_range = test_sys.mem_ranges + [AddrRange(0x2c1c0000, size=0x10000)]
+            ext_range = test_sys.mem_ranges #+ [AddrRange(0x2c1c0000, size=0x10000)]
             #test_sys.io_msi = MSICache(addr_ranges=AddrRange(0x2c1c0000, size=0x10000))
             #test_sys.iocache = IOCache(addr_ranges=ext_range)
             
@@ -196,7 +196,7 @@ def build_test_system(np):
             test_sys.iocache.cpu_side = test_sys.iobus.master
             test_sys.iocache.mem_side = test_sys.membus.slave
 
-            #test_sys.iobus.master = test_sys.realview.gicv2m.pio
+            test_sys.iobus.master = test_sys.realview.gicv2m.pio
 
             #test_sys.msibus = MSIXBar(is_msi_line=False)
             #test_sys.msibus.master = test_sys.realview.gicv2m.pio
@@ -228,12 +228,12 @@ def build_test_system(np):
             test_sys.iobridge = Bridge(delay='50ns', ranges = test_sys.mem_ranges)
             test_sys.iobridge.slave = test_sys.iobus.master
             test_sys.iobridge.master = test_sys.membus.slave
-            # test_sys.iobridge.ranges.append(AddrRange(0x2c1c0000, size=0x10000))
+            test_sys.iobridge.ranges.append(AddrRange(0x2c1c0000, size=0x10000))
             # Need check the Machine type...
 
             print("Setup MSI Frame connected iobridge")
             #test_sys.realview.gicv2m.pio = test_sys.membus.master
-            test_sys.realview.setupFrameForMSI(test_sys.iobridge)
+            #test_sys.realview.setupFrameForMSI(test_sys.iobridge)
 
         # Sanity check
         if options.simpoint_profile:

@@ -2,8 +2,8 @@ export M5_PATH=/home/ssibal/MOODUM/gem5_share
 
 gem5_dir=/home/ssibal/mq-gem5-21/gem5
 #kernel=/home/nepuko/research/gem5_share/binaries/vmlinux.aarch64.20140821
-kernel=/home/ssibal/gem5-land/gem5-msi-rss-neo/linux/vmlinux.old
-#kernel=/home/nepuko/research/gem5-land/new-linux/linux/vmlinux
+kernel=/home/ssibal/gem5-land/gem5-msi-rss-neo/linux/vmlinux
+#kernel=/home/ssibal/neo3/gem5-msi-rss/linux/vmlinux
 disk=/home/ssibal/MOODUM/gem5_share/disks/aarch64-ubuntu-trusty-headless-nep.img
 #disk=/media/nepuko/MOODUM/mcn_aarch64.img
 exe=$gem5_dir/build/ARM/gem5.opt
@@ -12,7 +12,7 @@ exe=$gem5_dir/build/ARM/gem5.opt
 #dtb_host=/home/nepuko/research/gem5-land/mlc-prefetcher-ddio/gem5/system/arm/dt/testsys.dtb
 #dtb_host=/home/nepuko/research/gem5_share/binaries/armv8_gem5_v1_2cpu.dtb
 #dtb_host=/home/nepuko/research/gem5-land/gem5-msi-rss-neo/test_out_newlinux/test.dtb
-dtb_host=/home/ssibal/gem5-land/gem5-msi-rss-neo/gem5/system/arm/dt/armv8_gem5_v1_1cpu.dtb
+dtb_host=/home/ssibal/mq-gem5-21/gem5/system/arm/dt/armv8_gem5_v1_1cpu.dtb
 
 BOOT_SCRIPT=/home/ssibal/MOODUM/gem5_share/simple_bootscript.rcS
 
@@ -22,14 +22,14 @@ BOOT_SCRIPT=/home/ssibal/MOODUM/gem5_share/simple_bootscript.rcS
 #debug="--debug-flags=IOCtrl,IOCtrlPort,IOCtrlVerbose,Ethernet,DMA"
 #debug="--debug-flags=Interrupt,GIC,GICV2M,Ethernet,PciHost,PciDevice"
 #debug="--debug-flags=GICV2M,NepMsi,Interrupt,GIC "
-debug="--debug-flags=GICV2M,NepMsi,NepNicIntr,NepNicIntrMsi "
+debug="--debug-flags=AddrRanges,GICV2M,NepMsi,NepNicIntr,NepNicIntrMsi,PciHost,PciDevice,EthernetIntr "
 cpu=AtomicSimpleCPU
 #cpu=TimingSimpleCPU
 #cpu=ex5_big
 
 #opts="--ddio --caches --l2cache --num-cpus=1 --dual --cpu-clock=10GHz --sys-clock=2GHz --mem-type=DDR4_2400_4x16"
-opts="--num-cpus=1 --cpu-type=$cpu "
-#cp_opts="-r2 "
+opts="--num-cpus=1 --cpu-type=$cpu"
+#cp_opts="-r1 "
 #cp_opts2="--restore-with-cpu=AtomicSimpleCPU "
 #opts="--ddio --caches --l2cache --num-cpus=1 --cpu-clock=10GHz --sys-clock=2GHz"
 

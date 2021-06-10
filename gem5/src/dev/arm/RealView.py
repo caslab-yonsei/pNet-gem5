@@ -45,7 +45,9 @@ from m5.objects.VoltageDomain import VoltageDomain
 from m5.objects.Device import \
     BasicPioDevice, PioDevice, IsaFake, BadAddr, DmaDevice
 from m5.objects.PciHost import *
-from m5.objects.Ethernet import NSGigE, IGbE_igb, IGbE_e1000
+#from m5.objects.Ethernet import NSGigE, IGbE_igb, IGbE_e1000
+from m5.objects.Ethernet import NSGigE
+from m5.objects.Ethernet import NepGbE
 from m5.objects.Ide import *
 from m5.objects.Platform import Platform
 from m5.objects.Terminal import Terminal
@@ -871,8 +873,8 @@ class VExpress_EMM(RealView):
 
     # Attach any PCI devices that are supported
     def attachPciDevices(self):
-        self.ethernet = IGbE_e1000(pci_bus=0, pci_dev=0, pci_func=0,
-                                   InterruptLine=1, InterruptPin=1)
+        # self.ethernet = IGbE_e1000(pci_bus=0, pci_dev=0, pci_func=0,
+        #                            InterruptLine=1, InterruptPin=1)
         self.ide = IdeController(disks = [], pci_bus=0, pci_dev=1, pci_func=0,
                                  InterruptLine=2, InterruptPin=2)
 

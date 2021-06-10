@@ -392,6 +392,7 @@ Port &
 DmaDevice::getPort(const std::string &if_name, PortID idx)
 {
     if (if_name == "dma") {
+        DPRINTF(DMA, "Return DMA Port!\n");
         return dmaPort;
     }
     else if (if_name == "msi") {

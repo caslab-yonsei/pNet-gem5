@@ -44,7 +44,15 @@
 		      <0 0x2c006000 0 0x2000>;
 		interrupts = <1 9 0xf04>;
 	};
-
+	v2m: v2m@2c1c0000 {
+			compatible = "arm,gic-v2m-frame";
+			#address-cells = <0>;
+			#size-cells = <0>;
+			msi-controller;
+			reg = <0 0x2c1c0000 0 0x10000>;
+			arm,msi-base-spi = <256>;
+			arm,msi-num-spis = <64>;
+	};
 
 	timer {
 		compatible = "arm,cortex-a15-timer",
@@ -64,14 +72,19 @@
 		#size-cells = <0x2>;
 		#interrupt-cells = <0x1>;
 
+		msi-parent = <&v2m>;
+
 		reg = <0x0 0x30000000 0x0 0x10000000>;
 
 		ranges = <0x01000000 0x0 0x0  0x0 0x2f000000  0x0 0x00010000>,
 		         <0x02000000 0x0 0x0  0x0 0x40000000  0x0 0x40000000>;
+		
+		// ranges = <0x01000000 0x0 0x00000000  0x0 0x2f000000  0x0 0x00010000>,
+		//      <0x02000000 0x0 0x40000000  0x0 0x40000000  0x0 0x40000000>;
 
 		interrupt-map = <0x000000 0x0 0x0 0 &gic 0 68 1>,
 		                <0x000800 0x0 0x0 0 &gic 0 69 1>,
-		                <0x001000 0x0 0x0 0 &gic 0 70 1>,
+		                <0x001000 0x0 0x0 0 &gic 0 70 1>,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           <0x001000 0x0 0x0 0 &gic 0 70 1>,
 		                <0x001800 0x0 0x0 0 &gic 0 71 1>;
 
 		interrupt-map-mask = <0x001800 0x0 0x0 0x0>;

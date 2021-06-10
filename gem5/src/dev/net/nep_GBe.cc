@@ -156,7 +156,7 @@ NepGbE::NepGbE(const Params &p)
         regs.nep_ex_regs[i].tipg = 0;
 
         // MSI
-        regs.nep_ex_regs[i].mqicr = 0;
+        regs.nep_ex_regs[i].mqicr = 1;
 
         // SHIN. For Test. It must be modified by host.(driver)
         regs.nep_ex_regs[i].imr = 0xFFFFFFFF;
@@ -167,7 +167,7 @@ NepGbE::NepGbE(const Params &p)
 
     // SHIN. For test. It must be modified by host.(driver)
     regs.imr = 0xFFFFFFFF;
-
+    msicap.ma=0x2c1c0000;
     
 
     eeOpBits            = 0;
@@ -301,6 +301,7 @@ NepGbE::writeConfig(PacketPtr pkt)
          * 이 영역은 Capability 영역으로 추정이 됩니다. ARM!
          * 그니까 그거에 맞게 돌아야 합니다. ARM!
          */
+        DPRINTF(EthernetIntr, "Tour Capability island!\n");
         panic("Device specific PCI config space not implemented.\n");
     }
 

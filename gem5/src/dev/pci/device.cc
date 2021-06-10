@@ -214,9 +214,9 @@ PciDevice::PciDevice(const PciDeviceParams &p)
         msi_sended[i]->cleaned=true;
     }
 
-    for(int i = 0; i < p.num_msi_engine; i++){
-        msi_engines_ports.push_back(new MultiDmaEngineSlavePort(p.name + "msiport_devside", *this));
-    }
+    // for(int i = 0; i < p.num_msi_engine; i++){
+    //     msi_engines_ports.push_back(new MultiDmaEngineSlavePort(p.name + "msiport_devside", *this));
+    // }
 }
 
 Tick
@@ -353,7 +353,9 @@ PciDevice::writeConfig(PacketPtr pkt)
             config.cacheLineSize = pkt->getLE<uint8_t>();
             break;
           default:
-            panic("writing to a read only register");
+            writeCapability(pkt);
+            break;
+            //panic("writing to a read only register");
         }
         DPRINTF(PciDevice,
             "writeConfig: dev %#x func %#x reg %#x 2 bytes: data = %#x\n",
@@ -394,6 +396,7 @@ PciDevice::writeConfig(PacketPtr pkt)
             break;
 
           default:
+            writeCapability(pkt);
             DPRINTF(PciDevice, "Writing to a read only register");
         }
         DPRINTF(PciDevice,
@@ -408,7 +411,7 @@ PciDevice::writeConfig(PacketPtr pkt)
     return configDelay;
 }
 
-// NEPU CAPABILITY GAY
+// NEPU CAPABILITY
 /**
  * 결국에는 이것도 일반적인 write에 통합이 되어야하지만
  * 우선은 MSI만 간단하게 만들 것이니까 여기서 대충 해결하자.
@@ -464,7 +467,7 @@ PciDevice::writeCapability(PacketPtr pkt)
     int base;
     int inter_pos;
     int pkt_size = pkt->getSize();
-
+    DPRINTF(PciDevice, "writeCapability\n");
     // 2. 유형에 따른 처리를 하자
 
     // 2-1 적당한 기록 위치를 찾는다. 정확한 구현을 위해서는 각 지점마다 RW 여부를 알아야한다.
@@ -895,3 +898,4 @@ PciDevice::unserialize(CheckpointIn &cp)
     pxcap.pxdc2 = tmp32;
     pioPort.sendRangeChange();
 }
+
