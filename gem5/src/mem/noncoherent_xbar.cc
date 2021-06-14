@@ -105,6 +105,7 @@ NoncoherentXBar::recvTimingReq(PacketPtr pkt, PortID cpu_side_port_id)
 
     if(pkt->getAddr() >= 0x2C1C0000 && pkt->getAddr() <= 0x2C1C1000){
         DPRINTF(NepMsi, "NoncoherentXBar::recvTimingReq pkt %s\n", pkt->print());
+        pkt->req->setFlags(Request::UNCACHEABLE);
         //return;
     }
 

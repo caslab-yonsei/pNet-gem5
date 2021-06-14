@@ -239,7 +239,7 @@ class DmaDevice : public PioDevice
                   Tick delay = 0)
     {
         dmaPort.msiAction(MemCmd::MsiReq, addr, size, event, data, delay, 
-        Request::NO_ACCESS || Request::UNCACHEABLE || Request::MSI_REQUEST);
+        Request::NO_ACCESS | Request::UNCACHEABLE | Request::MSI_REQUEST);
     }
 
     void

@@ -354,14 +354,14 @@ static int e1000_request_msi_irq(struct e1000_adapter *adapter)
 	
 	//
 
-	// for (i = 0; i < 1; i ++){
-		// err = request_irq(irq, handler, irq_flags, netdev->name,
-		// 	  netdev);
-		// printk("try alloc %d\n", irq);
-		// if (err) {
-		// 	e_err(probe, "Unable to allocate interrupt G Error: %d\n", err);
-		// }
-	// }	
+	for (i = 0; i < 1; i ++){
+		err = request_irq(adapter->pdev->irq, handler, irq_flags, netdev->name,
+			  netdev);
+		printk(KERN_ALERT "try alloc %d\n", adapter->pdev->irq);
+		if (err) {
+			e_err(probe, "Unable to allocate interrupt G Error: %d\n", err);
+		}
+	}	
 	//adapter->pdev->irq = 256;
 
 	
@@ -378,9 +378,9 @@ static int e1000_request_msi_irq(struct e1000_adapter *adapter)
 
 		// err = request_irq(adapter->pdev->irq+i, handler_mq, irq_flags, netdev->name,
 		// 	  netdev);
-		err = request_irq(adapter->pdev->irq+i, handler_mq, irq_flags, irq_name,
+		err = request_irq(adapter->pdev->irq+i+1, handler_mq, irq_flags, irq_name,
 			  netdev);
-		printk(KERN_ALERT "try alloc mq %d\n", adapter->pdev->irq+i);
+		printk(KERN_ALERT "try alloc mq %d\n", adapter->pdev->irq+i+1);
 		if (err) {
 			e_err(probe, "Unable to allocate interrupt RXTX Error: %d\n", err);
 		}
