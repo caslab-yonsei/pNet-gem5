@@ -42,7 +42,7 @@ from common import Options
 
 def build_switch(options):
     # instantiate an EtherSwitch
-    switch = EtherSwitch()
+    switch = EtherSwitch(fabric_speed ="99Gbps", output_buffer_size = "16MB")
     # instantiate distEtherLinks to connect switch ports
     # to other gem5 instances
     switch.portlink = [DistEtherLink(speed = options.ethernet_linkspeed,
