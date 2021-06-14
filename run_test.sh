@@ -3,6 +3,7 @@ export M5_PATH=/home/ssibal/MOODUM/gem5_share
 gem5_dir=/home/ssibal/mq-gem5-21/gem5
 #kernel=/home/nepuko/research/gem5_share/binaries/vmlinux.aarch64.20140821
 kernel=/home/ssibal/gem5-land/gem5-msi-rss-neo/linux/vmlinux
+kernel=/home/ssibal/mq-gem5-21/linux/vmlinux
 #kernel=/home/ssibal/neo3/gem5-msi-rss/linux/vmlinux
 disk=/home/ssibal/MOODUM/gem5_share/disks/aarch64-ubuntu-trusty-headless-nep.img
 #disk=/media/nepuko/MOODUM/mcn_aarch64.img
@@ -28,7 +29,7 @@ cpu=AtomicSimpleCPU
 #cpu=ex5_big
 
 #opts="--ddio --caches --l2cache --num-cpus=1 --dual --cpu-clock=10GHz --sys-clock=2GHz --mem-type=DDR4_2400_4x16"
-opts="--num-cpus=1 --cpu-type=$cpu"
+opts="--num-cpus=1 --cpu-type=$cpu --num-nep-rx-q=1"
 #cp_opts="-r1 "
 #cp_opts2="--restore-with-cpu=AtomicSimpleCPU "
 #opts="--ddio --caches --l2cache --num-cpus=1 --cpu-clock=10GHz --sys-clock=2GHz"
@@ -38,7 +39,7 @@ opts="--num-cpus=1 --cpu-type=$cpu"
 outdir=test_out_newlinux
 outdir=test_out_gicv2m_disabled
 
-$exe --outdir $outdir -re $debug $gem5_dir/configs/example/fs.py --disk-image=$disk --kernel=$kernel --machine-type=VExpress_GEM5_V1 --dtb-filename=$dtb_host --mem-size=256MB --num-nep-rx-q=4 $opts $cp_opts
+$exe --outdir $outdir -re $debug $gem5_dir/configs/example/fs.py --disk-image=$disk --kernel=$kernel --machine-type=VExpress_GEM5_V1 --dtb-filename=$dtb_host --mem-size=256MB --num-nep-rx-q=1 $opts $cp_opts
 
 # insmod /nepu1000/nepu1000.ko
 # /sbin/ifconfig eth0 hw ether 00:90:00:00:00:02

@@ -231,8 +231,8 @@ class NepGbE(EtherDevice):
     MSICAPBaseOffset = 0x50
     MSICAPNextCapability = 0x00
     MSICAPCapId = 0x05
-    MSICAPMsgCtrl = 0x018b   #0x8001 #32 vectors
-    MSICAPMsgAddr = 0x00000000
+    MSICAPMsgCtrl = 0xFBFB #0x018b : ???   #0x8001 #32 vectors
+    MSICAPMsgAddr = 0x2c1c0040
     MSICAPMsgUpperAddr = 0x00000000
     MSICAPMsgData = 0x0000
     MSICAPMaskBits = 0x00000000

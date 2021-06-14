@@ -238,7 +238,8 @@ class DmaDevice : public PioDevice
     msiWrite(Addr addr, int size, Event *event, uint8_t *data,
                   Tick delay = 0)
     {
-        dmaPort.msiAction(MemCmd::WriteReq, addr, size, event, data, delay, Request::UNCACHEABLE || Request::MSI_REQUEST);
+        dmaPort.msiAction(MemCmd::MsiReq, addr, size, event, data, delay, 
+        Request::NO_ACCESS || Request::UNCACHEABLE || Request::MSI_REQUEST);
     }
 
     void

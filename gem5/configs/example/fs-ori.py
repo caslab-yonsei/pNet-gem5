@@ -87,7 +87,7 @@ def build_test_system(np):
         test_sys = makeLinuxX86System(test_mem_mode, np, bm[0], options.ruby,
                                       cmdline=cmdline)
     elif buildEnv['TARGET_ISA'] == "arm":
-        test_sys = makeArmSystem(
+        test_sys = makeArmSystem__(
             test_mem_mode,
             options.machine_type,
             np,
@@ -100,6 +100,7 @@ def build_test_system(np):
             security=options.enable_security_extensions,
             vio_9p=options.vio_9p,
             bootloader=options.bootloader,
+            num_nep_rx_q=options.num_nep_rx_q
         )
         if options.enable_context_switch_stats_dump:
             test_sys.enable_context_switch_stats_dump = True
@@ -174,13 +175,19 @@ def build_test_system(np):
     else:
         if options.caches or options.l2cache:
             # By default the IOCache runs at the system clock
-            test_sys.iocache = IOCache(addr_ranges = test_sys.mem_ranges)
+            ext_range = test_sys.mem_ranges #+ [AddrRange(0x2c1c0000, size=0x10000)]
+            test_sys.iocache = IOCache(addr_ranges = ext_range)
             test_sys.iocache.cpu_side = test_sys.iobus.master
             test_sys.iocache.mem_side = test_sys.membus.slave
+            test_sys.io_msi = Bridge(delay='0ns', ranges = AddrRange(0x2c1c0000, size=0x10000))
+            test_sys.io_msi.master = test_sys.membus.slave
+            test_sys.io_msi.slave = test_sys.iobus.master
         elif not options.external_memory_system:
             test_sys.iobridge = Bridge(delay='50ns', ranges = test_sys.mem_ranges)
             test_sys.iobridge.slave = test_sys.iobus.master
             test_sys.iobridge.master = test_sys.membus.slave
+            test_sys.iobridge.ranges.append(AddrRange(0x2c1c0000, size=0x10000))
+            
 
         # Sanity check
         if options.simpoint_profile:

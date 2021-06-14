@@ -160,6 +160,7 @@ Gicv2m::write(PacketPtr pkt)
         DPRINTF(GICV2M, "GICv2m: Write of unk reg %#x\n", offset);
     }
 
+    //pkt->needsResponse
     pkt->makeAtomicResponse();
 
     return pioDelay;

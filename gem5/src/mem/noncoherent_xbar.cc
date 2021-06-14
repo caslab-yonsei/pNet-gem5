@@ -49,6 +49,8 @@
 #include "base/trace.hh"
 #include "debug/NoncoherentXBar.hh"
 #include "debug/XBar.hh"
+#include "debug/MSIXBar.hh"
+#include "mem/packet.hh"
 
 NoncoherentXBar::NoncoherentXBar(const NoncoherentXBarParams &p)
     : BaseXBar(p)
@@ -101,6 +103,11 @@ NoncoherentXBar::recvTimingReq(PacketPtr pkt, PortID cpu_side_port_id)
     // determine the source port based on the id
     ResponsePort *src_port = cpuSidePorts[cpu_side_port_id];
 
+    if(pkt->getAddr() >= 0x2C1C0000 && pkt->getAddr() <= 0x2C1C1000){
+        DPRINTF(NepMsi, "NoncoherentXBar::recvTimingReq pkt %s\n", pkt->print());
+        //return;
+    }
+
     // we should never see express snoops on a non-coherent crossbar
     assert(!pkt->isExpressSnoop());
 
@@ -112,6 +119,17 @@ NoncoherentXBar::recvTimingReq(PacketPtr pkt, PortID cpu_side_port_id)
     if (!reqLayers[mem_side_port_id]->tryTiming(src_port)) {
         DPRINTF(NoncoherentXBar, "recvTimingReq: src %s %s 0x%x BUSY\n",
                 src_port->name(), pkt->cmdString(), pkt->getAddr());
+
+        if(is_msi_line && pkt->isMsiMsg()){
+            //reqLayers[mem_side_port_id]->cancelMsi();
+            // int data = pkt->getLE<uint32_t>();
+            // int m = data >> 16;
+            // bool is_send = data & 1;
+            //if(pkt->needsResponse()) pkt->makeResponse();
+            DPRINTF(MSIXBar, "NoncoherentXBar::recvTimingReq timing failed %s\n", pkt->print());
+            //return true;
+        }
+        
         return false;
     }
 
@@ -153,6 +171,15 @@ NoncoherentXBar::recvTimingReq(PacketPtr pkt, PortID cpu_side_port_id)
         // occupy until the header is sent
         reqLayers[mem_side_port_id]->failedTiming(src_port,
                                                 clockEdge(Cycles(1)));
+
+        if(pkt->isMsiMsg()){
+        //     int data = pkt->getLE<uint32_t>();
+        //     int m = data >> 16;
+        //     bool is_send = data & 1;
+            
+            DPRINTF(MSIXBar, "NoncoherentXBar::recvTimingReq !success %s\n", pkt->print());
+            
+        }
 
         return false;
     }

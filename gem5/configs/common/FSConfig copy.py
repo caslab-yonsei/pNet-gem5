@@ -172,6 +172,7 @@ def makeSparcSystem(mem_mode, mdesc=None, cmdline=None):
 
     return self
 
+
 def makeArmSystem__(mem_mode, machine_type, num_cpus=1, mdesc=None,
                   dtb_filename=None, bare_metal=False, cmdline=None,
                   external_memory="", ruby=False, security=False,
@@ -230,8 +231,37 @@ def makeArmSystem__(mem_mode, machine_type, num_cpus=1, mdesc=None,
                 self.realview.ethernet = IGbE_e1000(pci_bus=0, pci_dev=0, pci_func=0,   
                                        InterruptLine=1, InterruptPin=1)
         
+        #self.realview.ethernet = IGbE_e1000(pci_bus=0, pci_dev=1, pci_func=0,
+        #                           InterruptLine=1, InterruptPin=1)
+        
+        #pci_devices.append(self.realview.dummy)
         pci_devices.append(self.realview.ethernet)
+        #self.realview.ethernet.pio=self.iobus.master
+        #self.realview.ethernet.dma=self.iobus.slave
+        # self.realview.msiengine = MultiDmaEngine()
+        # self.realview.msiengine.pio = self.iobus.master
+        # self.realview.msiengine.msi = self.membus.slave
+        # self.realview.msiengine.dma = self.iobus.slave
+        # self.realview.ethernets = ethernets
 
+        # for i in range(num_nic):
+        #     pci_devices.append(self.realview.ethernets[i])
+        #     #self.realview.ethernets[i].msiport_devside = self.realview.msiengine.msiport_engineside
+        #     self.realview.ethernets[i].dma = self.iobus.slave
+        
+        #self.realview.ethernet = IGbE_e1000(pci_bus=0, pci_dev=1, pci_func=0,
+        #                           InterruptLine=1, InterruptPin=1)
+        
+        #pci_devices.append(self.realview.dummy)
+        #pci_devices.append(self.realview.ethernet)
+
+         
+        #self.realview.ethernet.msi1 = self.iobus.slave
+        #self.realview.ethernet.msi2 = self.iobus.slave
+        
+    #self.realview.attachOnChipIO(self.iobus)
+    # MSI ON ARM!
+    #self.realview.gicv2m.pio = self.iobus.master
     self.realview.enableMSIX()
     if bare_metal:
         self.realview.enableMSIX()
@@ -385,12 +415,10 @@ def makeArmSystem__(mem_mode, machine_type, num_cpus=1, mdesc=None,
 
 def makeArmSystem(mem_mode, machine_type, num_cpus=1, mdesc=None,
                   dtb_filename=None, bare_metal=False, cmdline=None,
-                  external_memory="", ruby=False, security=False,
-                  vio_9p=None, bootloader=None):
+                  external_memory="", ruby=False, security=False):
     return makeArmSystem__(mem_mode, machine_type, num_cpus, mdesc,
                   dtb_filename, bare_metal, cmdline,
-                  external_memory, ruby, security,
-                  vio_9p, bootloader, num_nep_rx_q=4, num_nic=1)
+                  external_memory, ruby, security,num_nep_rx_q=1)
 
 def makeLinuxMipsSystem(mem_mode, mdesc=None, cmdline=None):
     class BaseMalta(Malta):
@@ -704,7 +732,8 @@ def makeDistRoot(testSystem,
                  sync_start,
                  linkspeed,
                  linkdelay,
-                 dumpfile):
+                 dumpfile,
+                 num_nics = 1):
     self = Root(full_system = True)
     self.testsys = testSystem
 
@@ -717,12 +746,25 @@ def makeDistRoot(testSystem,
                                    sync_start = sync_start,
                                    sync_repeat = sync_repeat)
 
-    if hasattr(testSystem, 'realview'):
-        self.etherlink.int0 = Parent.testsys.realview.ethernet.interface
+    self.local_switch = EtherSwitch(fabric_speed='99Gbps', output_buffer_size='8MB')
+    portlinks = []
+
+    for i in range(0, num_nics):
+        portlinks.append(EtherLink(speed = linkspeed, delay = "0us"))
+        portlinks[i].int0=self.local_switch.interface[i]
+    self.portlinks = portlinks
+    self.etherlink.int0 = self.local_switch.interface[num_nics]
+
+    if hasattr(testSystem, 'pc'):
+        self.portlink0.int1 = Parent.testsys.pc.ethernet0.interface  # x86 Implementation #
+        self.portlink1.int1 = Parent.testsys.pc.ethernet1.interface  # x86 Implementation #
+    elif hasattr(testSystem, 'realview'):
+        #for i in range(0, num_nics):
+        self.portlinks[i].int1 = Parent.testsys.realview.ethernet.interface
     elif hasattr(testSystem, 'tsunami'):
         self.etherlink.int0 = Parent.testsys.tsunami.ethernet.interface
     else:
-        fatal("Don't know how to connect DistEtherLink to this system")
+            fatal("Don't know how to connect DistEtherLink to this system")
 
     if dumpfile:
         self.etherdump = EtherDump(file=dumpfile)

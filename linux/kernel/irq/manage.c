@@ -1732,25 +1732,31 @@ int request_threaded_irq(unsigned int irq, irq_handler_t handler,
 	 * Also IRQF_COND_SUSPEND only makes sense for shared interrupts and
 	 * it cannot be set along with IRQF_NO_SUSPEND.
 	 */
+	printk(KERN_ALERT "-EINVAL 1\n");
+
 	if (((irqflags & IRQF_SHARED) && !dev_id) ||
 	    (!(irqflags & IRQF_SHARED) && (irqflags & IRQF_COND_SUSPEND)) ||
 	    ((irqflags & IRQF_NO_SUSPEND) && (irqflags & IRQF_COND_SUSPEND)))
 		return -EINVAL;
 
+	printk(KERN_ALERT "-EINVAL 2\n");
 	desc = irq_to_desc(irq);
 	if (!desc)
 		return -EINVAL;
 
+	printk(KERN_ALERT "-EINVAL 3\n");
 	if (!irq_settings_can_request(desc) ||
 	    WARN_ON(irq_settings_is_per_cpu_devid(desc)))
 		return -EINVAL;
 
+	printk(KERN_ALERT "-EINVAL 4\n");
 	if (!handler) {
 		if (!thread_fn)
 			return -EINVAL;
 		handler = irq_default_primary_handler;
 	}
 
+	printk(KERN_ALERT "-EINVAL 5\n");
 	action = kzalloc(sizeof(struct irqaction), GFP_KERNEL);
 	if (!action)
 		return -ENOMEM;

@@ -235,6 +235,9 @@ MemCmd::commandInfo[] =
     { SET3(IsRead, IsRequest, NeedsResponse), HTMReqResp, "HTMReq" },
     { SET2(IsRead, IsResponse), InvalidCmd, "HTMReqResp" },
     { SET2(IsRead, IsRequest), InvalidCmd, "HTMAbort" },
+    /* MsiReq */
+    { SET4(IsWrite, IsRequest, NeedsResponse, HasData),
+            WriteResp, "MsiReq" },
 };
 
 AddrRange

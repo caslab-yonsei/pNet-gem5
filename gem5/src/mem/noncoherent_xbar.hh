@@ -74,6 +74,8 @@ class NoncoherentXBar : public BaseXBar
     std::vector<ReqLayer*> reqLayers;
     std::vector<RespLayer*> respLayers;
 
+    bool is_msi_line=true;
+
     /**
      * Declaration of the non-coherent crossbar CPU-side port type, one
      * will be instantiated for each of the memory-side ports connecting to

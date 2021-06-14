@@ -63,6 +63,10 @@
 #include "sim/byteswap.hh"
 #include "sim/core.hh"
 
+#include "base/trace.hh"
+#include "debug/NepMsi.hh"
+
+
 class Packet;
 typedef Packet *PacketPtr;
 typedef uint8_t* PacketDataPtr;
@@ -137,6 +141,7 @@ class MemCmd
         HTMReq,
         HTMReqResp,
         HTMAbort,
+        MsiReq,
         NUM_MEM_CMDS
     };
 
@@ -208,6 +213,7 @@ class MemCmd
     bool isEviction() const        { return testCmdAttrib(IsEviction); }
     bool isClean() const           { return testCmdAttrib(IsClean); }
     bool fromCache() const         { return testCmdAttrib(FromCache); }
+    //bool isMsiReq() const          { return testCmdAttrib(MsiReq); }
 
     /**
      * A writeback is an eviction that carries data.
@@ -332,7 +338,7 @@ class Packet : public Printable
     Flags flags;
 
   public:
-    bool isMsiMsg(){return flags.isSet(MSI_MESSAGE);}
+    bool isMsiMsg(){return flags.isSet(MSI_MESSAGE) || cmd==MemCmd::MsiReq;}
     void setMsiMsg(){flags.set(MSI_MESSAGE);}
     void clearMsiMsg(){flags.clear(MSI_MESSAGE);}
     typedef MemCmd::Command Command;
@@ -1009,7 +1015,11 @@ class Packet : public Printable
     void
     makeResponse()
     {
-        assert(needsResponse());
+        if(!needsResponse())
+        {
+            DPRINTF(NepMsi, "Nep MSI? pkt %s\n",print());
+        }
+        //assert(needsResponse());
         assert(isRequest());
         cmd = cmd.responseCommand();
 

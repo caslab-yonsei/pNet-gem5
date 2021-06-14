@@ -167,7 +167,7 @@ NepGbE::NepGbE(const Params &p)
 
     // SHIN. For test. It must be modified by host.(driver)
     regs.imr = 0xFFFFFFFF;
-    msicap.ma=0x2c1c0000;
+    //msicap.ma=0x2c1c0040;
     
 
     eeOpBits            = 0;

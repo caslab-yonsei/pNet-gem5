@@ -315,7 +315,7 @@ static int e1000_request_msi_test_irq(struct e1000_adapter *adapter)
 	for (i = 0; i < adapter->num_vectors; i ++){
 		err = request_irq(adapter->pdev->irq+i, handler, irq_flags, netdev->name,
 			  netdev); //adapter->nepu_msi_vectore[i]
-		//printk("try alloc %d\n", adapter->pdev->irq+i);
+		printk("try alloc %d\n", adapter->pdev->irq+i);
 		if (err) {
 			e_err(probe, "Unable to allocate interrupt Error: %d\n", err);
 		}
@@ -323,6 +323,11 @@ static int e1000_request_msi_test_irq(struct e1000_adapter *adapter)
 
 	return err;
 }
+
+// static void e1000_write_msi_msg(struct msi_desc *desc, struct msi_msg *msg)
+// {
+
+// }
 
 static int e1000_request_msi_irq(struct e1000_adapter *adapter)
 {
@@ -333,25 +338,39 @@ static int e1000_request_msi_irq(struct e1000_adapter *adapter)
 	int i;
 	int num_queue = adapter->num_rx_queues;
 
+	// int rc;
+	// struct msi_desc *desc;
+	// struct msi_desc *failed_desc = NULL;
+
+	// rc = platform_msi_domain_alloc_irqs(adapter->pdev->dev, num_queue,
+	// 				    e1000_write_msi_msg);
+	// if (rc)
+	// 	return rc;
+
+	
+
 	irq_handler_t handler_mq = e1000_msi_mq_intr;
+	//int irq = pci_alloc_irq_vectors(adapter->pdev, num_queue+1, num_queue+1, 0);
+	
+	//
 
-
+	// for (i = 0; i < 1; i ++){
+		// err = request_irq(irq, handler, irq_flags, netdev->name,
+		// 	  netdev);
+		// printk("try alloc %d\n", irq);
+		// if (err) {
+		// 	e_err(probe, "Unable to allocate interrupt G Error: %d\n", err);
+		// }
+	// }	
 	//adapter->pdev->irq = 256;
 
-	for (i = 0; i < 0; i ++){
-		err = request_irq(adapter->pdev->irq, handler, irq_flags, netdev->name,
-			  netdev);
-		//printk("try alloc %d\n", adapter->pdev->irq);
-		if (err) {
-			e_err(probe, "Unable to allocate interrupt Error: %d\n", err);
-		}
-	}	
+	
 
-	for (i = 1; i < num_queue+1; i ++){
+	for (i = 0; i < num_queue; i ++){
 		char* irq_name = adapter->irq_names[i];
 		char rx_tx_num[5] = {0};
 
-		sprintf(rx_tx_num, "%d", i-1);
+		sprintf(rx_tx_num, "%d", i);
 		
 		strcpy(irq_name, netdev->name);
 		strcat(irq_name, "-rx-tx-");
@@ -361,12 +380,12 @@ static int e1000_request_msi_irq(struct e1000_adapter *adapter)
 		// 	  netdev);
 		err = request_irq(adapter->pdev->irq+i, handler_mq, irq_flags, irq_name,
 			  netdev);
-		//printk("try alloc mq %d\n", adapter->pdev->irq+i);
+		printk(KERN_ALERT "try alloc mq %d\n", adapter->pdev->irq+i);
 		if (err) {
-			e_err(probe, "Unable to allocate interrupt Error: %d\n", err);
+			e_err(probe, "Unable to allocate interrupt RXTX Error: %d\n", err);
 		}
 	}	
-
+	
 	return err;
 }
 
@@ -505,8 +524,8 @@ static void e1000_configure(struct e1000_adapter *adapter)
 	struct net_device *netdev = adapter->netdev;
 	int i;
 
-	////printk(KERN_ALERT "NEPU e1000_configure was called\n");
-
+	printk(KERN_ALERT "NEPU e1000_configure was called\n");
+	
 	e1000_set_rx_mode(netdev);
 
 	e1000_restore_vlan(adapter);
@@ -532,7 +551,7 @@ int e1000_up(struct e1000_adapter *adapter)
 	int i = 0;
 	int num_queue = er32(NUM_ENABLED_QUEUES);
 
-	////printk(KERN_ALERT "NEPU e1000_up was called\n");
+	printk(KERN_ALERT "NEPU e1000_up was called\n");
 
 	/* hardware has been reset, we need to reload some things */
 	e1000_configure(adapter);
@@ -541,7 +560,7 @@ int e1000_up(struct e1000_adapter *adapter)
 
 	//napi_enable(&adapter->napi);
 	for(; i < num_queue; i++){
-		////printk(KERN_ALERT "NEPU e1000_up napi_enable %d\n", i);
+		printk(KERN_ALERT "NEPU e1000_up napi_enable %d\n", i);
 		napi_enable(&adapter->mq_napi[i]);
 	}
 	
@@ -1099,10 +1118,11 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 	u16 eeprom_apme_mask = E1000_EEPROM_APME;
 	int bars, need_ioport;
 
-	
-	int num_queue = readl(pci_ioremap_bar(pdev, BAR_0) + E1000_82542_NUM_ENABLED_QUEUES);
+	printk(KERN_ALERT "NEPU e1000_probe was called. Try to get num of queues\n");
 
-	printk(KERN_ALERT "NEPU e1000_probe was called. num of queues is %d\n", num_queue);
+	
+
+	
 
 	/* do not allocate ioport bars when not needed */
 	need_ioport = e1000_is_need_ioport(pdev);
@@ -1129,6 +1149,8 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 	//netdev = alloc_etherdev(sizeof(struct e1000_adapter));
 	// TODO MQ netdev
 	//netdev = alloc_etherdev_mq(sizeof(struct e1000_adapter), NUM_QUEUE);
+	int num_queue = readl(pci_ioremap_bar(pdev, BAR_0) + E1000_82542_NUM_ENABLED_QUEUES);
+	printk(KERN_ALERT "NEPU e1000_probe was called. num of queues is %d\n", num_queue);
 	netdev = alloc_etherdev_mq(sizeof(struct e1000_adapter), num_queue);
 
 		// return alloc_netdev_mqs(sizeof_priv, "eth%d", NET_NAME_UNKNOWN,
@@ -1204,6 +1226,10 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 	/* setup the private structure */
 
 	err = e1000_sw_init(adapter);
+
+	// TEST
+	//e1000_request_msi_irq(adapter);
+
 	if (err)
 		goto err_sw_init;
 
@@ -1432,6 +1458,8 @@ err_alloc_etherdev:
 	pci_release_selected_regions(pdev, bars);
 err_pci_reg:
 	pci_disable_device(pdev);
+
+	
 	return err;
 }
 
@@ -1491,9 +1519,9 @@ static int e1000_sw_init(struct e1000_adapter *adapter)
 
 	// NEPU EXTENSION for MSI
 	// 임시로 일단 CAPA 작성하기
-	//printk(KERN_INFO"e1000_sw_init\n");
+	printk(KERN_INFO"e1000_sw_init\n");
 	
-	//printk(KERN_INFO"IRQ ST(BEFORE) %d\n", adapter->pdev->irq);
+	printk(KERN_INFO"IRQ ST(BEFORE) %d\n", adapter->pdev->irq);
 
 	// 번호 받기
 	struct irq_affinity msi_affd;
@@ -1510,10 +1538,10 @@ static int e1000_sw_init(struct e1000_adapter *adapter)
 	//set_irq_st(adapter, 256);
 
 	// 시작점 확인하기
-	//printk(KERN_INFO"IRQ ST(AFTER) %d\n", adapter->pdev->irq);
+	printk(KERN_INFO"IRQ ST(AFTER) %d\n", adapter->pdev->irq);
 
 	// 하드웨어 주소 확인하기
-	//printk(KERN_INFO "NIC HW addr %llx\n", adapter->hw.hw_addr);
+	printk(KERN_INFO "NIC HW addr %llx\n", adapter->hw.hw_addr);
 
 	// MSI 주소공간 확인하기
 	//int *gicv2m_frame = 0x2c1c0000 + 0x40;
@@ -5996,6 +6024,7 @@ void e1000_set_interrupt_capability(struct e1000_adapter *adapter)
 		/* Fall through */
 	case E1000E_INT_MODE_MSI:
 		//pci_enable_msi(adapter->pdev);
+		adapter->pdev->msi_cap=0x50;
 		vecs = pci_alloc_irq_vectors(adapter->pdev, 32, 32, PCI_IRQ_MSI);
 		if (vecs > 0) {
 			adapter->flags |= FLAG_MSI_ENABLED;

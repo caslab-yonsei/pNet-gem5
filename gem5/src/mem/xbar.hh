@@ -170,7 +170,8 @@ class BaseXBar : public ClockedObject
          * port, but using different functions for the flow control.
          */
         virtual void sendRetry(SrcType* retry_port) = 0;
-
+      public:
+        void cancelMsi(){waitingForLayer.pop_front();}
       private:
 
         /** The destination port this layer converges at. */

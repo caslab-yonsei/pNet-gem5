@@ -228,23 +228,11 @@ PciDevice::readConfig(PacketPtr pkt)
     if (offset >= PCI_DEVICE_SPECIFIC &&
         offset < PCI_CONFIG_SIZE) {
         warn_once("Device specific PCI config space "
-                  "not implemented for %s!\n", this->name());
-        switch (pkt->getSize()) {
-            case sizeof(uint8_t):
-                pkt->setLE<uint8_t>(0);
-                break;
-            case sizeof(uint16_t):
-                pkt->setLE<uint16_t>(0);
-                break;
-            case sizeof(uint32_t):
-                pkt->setLE<uint32_t>(0);
-                break;
-            default:
-                panic("invalid access size(?) for PCI configspace!\n");
-        }
+                  "(Capability) for %s!\n", this->name());
+        readCapability(pkt);
     } else if (offset > PCI_CONFIG_SIZE) {
         panic("Out-of-range access to PCI config space!\n");
-    }
+    } else {
 
     switch (pkt->getSize()) {
       case sizeof(uint8_t):
@@ -270,6 +258,7 @@ PciDevice::readConfig(PacketPtr pkt)
         break;
       default:
         panic("invalid access size(?) for PCI configspace!\n");
+    }
     }
     pkt->makeAtomicResponse();
     return configDelay;
@@ -300,17 +289,10 @@ PciDevice::writeConfig(PacketPtr pkt)
         offset < PCI_CONFIG_SIZE) {
         warn_once("Device specific PCI config space "
                   "not implemented for %s!\n", this->name());
-        switch (pkt->getSize()) {
-            case sizeof(uint8_t):
-            case sizeof(uint16_t):
-            case sizeof(uint32_t):
-                break;
-            default:
-                panic("invalid access size(?) for PCI configspace!\n");
-        }
+        writeCapability(pkt);
     } else if (offset > PCI_CONFIG_SIZE) {
         panic("Out-of-range access to PCI config space!\n");
-    }
+    } else {
 
     switch (pkt->getSize()) {
       case sizeof(uint8_t):
@@ -353,7 +335,7 @@ PciDevice::writeConfig(PacketPtr pkt)
             config.cacheLineSize = pkt->getLE<uint8_t>();
             break;
           default:
-            writeCapability(pkt);
+            //writeCapability(pkt);
             break;
             //panic("writing to a read only register");
         }
@@ -396,7 +378,7 @@ PciDevice::writeConfig(PacketPtr pkt)
             break;
 
           default:
-            writeCapability(pkt);
+            //writeCapability(pkt);
             DPRINTF(PciDevice, "Writing to a read only register");
         }
         DPRINTF(PciDevice,
@@ -406,6 +388,7 @@ PciDevice::writeConfig(PacketPtr pkt)
         break;
       default:
         panic("invalid access size(?) for PCI configspace!\n");
+    }
     }
     pkt->makeAtomicResponse();
     return configDelay;
@@ -464,87 +447,69 @@ PciDevice::writeCapability(PacketPtr pkt)
     // 나중에 PCIe 영역 지원을 추가한다면 
     int offset = pkt->getAddr() & PCI_CONFIG_SIZE;//(PCI_CONFIG_EXTENDED_SIZE-1);
     int type = findCapability(offset);
-    int base;
-    int inter_pos;
     int pkt_size = pkt->getSize();
     DPRINTF(PciDevice, "writeCapability\n");
+
+    uint8_t* data = nullptr;
+    int inter_offset = offset;
+    /* Return 0 for accesses to unimplemented PCI configspace areas */
+    /* 이 부분에서 처리 */
+    switch(type){
+        case CAPA_ID_NULL:
+            panic("This is not a capability field!! Maybe RO area!");
+            break;
+        case CAPA_ID_PM:
+            //base = PMCAP_BASE;
+            inter_offset = offset - PMCAP_BASE;
+            data = (pmcap.data) + inter_offset;
+            break;
+        case CAPA_ID_MSI:
+            //base = MSICAP_BASE;
+            inter_offset = offset - MSICAP_BASE;
+            data = (msicap.data) + inter_offset;
+            //*(uint8_t *)(msicap.data + inter_pos) = pkt->getLE<uint8_t>();
+            break;
+        case CAPA_ID_MSIX:
+            //base = MSIXCAP_BASE;
+            inter_offset = offset - MSIXCAP_BASE;
+            data = (msixcap.data) + inter_offset;
+            break;
+        case CAPA_ID_PX:
+            //base = PXCAP_BASE;
+            inter_offset = offset - PXCAP_BASE;
+            data = (pxcap.data) + inter_offset;
+            break;
+        default:
+            panic("This capability is not implemanted!");
+    }
+    if(!data) return;
     // 2. 유형에 따른 처리를 하자
 
     // 2-1 적당한 기록 위치를 찾는다. 정확한 구현을 위해서는 각 지점마다 RW 여부를 알아야한다.
     // 우선은 gem5의 동작이 완전하다고 가정하고 쓰기를 항상 허용한다.
     switch(pkt_size){
         case sizeof(uint8_t):
-            switch(type){
-                case CAPA_ID_NULL:
-                    panic("This is not a capability field!! Maybe RO area!");
-                    break;
-                case CAPA_ID_PM:
-                    base = PMCAP_BASE;
-                    break;
-                case CAPA_ID_MSI:
-                    base = MSICAP_BASE;
-                    inter_pos = offset - base;
-                    *(uint8_t *)(msicap.data + inter_pos) = pkt->getLE<uint8_t>();
-                    break;
-                case CAPA_ID_MSIX:
-                    base = MSIXCAP_BASE;
-                    break;
-                case CAPA_ID_PX:
-                    base = PXCAP_BASE;
-                    break;
-                default:
-                    panic("This capability is not implemanted!");
-            }
+            *(uint8_t *)(data) = pkt->getLE<uint8_t>();
+            DPRINTF(PciDevice,
+            "writeCapability: dev %#x func %#x reg %#x 1 bytes: data = %#x\n",
+            _busAddr.dev, _busAddr.func, offset,
+            (uint32_t)pkt->getLE<uint8_t>());
             break;
         case sizeof(uint16_t):
-            switch(type){
-                case CAPA_ID_NULL:
-                    panic("This is not a capability field!! Maybe RO area!");
-                    break;
-                case CAPA_ID_PM:
-                    base = PMCAP_BASE;
-                    break;
-                case CAPA_ID_MSI:
-                    base = MSICAP_BASE;
-                    inter_pos = offset - base;
-                    *(uint16_t *)(msicap.data + inter_pos) = pkt->getLE<uint16_t>();
-                    break;
-                case CAPA_ID_MSIX:
-                    base = MSIXCAP_BASE;
-                    break;
-                case CAPA_ID_PX:
-                    base = PXCAP_BASE;
-                    break;
-                default:
-                    panic("This capability is not implemanted!");
-            }
+            *(uint16_t *)(data) = pkt->getLE<uint16_t>();
+            DPRINTF(PciDevice,
+            "writeCapability: dev %#x func %#x reg %#x 2 bytes: data = %#x\n",
+            _busAddr.dev, _busAddr.func, offset,
+            (uint32_t)pkt->getLE<uint16_t>());
             break;
         case sizeof(uint32_t):
-            switch(type){
-                case CAPA_ID_NULL:
-                    panic("This is not a capability field!! Maybe RO area!");
-                    break;
-                case CAPA_ID_PM:
-                    base = PMCAP_BASE;
-                    break;
-                case CAPA_ID_MSI:
-                    base = MSICAP_BASE;
-                    inter_pos = offset - base;
-                    *(uint32_t *)(msicap.data + inter_pos) = pkt->getLE<uint32_t>();
-                    break;
-                case CAPA_ID_MSIX:
-                    base = MSIXCAP_BASE;
-                    break;
-                case CAPA_ID_PX:
-                    base = PXCAP_BASE;
-                    break;
-                default:
-                    panic("This capability is not implemanted!");
-            }
+            *(uint32_t *)(data) = pkt->getLE<uint32_t>();
+            DPRINTF(PciDevice,
+            "writeCapability: dev %#x func %#x reg %#x 4 bytes: data = %#x\n",
+            _busAddr.dev, _busAddr.func, offset,
+            (uint32_t)pkt->getLE<uint32_t>());
             break;
     }
-
-    inter_pos = offset - base;
 }
 
 /**
@@ -560,63 +525,73 @@ PciDevice::readCapability(PacketPtr pkt)
     int offset = pkt->getAddr() & (PCI_CONFIG_EXTENDED_SIZE-1);
     
     // 1. 유형 찾기
-    //int type = findCapability(offset);
-
+    int type = findCapability(offset);
+    uint8_t* data = nullptr;
+    int inter_offset = offset;
     /* Return 0 for accesses to unimplemented PCI configspace areas */
     /* 이 부분에서 처리 */
-    if (offset >= PCI_DEVICE_SPECIFIC &&
-        offset < PCI_CONFIG_SIZE) {
-        warn_once("Device specific PCI config space "
-                  "not implemented for %s!\n", this->name());
-        switch (pkt->getSize()) {
-            case sizeof(uint8_t):
-                pkt->setLE<uint8_t>(0);
-                break;
-            case sizeof(uint16_t):
-                pkt->setLE<uint16_t>(0);
-                break;
-            case sizeof(uint32_t):
-                pkt->setLE<uint32_t>(0);
-                break;
-            default:
-                panic("invalid access size(?) for PCI configspace!\n");
-        }
-    } else if (offset > PCI_CONFIG_SIZE) {
-        panic("Out-of-range access to PCI config space!\n");
+    switch(type){
+        case CAPA_ID_NULL:
+            //panic("This is not a capability field!! Maybe RO area!");
+            break;
+        case CAPA_ID_PM:
+            //base = PMCAP_BASE;
+            inter_offset = offset - PMCAP_BASE;
+            data = (pmcap.data) + inter_offset;
+            break;
+        case CAPA_ID_MSI:
+            //base = MSICAP_BASE;
+            inter_offset = offset - MSICAP_BASE;
+            data = (msicap.data) + inter_offset;
+            //*(uint8_t *)(msicap.data + inter_pos) = pkt->getLE<uint8_t>();
+            break;
+        case CAPA_ID_MSIX:
+            //base = MSIXCAP_BASE;
+            inter_offset = offset - MSIXCAP_BASE;
+            data = (msixcap.data) + inter_offset;
+            break;
+        case CAPA_ID_PX:
+            //base = PXCAP_BASE;
+            inter_offset = offset - PXCAP_BASE;
+            data = (pxcap.data) + inter_offset;
+            break;
+        default:
+            panic("This capability is not implemanted!");
     }
+    if(!data) return;
 
     switch (pkt->getSize()) {
       case sizeof(uint8_t):
-        pkt->setLE<uint8_t>(config.data[offset]);
+        pkt->setLE<uint8_t>(*data);
         DPRINTF(PciDevice,
-            "readConfig:  dev %#x func %#x reg %#x 1 bytes: data = %#x\n",
+            "readCapability:  dev %#x func %#x reg %#x 1 bytes: data = %#x\n",
             _busAddr.dev, _busAddr.func, offset,
             (uint32_t)pkt->getLE<uint8_t>());
         break;
       case sizeof(uint16_t):
-        pkt->setLE<uint16_t>(*(uint16_t*)&config.data[offset]);
+        pkt->setLE<uint16_t>(*(uint16_t*)data);
         DPRINTF(PciDevice,
-            "readConfig:  dev %#x func %#x reg %#x 2 bytes: data = %#x\n",
+            "readCapability:  dev %#x func %#x reg %#x 2 bytes: data = %#x\n",
             _busAddr.dev, _busAddr.func, offset,
             (uint32_t)pkt->getLE<uint16_t>());
         break;
       case sizeof(uint32_t):
-        pkt->setLE<uint32_t>(*(uint32_t*)&config.data[offset]);
+        pkt->setLE<uint32_t>(*(uint32_t*)data);
         DPRINTF(PciDevice,
-            "readConfig:  dev %#x func %#x reg %#x 4 bytes: data = %#x\n",
+            "readCapability:  dev %#x func %#x reg %#x 4 bytes: data = %#x\n",
             _busAddr.dev, _busAddr.func, offset,
             (uint32_t)pkt->getLE<uint32_t>());
         break;
       default:
         panic("invalid access size(?) for PCI configspace!\n");
     }
-    pkt->makeAtomicResponse();
+    //pkt->makeAtomicResponse();
 }
 
 Tick
 PciDevice::sendingMSI(int int_local_num=0)
 {
-    uint64_t addr;
+    uint64_t addr = 0;
     int packet_size;
     uint32_t data_val;
     Tick latency = 0;
@@ -625,7 +600,7 @@ PciDevice::sendingMSI(int int_local_num=0)
     send = false;
 
     // 주소는 configuration 에서 들고오기
-    addr=msicap.mua;
+    //addr=msicap.mua;
     addr <<= 32;
     addr |= msicap.ma;
 
@@ -662,6 +637,7 @@ PciDevice::sendingMSI(int int_local_num=0)
     // (((MultiDmaEngineMasterPort&)(msi_engines_ports[0]->getPort())).getDmaEngine())
     //     .msiWrite(addr, packet_size, &msi_sended[int_local_num]->msisend, data, 0);
     msiWrite(addr, packet_size, &msi_sended[int_local_num]->msisend, data, 0);
+    //msiWrite(addr, packet_size, nullptr, data, 0);
     // if(msi_engines.size())
     //     msi_engines[0]->msiWrite(addr, packet_size, &msi_sended[int_local_num]->msisend, data, 0);
     // else
@@ -685,7 +661,7 @@ PciDevice::clearMSI(int int_local_num=0)
     
 
 
-    uint64_t addr;
+    uint64_t addr = 0;
     int packet_size;
     uint8_t *data = (uint8_t*)malloc(4);
     uint32_t data_val;
@@ -693,7 +669,7 @@ PciDevice::clearMSI(int int_local_num=0)
     Tick latency = 0;
 
     // 주소는 configuration 에서 들고오기
-    addr=msicap.mua;
+    //addr=msicap.mua;
     addr <<= 32;
     addr |= msicap.ma;
 

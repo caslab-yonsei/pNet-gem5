@@ -370,7 +370,7 @@ int msi_domain_alloc_irqs(struct irq_domain *domain, struct device *dev,
 					       dev_to_node(dev), &arg, false,
 					       desc->affinity);
 		
-		printk(KERN_INFO "msi_domain_alloc_irqs. virq = %d\n", virq);
+		printk(KERN_ALERT "msi_domain_alloc_irqs. virq = %d\n", virq);
 
 		if (virq < 0) {
 			ret = -ENOSPC;

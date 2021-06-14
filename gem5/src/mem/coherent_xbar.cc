@@ -50,7 +50,7 @@
 #include "debug/AddrRanges.hh"
 #include "debug/CoherentXBar.hh"
 #include "sim/system.hh"
-
+#include "debug/NepMsi.hh"
 CoherentXBar::CoherentXBar(const CoherentXBarParams &p)
     : BaseXBar(p), system(p.system), snoopFilter(p.snoop_filter),
       snoopResponseLatency(p.snoop_response_latency),
@@ -145,6 +145,11 @@ CoherentXBar::recvTimingReq(PacketPtr pkt, PortID cpu_side_port_id)
 {
     // determine the source port based on the id
     ResponsePort *src_port = cpuSidePorts[cpu_side_port_id];
+
+    if(pkt->getAddr() >= 0x2C1C0000 && pkt->getAddr() <= 0x2C1C1000){
+        DPRINTF(NepMsi, "CoherentXBar::recvTimingReq pkt %s\n", pkt->print());
+        //return;
+    }
 
     // remember if the packet is an express snoop
     bool is_express_snoop = pkt->isExpressSnoop();
@@ -443,7 +448,10 @@ CoherentXBar::recvTimingResp(PacketPtr pkt, PortID mem_side_port_id)
 {
     // determine the source port based on the id
     RequestPort *src_port = memSidePorts[mem_side_port_id];
-
+        if(pkt->getAddr() >= 0x2C1C0000 && pkt->getAddr() <= 0x2C1C1000){
+        DPRINTF(NepMsi, "CoherentXBar::recvTimingResq pkt %s\n", pkt->print());
+        //return;
+    }
     // determine the destination
     const auto route_lookup = routeTo.find(pkt->req);
     assert(route_lookup != routeTo.end());
@@ -507,6 +515,11 @@ CoherentXBar::recvTimingSnoopReq(PacketPtr pkt, PortID mem_side_port_id)
     DPRINTF(CoherentXBar, "%s: src %s packet %s\n", __func__,
             memSidePorts[mem_side_port_id]->name(), pkt->print());
 
+    if(pkt->getAddr() >= 0x2C1C0000 && pkt->getAddr() <= 0x2C1C1000){
+        DPRINTF(NepMsi, "CoherentXBar::recvTimingSnoopReq pkt %s\n", pkt->print());
+        //return;
+    }
+
     // update stats here as we know the forwarding will succeed
     unsigned int pkt_size = pkt->hasData() ? pkt->getSize() : 0;
     transDist[pkt->cmdToIndex()]++;
@@ -566,6 +579,11 @@ CoherentXBar::recvTimingSnoopResp(PacketPtr pkt, PortID cpu_side_port_id)
 {
     // determine the source port based on the id
     ResponsePort* src_port = cpuSidePorts[cpu_side_port_id];
+
+    if(pkt->getAddr() >= 0x2C1C0000 && pkt->getAddr() <= 0x2C1C1000){
+        DPRINTF(NepMsi, "CoherentXBar::recvTimingSnoopResp pkt %s\n", pkt->print());
+        //return;
+    }
 
     // get the destination
     const auto route_lookup = routeTo.find(pkt->req);

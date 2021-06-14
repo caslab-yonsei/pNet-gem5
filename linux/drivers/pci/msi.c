@@ -899,8 +899,9 @@ int pci_msi_vec_count(struct pci_dev *dev)
 		return -EINVAL;
 
 	pci_read_config_word(dev, dev->msi_cap + PCI_MSI_FLAGS, &msgctl);
+	printk(KERN_ALERT "pci_msi_vec_count msgctl %x", msgctl);
 	ret = 1 << ((msgctl & PCI_MSI_FLAGS_QMASK) >> 1);
-
+	//ret = 32;
 	return ret;
 }
 EXPORT_SYMBOL(pci_msi_vec_count);
@@ -1068,9 +1069,11 @@ static int __pci_enable_msi_range(struct pci_dev *dev, int minvec, int maxvec,
 	if (maxvec < minvec)
 		return -ERANGE;
 
-	//printk(KERN_INFO"__pci_enable_msi_range-before pci_msi_vec_count %d\n", dev->irq);
+	printk(KERN_ALERT"__pci_enable_msi_range-before pci_msi_vec_count %d\n", dev->irq);
 
 	nvec = pci_msi_vec_count(dev);
+
+	printk(KERN_ALERT"pci_msi_vec_count(dev) nvec %d\n", nvec);
 	if (nvec < 0)
 		return nvec;
 	if (nvec < minvec)
@@ -1079,31 +1082,31 @@ static int __pci_enable_msi_range(struct pci_dev *dev, int minvec, int maxvec,
 	if (nvec > maxvec)
 		nvec = maxvec;
 
-	//printk(KERN_INFO"__pci_enable_msi_range-after pci_msi_vec_count %d\n", dev->irq);
+	printk(KERN_ALERT"__pci_enable_msi_range-after pci_msi_vec_count %d\n", dev->irq);
 
 	// NEPU MSI TEST PRINT
-	// printk(KERN_INFO"NEPU maxvec %d\n", maxvec);
-	// printk(KERN_INFO"NEPU minvec %d\n", minvec);
-	// printk(KERN_INFO"NEPU nvec %d\n", nvec);
+	printk(KERN_INFO"NEPU maxvec %d\n", maxvec);
+	printk(KERN_INFO"NEPU minvec %d\n", minvec);
+	printk(KERN_INFO"NEPU nvec %d\n", nvec);
 
 	for (;;) {
 		if (affd) {
 			nvec = irq_calc_affinity_vectors(minvec, nvec, affd);
-			//printk(KERN_INFO"__pci_enable_msi_range affd - nvec = %d\n", nvec);
+			printk(KERN_ALERT"__pci_enable_msi_range affd - nvec = %d\n", nvec);
 			if (nvec < minvec)
 				return -ENOSPC;
 		}
 
 		rc = msi_capability_init(dev, nvec, affd);
-		// printk(KERN_INFO"__pci_enable_msi_range-after msi_capability_init %d\n", dev->irq);
-		// printk(KERN_INFO"__pci_enable_msi_range - rc = %d\n", rc);
+		printk(KERN_ALERT"__pci_enable_msi_range-after msi_capability_init %d\n", dev->irq);
+		printk(KERN_ALERT"__pci_enable_msi_range - rc = %d\n", rc);
 		if (rc == 0){
-			//printk(KERN_INFO"__pci_enable_msi_range - rc = 0\n");
+			printk(KERN_ALERT"__pci_enable_msi_range - rc = 0\n");
 			return nvec;
 		}
 
 		if (rc < 0){
-			//printk(KERN_INFO"__pci_enable_msi_range - rc < 0\n");
+			printk(KERN_ALERT"__pci_enable_msi_range - rc < 0\n");
 			return rc;
 		}
 		if (rc < minvec)
