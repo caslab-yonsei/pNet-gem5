@@ -60,7 +60,7 @@ class EtherLink(SimObject):
     int1 = EtherInt("interface 1")
     delay = Param.Latency('0us', "packet transmit delay")
     delay_var = Param.Latency('0ns', "packet transmit delay variability")
-    speed = Param.NetworkBandwidth('1Gbps', "link speed")
+    speed = Param.NetworkBandwidth('99Gbps', "link speed")
     dump = Param.EtherDump(NULL, "dump object")
 
 class DistEtherLink(SimObject):
@@ -69,7 +69,7 @@ class DistEtherLink(SimObject):
     int0 = EtherInt("interface 0")
     delay = Param.Latency('0us', "packet transmit delay")
     delay_var = Param.Latency('0ns', "packet transmit delay variability")
-    speed = Param.NetworkBandwidth('1Gbps', "link speed")
+    speed = Param.NetworkBandwidth('99Gbps', "link speed")
     dump = Param.EtherDump(NULL, "dump object")
     dist_rank = Param.UInt32('0', "Rank of this gem5 process (dist run)")
     dist_size = Param.UInt32('1', "Number of gem5 processes (dist run)")
@@ -86,7 +86,7 @@ class EtherBus(SimObject):
     cxx_header = "dev/net/etherbus.hh"
     loopback = Param.Bool(True, "send packet back to the sending interface")
     dump = Param.EtherDump(NULL, "dump object")
-    speed = Param.NetworkBandwidth('100Mbps', "bus speed in bits per second")
+    speed = Param.NetworkBandwidth('99Gbps', "bus speed in bits per second")
 
 class EtherSwitch(SimObject):
     type = 'EtherSwitch'
