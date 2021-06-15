@@ -223,7 +223,7 @@ def makeArmSystem__(mem_mode, machine_type, num_cpus=1, mdesc=None,
         #ethernets = []
 
         for i in range(1):
-            if True:
+            if num_nep_rx_q > 0:
                 self.realview.ethernet = NepGbE_base(pci_bus=0, pci_dev=0, pci_func=0,
                     num_of_queues=num_nep_rx_q,num_msi_engine = num_nep_rx_q, MSICAPMsgCtrl = 0xFBFB)
             else:

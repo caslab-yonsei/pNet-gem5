@@ -74,7 +74,7 @@ DebugFlag('DistEthernetPkt')
 DebugFlag('DistEthernetCmd')
 
 # Ethernet controllers
-#Source('i8254xGBe.cc')
+Source('i8254xGBe.cc')
 Source('ns_gige.cc')
 Source('sinic.cc')
 
