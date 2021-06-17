@@ -13,6 +13,7 @@ class RxSidePolicyRSS : public RxSidePolicy {
     int num_rx_queue;
     int indirection_table[bucket_size];
     void initIndirTable();
+    uint32_t seed[256];
 
   public:
     virtual int getTargetRxQ(EthPacketPtr epkt);

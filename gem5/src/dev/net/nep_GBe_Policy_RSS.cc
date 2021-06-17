@@ -1,6 +1,9 @@
 #include "nep_GBe_Policy_RSS.hh"
 #include "base/inet.hh"
 
+#include <random>
+
+
 #include "debug/NepNicRxPolicyRss.hh"
 
 // BST
@@ -62,19 +65,19 @@ int RxSidePolicyRSS::calcHashValForEnQ(EthPacketPtr ethpkt)
     input[2] = rss_port;
 
     //set seed
-    uint32_t seed[6];
-    seed[0] = 0x3a42624c;
-    seed[1] = 0x41a926fc;
-    seed[2] = 0x5adf32f8;
-    seed[3] = 0x2944c283;
-    seed[4] = 0x9ab381ab;
-    seed[5] = 0x428910a3;
+    
+    // seed[0] = 0x3a42624c;
+    // seed[1] = 0x41a926fc;
+    // seed[2] = 0x5adf32f8;
+    // seed[3] = 0x2944c283;
+    // seed[4] = 0x9ab381ab;
+    // seed[5] = 0x428910a3;
     uint32_t key;
     uint32_t result = 0;
     uint32_t assist_key;
 
     //calculrate hash
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 255; i++)
     {
         key = seed[i];
         //assist_key use to assist left shift of seed array
@@ -138,6 +141,17 @@ RxSidePolicyRSS::RxSidePolicyRSS(NepGbE *_igbe)
 {
     idx_last_picked_entry = 0;
     num_rx_queue = num_rx_q;
+    std::random_device rd;
+
+    // random_device 를 통해 난수 생성 엔진을 초기화 한다.
+    std::mt19937 gen(rd());
+
+    // 0 부터 99 까지 균등하게 나타나는 난수열을 생성하기 위해 균등 분포 정의.
+    std::uniform_int_distribution<int> dis(0, 0xFFFFFFFF);
+
+    for (int i = 0; i < 256; i++) {
+        seed[i] = dis(gen);
+    }
     initIndirTable();
 }
 
