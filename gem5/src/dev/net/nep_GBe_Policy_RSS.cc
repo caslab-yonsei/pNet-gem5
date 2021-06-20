@@ -147,7 +147,7 @@ RxSidePolicyRSS::RxSidePolicyRSS(NepGbE *_igbe)
     std::mt19937 gen(rd());
 
     // 0 부터 99 까지 균등하게 나타나는 난수열을 생성하기 위해 균등 분포 정의.
-    std::uniform_int_distribution<int> dis(0, 0xFFFFFFFF);
+    std::uniform_int_distribution<unsigned int> dis(0, 0xFFFFFFFF);
 
     for (int i = 0; i < 256; i++) {
         seed[i] = dis(gen);

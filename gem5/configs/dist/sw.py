@@ -45,8 +45,8 @@ def build_switch(options):
     switch = EtherSwitch(fabric_speed ="99Gbps", output_buffer_size = "16MB")
     # instantiate distEtherLinks to connect switch ports
     # to other gem5 instances
-    switch.portlink = [DistEtherLink(speed = options.ethernet_linkspeed,
-                                      delay = options.ethernet_linkdelay,
+    switch.portlink = [DistEtherLink(speed = "99Gbps",#options.ethernet_linkspeed,
+                                      delay = "100ns", #options.ethernet_linkdelay,
                                       dist_rank = options.dist_rank,
                                       dist_size = options.dist_size,
                                       server_name = options.dist_server_name,
