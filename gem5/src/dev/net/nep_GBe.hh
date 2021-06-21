@@ -99,6 +99,8 @@ class NepGbE : public EtherDevice
 
     bool rxDmaPacket;
 
+    int num_of_queues;
+
     // SHIN. Test
     int test_count = 0;
     EthPacketPtr test_packet;
@@ -779,6 +781,8 @@ class NepGbE : public EtherDevice
     Port &getPort(const std::string &if_name,
                   PortID idx=InvalidPortID) override;
 
+    int getNumOfQueue(){return num_of_queues;}
+
     Tick lastInterrupt;
 
     Tick read(PacketPtr pkt) override;
@@ -798,8 +802,9 @@ class NepGbE : public EtherDevice
     // {
     //   return sys->numRunningContexts();
     // }
+  public:
+    bool port_specific;
 };
-
 class NepGbEInt : public EtherInt
 {
   private:
@@ -826,7 +831,7 @@ class NepGbEInt : public EtherInt
 };
 
 class RxSidePolicy{
-  private:
+  protected:
     NepGbE* igbe;
   public:
     virtual int getTargetRxQ(EthPacketPtr epkt) {return 0;}

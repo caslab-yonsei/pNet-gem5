@@ -100,7 +100,8 @@ def build_test_system(np):
             security=options.enable_security_extensions,
             vio_9p=options.vio_9p,
             bootloader=options.bootloader,
-            num_nep_rx_q=options.num_nep_rx_q
+            num_nep_rx_q=options.num_nep_rx_q,
+            port_specific=options.port_specific
         )
         if options.enable_context_switch_stats_dump:
             test_sys.enable_context_switch_stats_dump = True

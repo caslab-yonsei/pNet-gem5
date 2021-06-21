@@ -99,7 +99,8 @@ NepGbE::NepGbE(const Params &p)
       lastInterrupt(0)
 {
     etherInt = new NepGbEInt(name() + ".int", this);
-    
+    num_of_queues = p.num_of_queues;
+    port_specific = p.port_specific;
 
     // Initialized internal registers per Intel documentation
     // All registers intialized to 0 by per register constructor

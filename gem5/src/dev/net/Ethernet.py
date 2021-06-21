@@ -260,6 +260,7 @@ class NepGbE(EtherDevice):
     PXCAPDevCap2 = 0x00000000
     PXCAPDevCtrl2 = 0x00000000
     #msi0 = MasterPort("MSI port")
+    port_specific = Param.Bool(False)
     
     
 class NepGbE_base(NepGbE):

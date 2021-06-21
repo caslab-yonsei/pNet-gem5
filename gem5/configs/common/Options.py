@@ -448,6 +448,7 @@ def addFSOptions(parser):
 
     parser.add_option("--num-nep-rx-q", default=1, action="store", type="int",
                       help="Num of Queue of NepGbe")
+    parser.add_option("--port-specific", action="store_true")
 
     if buildEnv['TARGET_ISA'] == "arm":
         parser.add_option("--bare-metal", action="store_true",

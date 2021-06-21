@@ -120,7 +120,7 @@ def config_cache(options, system):
                                    assoc=options.l3_assoc)
              
         system.tol3bus = L3XBar(clk_domain = system.clk_domain,
-                snoop_filter=SnoopFilter(lookup_latency = 0, max_capacity="32MB"))
+                snoop_filter=SnoopFilter(lookup_latency = 0, max_capacity="128MB"))
             
 
         system.l3cache.cpu_side = system.tol3bus.master

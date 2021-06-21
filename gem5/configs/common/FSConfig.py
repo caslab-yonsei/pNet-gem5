@@ -175,7 +175,8 @@ def makeSparcSystem(mem_mode, mdesc=None, cmdline=None):
 def makeArmSystem__(mem_mode, machine_type, num_cpus=1, mdesc=None,
                   dtb_filename=None, bare_metal=False, cmdline=None,
                   external_memory="", ruby=False, security=False,
-                  vio_9p=None, bootloader=None, num_nep_rx_q=4, num_nic=1):
+                  vio_9p=None, bootloader=None, num_nep_rx_q=4, num_nic=1,
+                  port_specific=False):
     assert machine_type
 
     pci_devices = []
@@ -221,11 +222,12 @@ def makeArmSystem__(mem_mode, machine_type, num_cpus=1, mdesc=None,
         #pci_devices.append(self.realview.ethernet)
         
         #ethernets = []
-
+        port_specific_=port_specific
         for i in range(1):
             if num_nep_rx_q > 0:
                 self.realview.ethernet = NepGbE_base(pci_bus=0, pci_dev=0, pci_func=0,
-                    num_of_queues=num_nep_rx_q,num_msi_engine = num_nep_rx_q, MSICAPMsgCtrl = 0xFBFB)
+                    num_of_queues=num_nep_rx_q,num_msi_engine = num_nep_rx_q, MSICAPMsgCtrl = 0xFBFB,
+                    port_specific=port_specific_)
             else:
                 self.realview.ethernet = IGbE_e1000(pci_bus=0, pci_dev=0, pci_func=0,   
                                        InterruptLine=1, InterruptPin=1)
@@ -390,7 +392,8 @@ def makeArmSystem(mem_mode, machine_type, num_cpus=1, mdesc=None,
     return makeArmSystem__(mem_mode, machine_type, num_cpus, mdesc,
                   dtb_filename, bare_metal, cmdline,
                   external_memory, ruby, security,
-                  vio_9p, bootloader, num_nep_rx_q=4, num_nic=1)
+                  vio_9p, bootloader, num_nep_rx_q=4, num_nic=1,
+                  port_specific=False)
 
 def makeLinuxMipsSystem(mem_mode, mdesc=None, cmdline=None):
     class BaseMalta(Malta):
