@@ -184,7 +184,8 @@ class IGbE_igb(IGbE):
 class NepGbE(EtherDevice):
     type = 'NepGbE'
     cxx_header = "dev/net/nep_GBe.hh"
-
+    dist_rank = Param.UInt32('0', "Rank of this gem5 process (dist run)")
+    
     hardware_address = Param.EthernetAddr(NextEthernetAddr,
         "Ethernet Hardware Address")
     rx_fifo_size = Param.MemorySize('384kB', "Size of the rx FIFO")

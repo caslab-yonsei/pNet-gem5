@@ -176,7 +176,7 @@ def makeArmSystem__(mem_mode, machine_type, num_cpus=1, mdesc=None,
                   dtb_filename=None, bare_metal=False, cmdline=None,
                   external_memory="", ruby=False, security=False,
                   vio_9p=None, bootloader=None, num_nep_rx_q=4, num_nic=1,
-                  port_specific=False):
+                  port_specific=False, dist_rank=0):
     assert machine_type
 
     pci_devices = []
@@ -227,7 +227,7 @@ def makeArmSystem__(mem_mode, machine_type, num_cpus=1, mdesc=None,
             if num_nep_rx_q > 0:
                 self.realview.ethernet = NepGbE_base(pci_bus=0, pci_dev=0, pci_func=0,
                     num_of_queues=num_nep_rx_q,num_msi_engine = num_nep_rx_q, MSICAPMsgCtrl = 0xFBFB,
-                    port_specific=port_specific_)
+                    port_specific=port_specific_, dist_rank=dist_rank)
             else:
                 self.realview.ethernet = IGbE_e1000(pci_bus=0, pci_dev=0, pci_func=0,   
                                        InterruptLine=1, InterruptPin=1)

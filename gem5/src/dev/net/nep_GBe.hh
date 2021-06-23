@@ -804,6 +804,7 @@ class NepGbE : public EtherDevice
     // }
   public:
     bool port_specific;
+    int dist_rank;
 };
 class NepGbEInt : public EtherInt
 {

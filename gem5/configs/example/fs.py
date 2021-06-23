@@ -101,7 +101,8 @@ def build_test_system(np):
             vio_9p=options.vio_9p,
             bootloader=options.bootloader,
             num_nep_rx_q=options.num_nep_rx_q,
-            port_specific=options.port_specific
+            port_specific=options.port_specific,
+            dist_rank=options.dist_rank
         )
         if options.enable_context_switch_stats_dump:
             test_sys.enable_context_switch_stats_dump = True
@@ -176,13 +177,13 @@ def build_test_system(np):
     else:
         if options.caches or options.l2cache:
             # By default the IOCache runs at the system clock
-            ext_range = test_sys.mem_ranges + [AddrRange(0x2c1c0000, size=0x10000)]
+            ext_range = test_sys.mem_ranges #+ [AddrRange(0x2c1c0000, size=0x10000)]
             test_sys.iocache = IOCache(addr_ranges = ext_range)
             test_sys.iocache.cpu_side = test_sys.iobus.master
             test_sys.iocache.mem_side = test_sys.membus.slave
-            # test_sys.io_msi = Bridge(delay='0ns', ranges = AddrRange(0x2c1c0000, size=0x10000))
-            # test_sys.io_msi.master = test_sys.membus.slave
-            # test_sys.io_msi.slave = test_sys.iobus.master
+            test_sys.io_msi = Bridge(delay='0ns', ranges = AddrRange(0x2c1c0000, size=0x10000))
+            test_sys.io_msi.master = test_sys.membus.slave
+            test_sys.io_msi.slave = test_sys.iobus.master
         elif not options.external_memory_system:
             test_sys.iobridge = Bridge(delay='50ns', ranges = test_sys.mem_ranges)
             test_sys.iobridge.slave = test_sys.iobus.master

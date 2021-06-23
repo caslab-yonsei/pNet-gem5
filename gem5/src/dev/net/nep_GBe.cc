@@ -101,6 +101,7 @@ NepGbE::NepGbE(const Params &p)
     etherInt = new NepGbEInt(name() + ".int", this);
     num_of_queues = p.num_of_queues;
     port_specific = p.port_specific;
+    dist_rank=p.dist_rank;
 
     // Initialized internal registers per Intel documentation
     // All registers intialized to 0 by per register constructor
@@ -853,7 +854,7 @@ NepGbE::write(PacketPtr pkt)
         break;
       case REG_ITR:
         if (qid > -1)
-            regs.nep_ex_regs[qid].itr = val / 4;
+            regs.nep_ex_regs[qid].itr = val;
         else
             regs.itr = val;
         break;
@@ -3857,7 +3858,6 @@ NepGbE::MultiQueueManager::allTxFifoTickOn(){
 
 // SHIN. RxManager의 생성자
 // 그냥 내부 구성요소들을 생성하는게 하는 일의 전부임
-// 크기 정책은 일단 걍 나눠서 씀
 NepGbE::MultiQueueManager::MultiQueueManager(NepGbE* __igbe, 
                         int num_rx_q, int rx_queue_max_size, int rx_desc_max_size,
                         int num_tx_q, int tx_queue_max_size, int tx_desc_max_size)

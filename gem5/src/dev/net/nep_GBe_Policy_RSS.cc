@@ -65,8 +65,12 @@ int RxSidePolicyRSS::calcHashValForEnQ(EthPacketPtr ethpkt)
     input[2] = rss_port;
 
     //set seed
-    if(igbe->port_specific)
-        return rss_dst_port % igbe->getNumOfQueue();
+    if(igbe->port_specific){
+        if(igbe->dist_rank==0)
+            return rss_dst_port % igbe->getNumOfQueue();
+        else
+            return rss_src_port % igbe->getNumOfQueue();
+    }
     
     // seed[0] = 0x3a42624c;
     // seed[1] = 0x41a926fc;
