@@ -151,3 +151,5 @@
  
 #define SIOCPROTOPRIVATE 0x89E0 /* to 89EF */
 #endif	/* _LINUX_SOCKIOS_H */
+
+#define SIODYIPI 0x90E0 // bst edit for dyipi

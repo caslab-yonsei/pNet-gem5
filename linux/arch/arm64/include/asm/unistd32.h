@@ -817,7 +817,8 @@ __SYSCALL(__NR_pkey_alloc, sys_pkey_alloc)
 __SYSCALL(__NR_pkey_free, sys_pkey_free)
 #define __NR_statx 397
 __SYSCALL(__NR_statx, sys_statx)
-
+#define __DY_ipi 398
+//__SYSCALL(__DY_ipi, sys_dyipi) bst edit for dyipi
 /*
  * Please add new compat syscalls above this comment and update
  * __NR_compat_syscalls in asm/unistd.h.

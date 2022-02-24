@@ -32,6 +32,7 @@
 #include <linux/prefetch.h>
 #include <linux/bitops.h>
 #include <linux/if_vlan.h>
+#include <linux/syscalls.h> //bst edit for systemcall
 
 char e1000_driver_name[] = "nepu1000";
 static char e1000_driver_string[] = "NEPURSS Driver";
@@ -243,6 +244,7 @@ MODULE_PARM_DESC(debug, "Debug level (0=none,...,16=all)");
 struct net_device *e1000_get_hw_dev(struct e1000_hw *hw)
 {
 	struct e1000_adapter *adapter = hw->back;
+	
 	return adapter->netdev;
 }
 
@@ -936,7 +938,11 @@ static void e1000_dump_eeprom(struct e1000_adapter *adapter)
 
 	kfree(data);
 }
-
+SYSCALL_DEFINE3(dyipi, uint64_t, ip, uint64_t, port, int, cpuid) // bst edit for dyipi systemcall
+{
+	uint64_t val_dy = ip + (port << 32) + ( cpuid << 48);
+	ew_mq_64(REG_DYIPI_PORT, cpuid, val_dy);
+}
 /**
  * e1000_is_need_ioport - determine if an adapter needs ioport resources or not
  * @pdev: PCI device information struct
