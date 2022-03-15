@@ -249,6 +249,13 @@ struct ifreq {
 		char	ifru_newname[IFNAMSIZ];
 		void __user *	ifru_data;
 		struct	if_settings ifru_settings;
+		short port;
+		short ip0;
+		short ip1;
+		short ip2;
+		short ip3;
+		short cpu_id;
+		short queue_id;
 	} ifr_ifru;
 };
 #endif /* __UAPI_DEF_IF_IFREQ */

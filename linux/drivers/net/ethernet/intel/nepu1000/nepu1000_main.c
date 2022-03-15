@@ -938,11 +938,11 @@ static void e1000_dump_eeprom(struct e1000_adapter *adapter)
 
 	kfree(data);
 }
-SYSCALL_DEFINE3(dyipi, uint64_t, ip, uint64_t, port, int, cpuid) // bst edit for dyipi systemcall
+/*SYSCALL_DEFINE3(dyipi, uint64_t, ip, uint64_t, port, int, cpuid) // bst edit for dyipi systemcall
 {
 	uint64_t val_dy = ip + (port << 32) + ( cpuid << 48);
 	ew_mq_64(REG_DYIPI_PORT, cpuid, val_dy);
-}
+}*/
 /**
  * e1000_is_need_ioport - determine if an adapter needs ioport resources or not
  * @pdev: PCI device information struct
@@ -5380,12 +5380,18 @@ static void e1000_smartspeed(struct e1000_adapter *adapter)
  * @cmd:
  **/
 static int e1000_ioctl(struct net_device *netdev, struct ifreq *ifr, int cmd)
-{
+{	
+	struct e1000_adapter *adapter = netdev_priv(netdev);
+	struct e1000_hw *hw = &adapter->hw;
 	switch (cmd) {
 	case SIOCGMIIPHY:
 	case SIOCGMIIREG:
 	case SIOCSMIIREG:
 		return e1000_mii_ioctl(netdev, ifr, cmd);
+	case SIODYIPI:
+		//printk("port =  %d, cpuid = %d, ip = %d.%d.%d.%d", ifr->ifru.port, ifr->ifru.cpu_id, ifr->ifru.ip0, ifr->ifru.ip1, ifr->ifru.ip2, ifr->ifru.ip)
+		ew_mq_32(DYIPIL, ifr->ifr_ifru.queue_id, ifr->ifr_ifru.ip0 << 56 + ifr->ifr_ifru.ip1 << 48 + ifr->ifr_ifru.ip2 << 40 + ifr->ifr_ifru.ip3 << 32 \
+		+ ifr->ifr_ifru.port << 24 + ifr->ifr_ifru.cpu_id << 20); 
 	default:
 		return -EOPNOTSUPP;
 	}

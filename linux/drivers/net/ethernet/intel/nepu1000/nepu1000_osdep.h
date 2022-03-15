@@ -67,12 +67,10 @@
 // BST edit for dynamic ipi
 #define er_mq_64(reg, qid)							\
 	(readq(hw->hw_addr + \
-        (REG_END * ((qid) + 1) + ((hw->mac_type >= e1000_82543)		\
-			       ? E1000_##reg : E1000_82542_##reg))))
+        (REG_END * ((qid) + 1) + (( reg ))))
 
 #define ew_mq_64(reg, qid, value)						\
-	(writeq((value), (REG_END * ((qid) + 1)) + (hw->hw_addr + ((hw->mac_type >= e1000_82543)	\
-					 ? E1000_##reg : E1000_82542_##reg))))
+	(writeq((value), (REG_END * ((qid) + 1)) + (hw->hw_addr + (reg))))
 
 #define mq_32(reg, qid)     \
     (REG_END * ((qid) + 1)) + (hw->hw_addr + ((hw->mac_type >= e1000_82543)	\
