@@ -30,7 +30,7 @@ DTC?=dtc
 DTC_CPP_FLAGS=-nostdinc -undef
 
 # $(1) is the prefix of DTB files
-NUM_CPUS := 1 2 4 8 16
+NUM_CPUS := 1 2 4 8 16 32
 CREATE_TARGET=$(foreach n, $(NUM_CPUS), $(1)_$(n)cpu.dtb)
 
 TARGET_PREFIX=\

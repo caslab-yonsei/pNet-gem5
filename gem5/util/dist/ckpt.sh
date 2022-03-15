@@ -339,6 +339,11 @@ do
         # make sure that CKPT_DIR exists
         mkdir -p $CKPT_DIR/m5out.$n > /dev/null 2>&1
 	    echo "starting gem5 on $h ..."
+	    if [ $n == "1" ] #bst edit
+	    then
+		    FS_ARGS="--cpu-type=AtomicSimpleCPU --num-cpus=16 --cpu-clock=8GHz --l3_size=64MB --machine-type=VExpress_GEM5_V1 --disk-image=/home/bst/IISWC/mQ-gem5/ubuntu.img --kernel=/home/bst/IISWC/mQ-gem5/linux/vmlinux --dtb-filename=/home/bst/IISWC/mQ-gem5/gem5/system/arm/dt/armv8_gem5_v1_16cpu.dtb --script=/home/bst/IISWC/mQ-gem5/script/ckpt.rcS --mem-size=4GB --mem-type=DDR4_2400_4x16 --ethernet-linkdelay=100ns --ethernet-linkspeed=99Gbps --mem-channels=4 --num-nep-rx-q=16"
+	    
+	    fi
 	    echo "M5 args $M5_ARGS\n"
 	    echo "fs_config $FS_CONFIG\n"
 	    echo "fs_args $FS_ARGS\n"
