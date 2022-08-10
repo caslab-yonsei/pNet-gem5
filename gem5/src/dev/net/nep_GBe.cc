@@ -74,6 +74,8 @@
 
 // SHIN.
 
+#include "debug/NepCkpt.hh"
+
 using namespace iGbReg;
 using namespace Net;
 
@@ -103,6 +105,8 @@ NepGbE::NepGbE(const Params &p)
     port_specific = p.port_specific;
     dist_rank=p.dist_rank;
 
+    std::cout << "nepnic" << std::endl;
+
     // Initialized internal registers per Intel documentation
     // All registers intialized to 0 by per register constructor
     regs.ctrl.fd(1);
@@ -127,9 +131,12 @@ NepGbE::NepGbE(const Params &p)
     regs.pba.txa(0x10);
 
     regs.num_enabled_queues = p.num_of_queues;
+    
 
     // Init NEPU Regs
     for(int i = 0; i < 32; i++){
+        regs.nep_ex_regs[i].idx = i;
+
         // RX
         regs.nep_ex_regs[i].rxdctl = 0;
         regs.nep_ex_regs[i].rxdctl.gran(1);
@@ -3326,7 +3333,42 @@ NepGbE::serialize(CheckpointOut &cp) const
 
     DPRINTF(EthernetSM, "NepGbE::serialize\n");
 
-    regs.serialize(cp);
+    
+    
+    // regs.nep_ex_regs[4].serializeSection(cp, "NepRegs4");
+    // regs.nep_ex_regs[1].serializeSection(cp, "NepRegs1");
+    // regs.nep_ex_regs[2].serializeSection(cp, "NepRegs2");
+    // regs.nep_ex_regs[0].serializeSection(cp, "NepRegs0");
+    // regs.nep_ex_regs[3].serializeSection(cp, "NepRegs3");
+    // regs.nep_ex_regs[5].serializeSection(cp, "NepRegs5");
+    // regs.nep_ex_regs[6].serializeSection(cp, "NepRegs6");
+    // regs.nep_ex_regs[7].serializeSection(cp, "NepRegs7");
+    // regs.nep_ex_regs[8].serializeSection(cp, "NepRegs8");
+    // regs.nep_ex_regs[9].serializeSection(cp, "NepRegs9");
+    // regs.nep_ex_regs[10].serializeSection(cp, "NepRegs10");
+    // regs.nep_ex_regs[11].serializeSection(cp, "NepRegs11");
+    // regs.nep_ex_regs[12].serializeSection(cp, "NepRegs12");
+    // regs.nep_ex_regs[13].serializeSection(cp, "NepRegs13");
+    // regs.nep_ex_regs[14].serializeSection(cp, "NepRegs14");
+    // regs.nep_ex_regs[15].serializeSection(cp, "NepRegs15");
+    // regs.nep_ex_regs[16].serializeSection(cp, "NepRegs16");
+    // regs.nep_ex_regs[17].serializeSection(cp, "NepRegs17");
+    // regs.nep_ex_regs[18].serializeSection(cp, "NepRegs18");
+    // regs.nep_ex_regs[19].serializeSection(cp, "NepRegs19");
+    // regs.nep_ex_regs[20].serializeSection(cp, "NepRegs20");
+    // regs.nep_ex_regs[21].serializeSection(cp, "NepRegs21");
+    // regs.nep_ex_regs[22].serializeSection(cp, "NepRegs22");
+    // regs.nep_ex_regs[23].serializeSection(cp, "NepRegs23");
+    // regs.nep_ex_regs[24].serializeSection(cp, "NepRegs24");
+    // regs.nep_ex_regs[25].serializeSection(cp, "NepRegs25");
+    // regs.nep_ex_regs[26].serializeSection(cp, "NepRegs26");
+    // regs.nep_ex_regs[27].serializeSection(cp, "NepRegs27");
+    // regs.nep_ex_regs[28].serializeSection(cp, "NepRegs28");
+    // regs.nep_ex_regs[29].serializeSection(cp, "NepRegs29");
+    // regs.nep_ex_regs[30].serializeSection(cp, "NepRegs30");
+    // regs.nep_ex_regs[31].serializeSection(cp, "NepRegs31");
+    
+
     SERIALIZE_SCALAR(eeOpBits);
     SERIALIZE_SCALAR(eeAddrBits);
     SERIALIZE_SCALAR(eeDataBits);
@@ -3368,7 +3410,16 @@ NepGbE::serialize(CheckpointOut &cp) const
 
     SERIALIZE_SCALAR(pktOffset);
 
+    regs.serializeSection(cp, "Regs");
     txDescCache.serializeSection(cp, "TxDescCache");
+    mqManager.serializeSection(cp, "MultiQueueManager");
+    
+    // for(int i = 0; i < 32; i++)
+    // {
+    //     std::cout << "nep" << i << std::endl;
+    //     DPRINTF(NepCkpt, "Serialize Nep Regs NepGbE %d\n", i);
+    //     regs.nep_ex_regs[i].serialize(cp);
+    // }
     //rxDescCache.serializeSection(cp, "RxDescCache");
 }
 
@@ -3378,8 +3429,47 @@ NepGbE::unserialize(CheckpointIn &cp)
     PciDevice::unserialize(cp);
 
     DPRINTF(EthernetSM, "NepGbE::unserialize\n");
+    DPRINTF(NepCkpt, "NepGbE::unserialize\n");
+    
 
-    regs.unserialize(cp);
+    // regs.nep_ex_regs[1].unserializeSection(cp, "NepRegs1");
+    // regs.nep_ex_regs[0].unserializeSection(cp, "NepRegs0");
+    // regs.nep_ex_regs[2].unserializeSection(cp, "NepRegs2");
+    // regs.nep_ex_regs[3].unserializeSection(cp, "NepRegs3");
+    // regs.nep_ex_regs[4].unserializeSection(cp, "NepRegs4");
+    // regs.nep_ex_regs[5].unserializeSection(cp, "NepRegs5");
+    // regs.nep_ex_regs[6].unserializeSection(cp, "NepRegs6");
+    // regs.nep_ex_regs[7].unserializeSection(cp, "NepRegs7");
+    // regs.nep_ex_regs[8].unserializeSection(cp, "NepRegs8");
+    // regs.nep_ex_regs[9].unserializeSection(cp, "NepRegs9");
+    // regs.nep_ex_regs[10].unserializeSection(cp, "NepRegs10");
+    // regs.nep_ex_regs[11].unserializeSection(cp, "NepRegs11");
+    // regs.nep_ex_regs[12].unserializeSection(cp, "NepRegs12");
+    // regs.nep_ex_regs[13].unserializeSection(cp, "NepRegs13");
+    // regs.nep_ex_regs[14].unserializeSection(cp, "NepRegs14");
+    // regs.nep_ex_regs[15].unserializeSection(cp, "NepRegs15");
+    // regs.nep_ex_regs[16].unserializeSection(cp, "NepRegs16");
+    // regs.nep_ex_regs[17].unserializeSection(cp, "NepRegs17");
+    // regs.nep_ex_regs[18].unserializeSection(cp, "NepRegs18");
+    // regs.nep_ex_regs[19].unserializeSection(cp, "NepRegs19");
+    // regs.nep_ex_regs[20].unserializeSection(cp, "NepRegs20");
+    // regs.nep_ex_regs[21].unserializeSection(cp, "NepRegs21");
+    // regs.nep_ex_regs[22].unserializeSection(cp, "NepRegs22");
+    // regs.nep_ex_regs[23].unserializeSection(cp, "NepRegs23");
+    // regs.nep_ex_regs[24].unserializeSection(cp, "NepRegs24");
+    // regs.nep_ex_regs[25].unserializeSection(cp, "NepRegs25");
+    // regs.nep_ex_regs[26].unserializeSection(cp, "NepRegs26");
+    // regs.nep_ex_regs[27].unserializeSection(cp, "NepRegs27");
+    // regs.nep_ex_regs[28].unserializeSection(cp, "NepRegs28");
+    // regs.nep_ex_regs[29].unserializeSection(cp, "NepRegs29");
+    // regs.nep_ex_regs[30].unserializeSection(cp, "NepRegs30");
+    // regs.nep_ex_regs[31].unserializeSection(cp, "NepRegs31");
+
+    // for (int i = 0; i < 32; i++)
+    // {
+    //     regs.nep_ex_regs[i].unserializeSection(cp, "NepRegs" + std::to_string(i));
+    // }
+
     UNSERIALIZE_SCALAR(eeOpBits);
     UNSERIALIZE_SCALAR(eeAddrBits);
     UNSERIALIZE_SCALAR(eeDataBits);
@@ -3426,7 +3516,9 @@ NepGbE::unserialize(CheckpointIn &cp)
 
     UNSERIALIZE_SCALAR(pktOffset);
 
+    regs.unserializeSection(cp, "Regs");
     txDescCache.unserializeSection(cp, "TxDescCache");
+    mqManager.unserializeSection(cp, "MultiQueueManager");
     //rxDescCache.unserializeSection(cp, "RxDescCache");
 }
 
@@ -3924,6 +4016,99 @@ NepGbE::MultiQueueManager::~MultiQueueManager(){
     }
 }
 
+void
+NepGbE::MultiQueueManager::serialize(CheckpointOut &cp) const {
+    for (int i = 0; i < num_rx_queues; i++)
+    {
+        mq_component_sets[i]->serializeSection(cp, "MultiQueueSet" + std::to_string(i));
+    }
+}
+
+void
+NepGbE::MultiQueueManager::unserialize(CheckpointIn &cp) {
+    for (int i = 0; i < num_rx_queues; i++)
+    {
+        mq_component_sets[i]->unserializeSection(cp, "MultiQueueSet" + std::to_string(i));
+    }
+}
+
+void
+NepGbE::MultiQueueComponentSet::serialize(CheckpointOut &cp) const {
+    rxfifo.serialize("rxfifo", cp);
+    txfifo.serialize("txfifo", cp);
+    
+
+    bool txPktExists = txPacket != nullptr;
+    SERIALIZE_SCALAR(txPktExists);
+    if (txPktExists)
+        txPacket->serialize("txpacket", cp);
+
+    Tick rdtr_time = 0, radv_time = 0, tidv_time = 0, tadv_time = 0,
+        inter_time = 0;
+
+    if (rdtrMultEvent.scheduled())
+        rdtr_time = rdtrMultEvent.when();
+    SERIALIZE_SCALAR(rdtr_time);
+
+    if (radvMultEvent.scheduled())
+        radv_time = radvMultEvent.when();
+    SERIALIZE_SCALAR(radv_time);
+
+    if (tidvMultEvent.scheduled())
+        tidv_time = tidvMultEvent.when();
+    SERIALIZE_SCALAR(tidv_time);
+
+    if (tadvMultEvent.scheduled())
+        tadv_time = tadvMultEvent.when();
+    SERIALIZE_SCALAR(tadv_time);
+
+    if (interMultEvent.scheduled())
+        inter_time = interMultEvent.when();
+    SERIALIZE_SCALAR(inter_time);
+
+    SERIALIZE_SCALAR(pktOffset);
+    rxDescCache.serializeSection(cp, "RxDescCache");
+    txDescCache.serializeSection(cp, "TxDescCache");
+}
+
+void
+NepGbE::MultiQueueComponentSet::unserialize(CheckpointIn &cp) {
+    rxfifo.unserialize("rxfifo", cp);
+    txfifo.unserialize("txfifo", cp);
+    rxDescCache.unserializeSection(cp, "RxDescCache");
+    txDescCache.unserializeSection(cp, "TxDescCache");
+
+    bool txPktExists;
+    UNSERIALIZE_SCALAR(txPktExists);
+    if (txPktExists) {
+        txPacket = std::make_shared<EthPacketData>(16384);
+        txPacket->unserialize("txpacket", cp);
+    }
+
+    Tick rdtr_time, radv_time, tidv_time, tadv_time, inter_time;
+    UNSERIALIZE_SCALAR(rdtr_time);
+    UNSERIALIZE_SCALAR(radv_time);
+    UNSERIALIZE_SCALAR(tidv_time);
+    UNSERIALIZE_SCALAR(tadv_time);
+    UNSERIALIZE_SCALAR(inter_time);
+
+    if (rdtr_time)
+        igbe->schedule(rdtrMultEvent, rdtr_time);
+
+    if (radv_time)
+        igbe->schedule(radvMultEvent, radv_time);
+
+    if (tidv_time)
+        igbe->schedule(tidvMultEvent, tidv_time);
+
+    if (tadv_time)
+        igbe->schedule(tadvMultEvent, tadv_time);
+
+    if (inter_time)
+        igbe->schedule(interMultEvent, inter_time);
+
+    UNSERIALIZE_SCALAR(pktOffset);
+}
 
 void
 NepGbE::MultiQueueComponentSet::delayIntEventMultIntr()
@@ -3970,4 +4155,203 @@ NepGbE::MultiQueueComponentSet::tidvProcessMultIntr()
             "NepNic! Posting TXDW interrupt because TIDV timer expired\n");
     //postInterrupt(iGbReg::IT_TXDW);
     postInterruptMultIntr(iGbReg::IT_TXDW);
+}
+
+
+void
+iGbReg::Regs::NEP_EX_REGS::serialize(CheckpointOut &cp) const 
+{
+    DPRINTF(NepCkpt, "NepRegs serialize\n");
+    paramOut(cp, "rctl" + std::to_string(idx), rctl._data);
+    paramOut(cp, "rdba" + std::to_string(idx), rdba._data);
+    paramOut(cp, "rdlen" + std::to_string(idx), rdlen._data);
+    paramOut(cp, "rdh" + std::to_string(idx), rdh._data);
+    paramOut(cp, "rdt" + std::to_string(idx), rdt._data);
+    paramOut(cp, "rdtr" + std::to_string(idx), rdtr._data);
+    paramOut(cp, "srrctl" + std::to_string(idx), srrctl._data);
+    paramOut(cp, "rxdctl" + std::to_string(idx), rxdctl._data);
+    paramOut(cp, "radv" + std::to_string(idx), radv._data);
+    paramOut(cp, "rsrpd" + std::to_string(idx), rsrpd._data);
+    paramOut(cp, "rxcsum" + std::to_string(idx), rxcsum._data);
+    paramOut(cp, "rlpml" + std::to_string(idx), rlpml);
+    paramOut(cp, "rfctl" + std::to_string(idx), rfctl._data);
+
+
+    paramOut(cp, "tctl" + std::to_string(idx), tctl._data);
+    paramOut(cp, "tdba" + std::to_string(idx), tdba._data);
+    paramOut(cp, "tipg" + std::to_string(idx), tipg);
+    paramOut(cp, "tdlen" + std::to_string(idx), tdlen._data);
+    paramOut(cp, "txdca_ctl" + std::to_string(idx), txdca_ctl._data);
+    paramOut(cp, "tdh" + std::to_string(idx), tdh._data);
+    paramOut(cp, "tdt" + std::to_string(idx), tdt._data);
+    paramOut(cp, "tidv" + std::to_string(idx), tidv._data);
+    paramOut(cp, "txdctl" + std::to_string(idx), txdctl._data);
+    paramOut(cp, "tadv" + std::to_string(idx), tadv._data);
+    paramOut(cp, "tdwba" + std::to_string(idx), tdwba);
+
+
+    paramOut(cp, "mqicr" + std::to_string(idx), mqicr._data);
+    paramOut(cp, "itr" + std::to_string(idx), itr._data);
+    paramOut(cp, "imr" + std::to_string(idx), imr);
+    paramOut(cp, "iam" + std::to_string(idx), iam);
+    paramOut(cp, "ctrl_ext" + std::to_string(idx), ctrl_ext._data);
+}
+
+void
+iGbReg::Regs::NEP_EX_REGS::unserialize(CheckpointIn &cp) 
+{
+    paramIn(cp, "rctl" + std::to_string(idx), rctl._data);
+    paramIn(cp, "rdba" + std::to_string(idx), rdba._data);
+    paramIn(cp, "rdlen" + std::to_string(idx), rdlen._data);
+    paramIn(cp, "rdh" + std::to_string(idx), rdh._data);
+    paramIn(cp, "rdt" + std::to_string(idx), rdt._data);
+    paramIn(cp, "rdtr" + std::to_string(idx), rdtr._data);
+    paramIn(cp, "srrctl" + std::to_string(idx), srrctl._data);
+    paramIn(cp, "rxdctl" + std::to_string(idx), rxdctl._data);
+    paramIn(cp, "radv" + std::to_string(idx), radv._data);
+    paramIn(cp, "rsrpd" + std::to_string(idx), rsrpd._data);
+    paramIn(cp, "rxcsum" + std::to_string(idx), rxcsum._data);
+    paramIn(cp, "rlpml" + std::to_string(idx), rlpml);
+    paramIn(cp, "rfctl" + std::to_string(idx), rfctl._data);
+
+
+    paramIn(cp, "tctl" + std::to_string(idx), tctl._data);
+    paramIn(cp, "tdba" + std::to_string(idx), tdba._data);
+    paramIn(cp, "tipg" + std::to_string(idx), tipg);
+    paramIn(cp, "tdlen" + std::to_string(idx), tdlen._data);
+    paramIn(cp, "txdca_ctl" + std::to_string(idx), txdca_ctl._data);
+    paramIn(cp, "tdh" + std::to_string(idx), tdh._data);
+    paramIn(cp, "tdt" + std::to_string(idx), tdt._data);
+    paramIn(cp, "tidv" + std::to_string(idx), tidv._data);
+    paramIn(cp, "txdctl" + std::to_string(idx), txdctl._data);
+    paramIn(cp, "tadv" + std::to_string(idx), tadv._data);
+    paramIn(cp, "tdwba" + std::to_string(idx), tdwba);
+
+
+    paramIn(cp, "mqicr" + std::to_string(idx), mqicr._data);
+    paramIn(cp, "itr" + std::to_string(idx), itr._data);
+    paramIn(cp, "imr" + std::to_string(idx), imr);
+    paramIn(cp, "iam" + std::to_string(idx), iam);
+    paramIn(cp, "ctrl_ext" + std::to_string(idx), ctrl_ext._data);
+}
+
+void
+iGbReg::Regs::serialize(CheckpointOut &cp) const 
+{
+    DPRINTF(NepCkpt, "Serialize Regs\n");
+    //std::cout << "nep" << std::endl;
+    paramOut(cp, "ctrl", ctrl._data);
+    paramOut(cp, "sts", sts._data);
+    paramOut(cp, "eecd", eecd._data);
+    paramOut(cp, "eerd", eerd._data);
+    paramOut(cp, "ctrl_ext", ctrl_ext._data);
+    paramOut(cp, "mdic", mdic._data);
+    paramOut(cp, "icr", icr._data);
+    SERIALIZE_SCALAR(imr);
+    paramOut(cp, "itr", itr._data);
+    SERIALIZE_SCALAR(iam);
+    paramOut(cp, "rctl", rctl._data);
+    paramOut(cp, "fcttv", fcttv._data);
+    paramOut(cp, "tctl", tctl._data);
+    paramOut(cp, "pba", pba._data);
+    paramOut(cp, "fcrtl", fcrtl._data);
+    paramOut(cp, "fcrth", fcrth._data);
+    paramOut(cp, "rdba", rdba._data);
+    paramOut(cp, "rdlen", rdlen._data);
+    paramOut(cp, "srrctl", srrctl._data);
+    paramOut(cp, "rdh", rdh._data);
+    paramOut(cp, "rdt", rdt._data);
+    paramOut(cp, "rdtr", rdtr._data);
+    paramOut(cp, "rxdctl", rxdctl._data);
+    paramOut(cp, "radv", radv._data);
+    paramOut(cp, "rsrpd", rsrpd._data);
+    paramOut(cp, "tdba", tdba._data);
+    paramOut(cp, "tdlen", tdlen._data);
+    paramOut(cp, "tdh", tdh._data);
+    paramOut(cp, "txdca_ctl", txdca_ctl._data);
+    paramOut(cp, "tdt", tdt._data);
+    paramOut(cp, "tidv", tidv._data);
+    paramOut(cp, "txdctl", txdctl._data);
+    paramOut(cp, "tadv", tadv._data);
+    SERIALIZE_SCALAR(tdwba);
+    paramOut(cp, "rxcsum", rxcsum._data);
+    SERIALIZE_SCALAR(rlpml);
+    paramOut(cp, "rfctl", rfctl._data);
+    paramOut(cp, "manc", manc._data);
+    paramOut(cp, "swsm", swsm._data);
+    paramOut(cp, "fwsm", fwsm._data);
+    SERIALIZE_SCALAR(sw_fw_sync);
+
+    paramOut(cp, "imr", imr);
+    
+    for(int i = 0; i < 32; i++)
+    {
+        std::cout << "nep" << i << std::endl;
+        DPRINTF(NepCkpt, "Serialize Nep Regs %d\n", i);
+        nep_ex_regs[i].serialize(cp);
+    }
+    
+}
+
+void
+iGbReg::Regs::unserialize(CheckpointIn &cp) 
+{
+    DPRINTF(NepCkpt, "Unserialize Nep Regs\n");
+    std::cout << "nep" << std::endl;
+    paramIn(cp, "ctrl", ctrl._data);
+    paramIn(cp, "sts", sts._data);
+    paramIn(cp, "eecd", eecd._data);
+    paramIn(cp, "eerd", eerd._data);
+    paramIn(cp, "ctrl_ext", ctrl_ext._data);
+    paramIn(cp, "mdic", mdic._data);
+    paramIn(cp, "icr", icr._data);
+    UNSERIALIZE_SCALAR(imr);
+    paramIn(cp, "itr", itr._data);
+    UNSERIALIZE_SCALAR(iam);
+    paramIn(cp, "rctl", rctl._data);
+    paramIn(cp, "fcttv", fcttv._data);
+    paramIn(cp, "tctl", tctl._data);
+    paramIn(cp, "pba", pba._data);
+    paramIn(cp, "fcrtl", fcrtl._data);
+    paramIn(cp, "fcrth", fcrth._data);
+    paramIn(cp, "rdba", rdba._data);
+    paramIn(cp, "rdlen", rdlen._data);
+    paramIn(cp, "srrctl", srrctl._data);
+    paramIn(cp, "rdh", rdh._data);
+    paramIn(cp, "rdt", rdt._data);
+    paramIn(cp, "rdtr", rdtr._data);
+    paramIn(cp, "rxdctl", rxdctl._data);
+    paramIn(cp, "radv", radv._data);
+    paramIn(cp, "rsrpd", rsrpd._data);
+    paramIn(cp, "tdba", tdba._data);
+    paramIn(cp, "tdlen", tdlen._data);
+    paramIn(cp, "tdh", tdh._data);
+    paramIn(cp, "txdca_ctl", txdca_ctl._data);
+    paramIn(cp, "tdt", tdt._data);
+    paramIn(cp, "tidv", tidv._data);
+    paramIn(cp, "txdctl", txdctl._data);
+    paramIn(cp, "tadv", tadv._data);
+    UNSERIALIZE_SCALAR(tdwba);
+    paramIn(cp, "rxcsum", rxcsum._data);
+    UNSERIALIZE_SCALAR(rlpml);
+    paramIn(cp, "rfctl", rfctl._data);
+    paramIn(cp, "manc", manc._data);
+    paramIn(cp, "swsm", swsm._data);
+    paramIn(cp, "fwsm", fwsm._data);
+    UNSERIALIZE_SCALAR(sw_fw_sync);
+
+    paramIn(cp, "imr", imr);
+    //nep_ex_regs[0].unserializeSection(cp, "NepRegs" + std::to_string(0));
+    // for(int i = 0; i < 32; i++)
+    // {
+    //     std::cout << "nep" << i << std::endl;
+    //     DPRINTF(NepCkpt, "Unerialize Nep Regs %d\n", i);
+    //     nep_ex_regs[i].unserializeSection(cp, "NepRegs" + std::to_string(i));
+    // }
+    for(int i = 0; i < 32; i++)
+    {
+        std::cout << "nep" << i << std::endl;
+        DPRINTF(NepCkpt, "UnSerialize Nep Regs %d\n", i);
+        nep_ex_regs[i].unserialize(cp);
+    }
 }

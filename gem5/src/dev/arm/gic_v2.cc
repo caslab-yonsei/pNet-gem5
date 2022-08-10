@@ -869,6 +869,7 @@ GicV2::sendInt(uint32_t num)
              "sentInt() must only be used for interrupts 32 and higher");
     getPendingInt(target, intNumToWord(num)) |= 1 << intNumToBit(num);
     updateIntState(intNumToWord(num));
+    //clearInt(num);
 }
 
 void

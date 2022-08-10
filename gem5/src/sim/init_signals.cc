@@ -62,12 +62,14 @@
 #include "sim/eventq.hh"
 
 // Use an separate stack for fatal signal handlers
-static uint8_t fatalSigStack[2 * SIGSTKSZ];
+//static uint8_t fatalSigStack[2 * SIGSTKSZ];
 
 static bool
 setupAltStack()
 {
     stack_t stack;
+    const auto stack_size = 2 * SIGSTKSZ;
+    static uint8_t *fatalSigStack = new uint8_t[stack_size];
 #if defined(__FreeBSD__) && (__FreeBSD_version < 1100097)
     stack.ss_sp = (char *)fatalSigStack;
 #else

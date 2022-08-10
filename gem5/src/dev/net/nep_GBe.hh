@@ -574,7 +574,7 @@ class NepGbE : public EtherDevice
 
     // SHIN. Structure that collects variables that need
     // individual management in RSS-enabled device
-    struct MultiQueueComponentSet {
+    struct MultiQueueComponentSet : public Serializable {
         RxDescCache rxDescCache;
         PacketFifo rxfifo;
 
@@ -614,6 +614,9 @@ class NepGbE : public EtherDevice
         void tidvProcessMultIntr();
 
         void chkMultiMSI();
+
+        void serialize(CheckpointOut &cp) const override;
+        void unserialize(CheckpointIn &cp) override;
     };
 
     // struct TxComponentSet {
@@ -638,7 +641,7 @@ class NepGbE : public EtherDevice
     // };
 
     // SHIN. As a manager of Rx, it is possible to change and apply policies.
-    class MultiQueueManager {
+    class MultiQueueManager : public Serializable {
       private:
         // Managed Component Vectors
         std::vector<MultiQueueComponentSet*> mq_component_sets;
@@ -768,6 +771,9 @@ class NepGbE : public EtherDevice
         MultiQueueManager(NepGbE* __igbe, int num_rx_q, int rx_queue_max_size, int rx_desc_max_size,
                                           int num_tx_q, int tx_queue_max_size, int tx_desc_max_size);
         ~MultiQueueManager();
+
+        void serialize(CheckpointOut &cp) const override;
+        void unserialize(CheckpointIn &cp) override;
     };
     MultiQueueManager mqManager;
 

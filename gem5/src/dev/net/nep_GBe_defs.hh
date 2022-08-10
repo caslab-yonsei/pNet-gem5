@@ -35,6 +35,7 @@
 #define __DEV_NET_NEPGBEDEFS_HH__
 
 #include "base/bitfield.hh"
+#include "debug/NepCkpt.hh"
 
 namespace iGbReg {
 
@@ -811,8 +812,10 @@ struct Regs : public Serializable {
     uint32_t num_enabled_queues;
 
     // SHIN.
-    struct NEP_EX_REGS {
+    class NEP_EX_REGS {
         // RX
+      public:
+        int idx;
         RCTL rctl;          // 32
         RDBA rdba;          // 64   RxDesc Base Address
         RDLEN rdlen;        // 32   RxDesc Length
@@ -846,100 +849,127 @@ struct Regs : public Serializable {
         uint32_t imr;
         uint32_t iam;
         CTRL_EXT ctrl_ext;
+
+      public:
+
+        void serialize(CheckpointOut &cp) const ;
+        void unserialize(CheckpointIn &cp) ;
     };
+    
     NEP_EX_REGS nep_ex_regs[32]; // Up to 32 Cores now...
 
-    void serialize(CheckpointOut &cp) const override
-    {
-        paramOut(cp, "ctrl", ctrl._data);
-        paramOut(cp, "sts", sts._data);
-        paramOut(cp, "eecd", eecd._data);
-        paramOut(cp, "eerd", eerd._data);
-        paramOut(cp, "ctrl_ext", ctrl_ext._data);
-        paramOut(cp, "mdic", mdic._data);
-        paramOut(cp, "icr", icr._data);
-        SERIALIZE_SCALAR(imr);
-        paramOut(cp, "itr", itr._data);
-        SERIALIZE_SCALAR(iam);
-        paramOut(cp, "rctl", rctl._data);
-        paramOut(cp, "fcttv", fcttv._data);
-        paramOut(cp, "tctl", tctl._data);
-        paramOut(cp, "pba", pba._data);
-        paramOut(cp, "fcrtl", fcrtl._data);
-        paramOut(cp, "fcrth", fcrth._data);
-        paramOut(cp, "rdba", rdba._data);
-        paramOut(cp, "rdlen", rdlen._data);
-        paramOut(cp, "srrctl", srrctl._data);
-        paramOut(cp, "rdh", rdh._data);
-        paramOut(cp, "rdt", rdt._data);
-        paramOut(cp, "rdtr", rdtr._data);
-        paramOut(cp, "rxdctl", rxdctl._data);
-        paramOut(cp, "radv", radv._data);
-        paramOut(cp, "rsrpd", rsrpd._data);
-        paramOut(cp, "tdba", tdba._data);
-        paramOut(cp, "tdlen", tdlen._data);
-        paramOut(cp, "tdh", tdh._data);
-        paramOut(cp, "txdca_ctl", txdca_ctl._data);
-        paramOut(cp, "tdt", tdt._data);
-        paramOut(cp, "tidv", tidv._data);
-        paramOut(cp, "txdctl", txdctl._data);
-        paramOut(cp, "tadv", tadv._data);
-        //paramOut(cp, "tdwba", tdwba._data);
-        SERIALIZE_SCALAR(tdwba);
-        paramOut(cp, "rxcsum", rxcsum._data);
-        SERIALIZE_SCALAR(rlpml);
-        paramOut(cp, "rfctl", rfctl._data);
-        paramOut(cp, "manc", manc._data);
-        paramOut(cp, "swsm", swsm._data);
-        paramOut(cp, "fwsm", fwsm._data);
-        SERIALIZE_SCALAR(sw_fw_sync);
-    }
+    void serialize(CheckpointOut &cp) const override;
+    // {
+    //     DPRINTF(NepCkpt, "Serialize Regs\n");
+    //     std::cout << "nep" << std::endl;
+    //     paramOut(cp, "ctrl", ctrl._data);
+    //     paramOut(cp, "sts", sts._data);
+    //     paramOut(cp, "eecd", eecd._data);
+    //     paramOut(cp, "eerd", eerd._data);
+    //     paramOut(cp, "ctrl_ext", ctrl_ext._data);
+    //     paramOut(cp, "mdic", mdic._data);
+    //     paramOut(cp, "icr", icr._data);
+    //     SERIALIZE_SCALAR(imr);
+    //     paramOut(cp, "itr", itr._data);
+    //     SERIALIZE_SCALAR(iam);
+    //     paramOut(cp, "rctl", rctl._data);
+    //     paramOut(cp, "fcttv", fcttv._data);
+    //     paramOut(cp, "tctl", tctl._data);
+    //     paramOut(cp, "pba", pba._data);
+    //     paramOut(cp, "fcrtl", fcrtl._data);
+    //     paramOut(cp, "fcrth", fcrth._data);
+    //     paramOut(cp, "rdba", rdba._data);
+    //     paramOut(cp, "rdlen", rdlen._data);
+    //     paramOut(cp, "srrctl", srrctl._data);
+    //     paramOut(cp, "rdh", rdh._data);
+    //     paramOut(cp, "rdt", rdt._data);
+    //     paramOut(cp, "rdtr", rdtr._data);
+    //     paramOut(cp, "rxdctl", rxdctl._data);
+    //     paramOut(cp, "radv", radv._data);
+    //     paramOut(cp, "rsrpd", rsrpd._data);
+    //     paramOut(cp, "tdba", tdba._data);
+    //     paramOut(cp, "tdlen", tdlen._data);
+    //     paramOut(cp, "tdh", tdh._data);
+    //     paramOut(cp, "txdca_ctl", txdca_ctl._data);
+    //     paramOut(cp, "tdt", tdt._data);
+    //     paramOut(cp, "tidv", tidv._data);
+    //     paramOut(cp, "txdctl", txdctl._data);
+    //     paramOut(cp, "tadv", tadv._data);
+    //     //paramOut(cp, "tdwba", tdwba._data);
+    //     SERIALIZE_SCALAR(tdwba);
+    //     paramOut(cp, "rxcsum", rxcsum._data);
+    //     SERIALIZE_SCALAR(rlpml);
+    //     paramOut(cp, "rfctl", rfctl._data);
+    //     paramOut(cp, "manc", manc._data);
+    //     paramOut(cp, "swsm", swsm._data);
+    //     paramOut(cp, "fwsm", fwsm._data);
+    //     SERIALIZE_SCALAR(sw_fw_sync);
 
-    void unserialize(CheckpointIn &cp) override
-    {
-        paramIn(cp, "ctrl", ctrl._data);
-        paramIn(cp, "sts", sts._data);
-        paramIn(cp, "eecd", eecd._data);
-        paramIn(cp, "eerd", eerd._data);
-        paramIn(cp, "ctrl_ext", ctrl_ext._data);
-        paramIn(cp, "mdic", mdic._data);
-        paramIn(cp, "icr", icr._data);
-        UNSERIALIZE_SCALAR(imr);
-        paramIn(cp, "itr", itr._data);
-        UNSERIALIZE_SCALAR(iam);
-        paramIn(cp, "rctl", rctl._data);
-        paramIn(cp, "fcttv", fcttv._data);
-        paramIn(cp, "tctl", tctl._data);
-        paramIn(cp, "pba", pba._data);
-        paramIn(cp, "fcrtl", fcrtl._data);
-        paramIn(cp, "fcrth", fcrth._data);
-        paramIn(cp, "rdba", rdba._data);
-        paramIn(cp, "rdlen", rdlen._data);
-        paramIn(cp, "srrctl", srrctl._data);
-        paramIn(cp, "rdh", rdh._data);
-        paramIn(cp, "rdt", rdt._data);
-        paramIn(cp, "rdtr", rdtr._data);
-        paramIn(cp, "rxdctl", rxdctl._data);
-        paramIn(cp, "radv", radv._data);
-        paramIn(cp, "rsrpd", rsrpd._data);
-        paramIn(cp, "tdba", tdba._data);
-        paramIn(cp, "tdlen", tdlen._data);
-        paramIn(cp, "tdh", tdh._data);
-        paramIn(cp, "txdca_ctl", txdca_ctl._data);
-        paramIn(cp, "tdt", tdt._data);
-        paramIn(cp, "tidv", tidv._data);
-        paramIn(cp, "txdctl", txdctl._data);
-        paramIn(cp, "tadv", tadv._data);
-        UNSERIALIZE_SCALAR(tdwba);
-        //paramIn(cp, "tdwba", tdwba._data);
-        paramIn(cp, "rxcsum", rxcsum._data);
-        UNSERIALIZE_SCALAR(rlpml);
-        paramIn(cp, "rfctl", rfctl._data);
-        paramIn(cp, "manc", manc._data);
-        paramIn(cp, "swsm", swsm._data);
-        paramIn(cp, "fwsm", fwsm._data);
-        UNSERIALIZE_SCALAR(sw_fw_sync);
-    }
+    //     paramOut(cp, "imr", imr);
+    //     nep_ex_regs[0].serializeSection(cp, "NepRegs" + std::to_string(0));
+    //     // for(int i = 0; i < 32; i++)
+    //     // {
+    //     //     std::cout << "nep" << i << std::endl;
+    //     //     DPRINTF(NepCkpt, "Serialize Nep Regs %d\n", i);
+    //     //     nep_ex_regs[i].serializeSection(cp, "NepRegs" + std::to_string(i));
+    //     // }
+    // }
+
+    void unserialize(CheckpointIn &cp) override;
+    // {
+    //     DPRINTF(NepCkpt, "Unserialize Nep Regs\n");
+    //     std::cout << "nep" << std::endl;
+    //     paramIn(cp, "ctrl", ctrl._data);
+    //     paramIn(cp, "sts", sts._data);
+    //     paramIn(cp, "eecd", eecd._data);
+    //     paramIn(cp, "eerd", eerd._data);
+    //     paramIn(cp, "ctrl_ext", ctrl_ext._data);
+    //     paramIn(cp, "mdic", mdic._data);
+    //     paramIn(cp, "icr", icr._data);
+    //     UNSERIALIZE_SCALAR(imr);
+    //     paramIn(cp, "itr", itr._data);
+    //     UNSERIALIZE_SCALAR(iam);
+    //     paramIn(cp, "rctl", rctl._data);
+    //     paramIn(cp, "fcttv", fcttv._data);
+    //     paramIn(cp, "tctl", tctl._data);
+    //     paramIn(cp, "pba", pba._data);
+    //     paramIn(cp, "fcrtl", fcrtl._data);
+    //     paramIn(cp, "fcrth", fcrth._data);
+    //     paramIn(cp, "rdba", rdba._data);
+    //     paramIn(cp, "rdlen", rdlen._data);
+    //     paramIn(cp, "srrctl", srrctl._data);
+    //     paramIn(cp, "rdh", rdh._data);
+    //     paramIn(cp, "rdt", rdt._data);
+    //     paramIn(cp, "rdtr", rdtr._data);
+    //     paramIn(cp, "rxdctl", rxdctl._data);
+    //     paramIn(cp, "radv", radv._data);
+    //     paramIn(cp, "rsrpd", rsrpd._data);
+    //     paramIn(cp, "tdba", tdba._data);
+    //     paramIn(cp, "tdlen", tdlen._data);
+    //     paramIn(cp, "tdh", tdh._data);
+    //     paramIn(cp, "txdca_ctl", txdca_ctl._data);
+    //     paramIn(cp, "tdt", tdt._data);
+    //     paramIn(cp, "tidv", tidv._data);
+    //     paramIn(cp, "txdctl", txdctl._data);
+    //     paramIn(cp, "tadv", tadv._data);
+    //     UNSERIALIZE_SCALAR(tdwba);
+    //     //paramIn(cp, "tdwba", tdwba._data);
+    //     paramIn(cp, "rxcsum", rxcsum._data);
+    //     UNSERIALIZE_SCALAR(rlpml);
+    //     paramIn(cp, "rfctl", rfctl._data);
+    //     paramIn(cp, "manc", manc._data);
+    //     paramIn(cp, "swsm", swsm._data);
+    //     paramIn(cp, "fwsm", fwsm._data);
+    //     UNSERIALIZE_SCALAR(sw_fw_sync);
+
+    //     paramIn(cp, "imr", imr);
+    //     // for(int i = 0; i < 32; i++)
+    //     // {
+    //     //     std::cout << "nep" << i << std::endl;
+    //     //     DPRINTF(NepCkpt, "Unerialize Nep Regs %d\n", i);
+    //     //     nep_ex_regs[i].unserializeSection(cp, "NepRegs" + std::to_string(i));
+    //     // }
+    // }
 };
 } // namespace iGbReg
 

@@ -1,7 +1,8 @@
-# -*- mode:python -*-
+#! /bin/bash
 
+#
 # Copyright (c) 2015 ARM Limited
-# All rights reserved.
+# All rights reserved
 #
 # The license below extends only to copyright in the software and shall
 # not be construed as granting a license to any other intellectual
@@ -11,9 +12,6 @@
 # terms below provided that you ensure that this notice is replicated
 # unmodified and in its entirety in all distributions of the software,
 # modified or unmodified, in source code or in binary form.
-#
-# Copyright (c) 2006 The Regents of The University of Michigan
-# All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -37,66 +35,45 @@
 # THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# This is an example script to start a dist gem5 simulations using
+# two AArch64 systems. It is also uses the example
+# dist gem5 bootscript util/dist/test/simple_bootscript.rcS that will
+# run the linux ping command to check if we can see the peer system
+# connected via the simulated Ethernet link.
 
-Import('*')
+GEM5_DIR=$(pwd)/$(dirname $0)/../../..
 
-SimObject('Ethernet.py')
+IMG=$M5_PATH/disks/aarch64-ubuntu-trusty-headless.img
+VMLINUX=$M5_PATH/binaries/vmlinux.aarch64.20140821
+DTB=$M5_PATH/binaries/vexpress.aarch64.20140821.dtb
 
-# Basic Ethernet infrastructure
-Source('etherbus.cc')
-Source('etherswitch.cc')
-Source('etherdevice.cc')
-Source('etherdump.cc')
-Source('etherint.cc')
-Source('etherlink.cc')
-Source('etherpkt.cc')
-Source('ethertap.cc')
+FS_CONFIG=$GEM5_DIR/configs/example/fs.py
+SW_CONFIG=$GEM5_DIR/configs/dist/sw.py
+GEM5_EXE=$GEM5_DIR/build/ARM/gem5.opt
 
-Source('pktfifo.cc')
+BOOT_SCRIPT=$GEM5_DIR/util/dist/test/simple_bootscript.rcS
+GEM5_DIST_SH=$GEM5_DIR/util/dist/gem5-dist.sh
 
-DebugFlag('Ethernet')
-DebugFlag('EthernetCksum')
-DebugFlag('EthernetDMA')
-DebugFlag('EthernetData')
-DebugFlag('EthernetDesc')
-DebugFlag('EthernetEEPROM')
-DebugFlag('EthernetIntr')
-DebugFlag('EthernetPIO')
-DebugFlag('EthernetSM')
+DEBUG_FLAGS="--debug-flags=DistEthernet"
+#CHKPT_RESTORE="-r1"
 
-# Dist gem5
-Source('dist_iface.cc')
-Source('dist_etherlink.cc')
-Source('tcp_iface.cc')
+NNODES=2
 
-DebugFlag('DistEthernet')
-DebugFlag('DistEthernetPkt')
-DebugFlag('DistEthernetCmd')
+$GEM5_DIST_SH -n $NNODES                                                     \
+              -x $GEM5_EXE                                                   \
+              -s $SW_CONFIG                                                  \
+              -f $FS_CONFIG                                                  \
+              --m5-args                                                      \
+                 $DEBUG_FLAGS                                                \
+              --fs-args                                                      \
+                  --cpu-type=atomic                                          \
+		  --num-cpus=1                                               \
+                  --machine-type=VExpress_EMM64                              \
+                  --disk-image=$IMG                                          \
+                  --kernel=$VMLINUX                                          \
+                  --dtb-filename=$DTB                                        \
+                  --script=$BOOT_SCRIPT                                      \
+              --cf-args                                                      \
+                  $CHKPT_RESTORE
 
-# Ethernet controllers
-Source('i8254xGBe.cc')
-Source('ns_gige.cc')
-Source('sinic.cc')
-
-Source('nep_GBe.cc')
-Source('nep_GBe_Policy_RSS.cc')
-
-DebugFlag('NepNicRxManager')
-DebugFlag('NepNicIGBe')
-DebugFlag('NepNicOthers')
-DebugFlag('NepLoadGenerator')
-DebugFlag('NepNicRxPolicy')
-DebugFlag('NepNicRxPolicyRss')
-DebugFlag('NepNicIntr')
-DebugFlag('NepNicIntrMsi')
-DebugFlag('NepTx')
-DebugFlag('NepMsi')
-DebugFlag('NepCkpt')
-
-
-CompoundFlag('EthernetAll', [ 'Ethernet', 'EthernetPIO', 'EthernetDMA',
-    'EthernetData' , 'EthernetDesc', 'EthernetIntr', 'EthernetSM',
-    'EthernetCksum', 'EthernetEEPROM' ])
-
-CompoundFlag('EthernetNoData', [ 'Ethernet', 'EthernetPIO', 'EthernetDesc',
-    'EthernetIntr', 'EthernetSM', 'EthernetCksum' ])

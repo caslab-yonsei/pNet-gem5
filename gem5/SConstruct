@@ -154,7 +154,8 @@ if not ('CC' in main and 'CXX' in main):
 
 # Find default configuration & binary.
 Default(environ.get('M5_DEFAULT_BINARY', 'build/ARM/gem5.debug'))
-
+environ['CC'] = 'gcc-9'
+environ['CXX'] = 'g++-9'
 # helper function: find last occurrence of element in list
 def rfind(l, elt, offs = -1):
     for i in range(len(l)+offs, 0, -1):
