@@ -8,6 +8,33 @@
 #
 source /root/.bashrc
 
+#THIS IS WHERE EXECUTION BEGINS FROM AFTER RESTORING FROM CKPT
+if [ "$RUNSCRIPT_VAR" -eq 2 ]
+then
+    ncpu=$(grep -c processor /proc/cpuinfo)
+	cd /home/benchmark/mutilate
+    echo "Before running"
+    cat /proc/interrupts
+	cat /proc/stat
+
+    echo "Start Bench"
+    for((i=1; i <$ncpu ; i++)) do
+		taskset -c $i ./mutilate -s 192.168.0.2:$(expr 11211 + $i) --affinity --loadonly -T 1 -r 100000 &
+	done
+    taskset -c 0 ./mutilate -s 192.168.0.2:11211 --affinity --loadonly -T 1 -r 100000
+    echo "resetstats"
+    /sbin/m5 resetstats 0
+    for((i=0; i <$ncpu ; i++)) do
+		taskset -c $i ./mutilate -s 192.168.0.2:$(expr 11211 + $i) -t 1 -T 1 --affinity --noload -r 100000 &
+	done
+    for((time=0 ; time < 30; time++)) do
+		cat /proc/interrupts
+		cat /proc/stat
+		sleep 0.1
+	done
+	/sbin/m5 exit 1
+fi
+
 # Retrieve dist-gem5 rank and size parameters using the 'm5' utility
 MY_RANK=$(/sbin/m5 initparam dist-rank)
 [ $? = 0 ] || { echo "m5 initparam failed"; exit -1; }
@@ -53,6 +80,67 @@ then
     /sbin/m5 checkpoint 1
 else
     sleep 0.01
+fi
+
+if ((MY_RANK < 1))
+then
+	for((i=0; i < 4; i++)) do
+		let core=2**$i
+		hex_core=$(printf "%x" $core)                                                                                                                                                               
+		echo $hex_core > /proc/irq/$(expr 15 + $i)/smp_affinity
+		echo $i > /proc/irq/$(expr 15 + $i)/smp_affinity_list
+		echo $i > /proc/irq/$(expr 15 + $i)/smp_affinity_list
+		echo $hex_core > /proc/irq/$(expr 15 + $i)/smp_affinity
+		cat /proc/irq/$(expr 15 + $i)/smp_affinity_list
+		cat /proc/irq/$(expr 15 + $i)/smp_affinity
+	done
+	ncpu=$(grep -c processor /proc/cpuinfo)
+	echo $ncpu
+	cd /home/memcached-1.6.9
+	for((i=0; i < $ncpu ; i++)) do
+		taskset -c $i ./memcached -m $(expr 2048 "/" $ncpu) -p $(expr 11211 + $i) -l 192.168.0.${MY_ADDR} -t 1 -u root &
+	done
+	/sbin/m5 resetstats 0
+	for((time=0; time<1000; time++)) do
+		cat /proc/interrupts
+		cat /proc/stat
+		sleep 0.1
+	done
+else
+	for((i=0; i < 4; i++)) do
+		let core=2**$i
+		hex_core=$(printf "%x" $core)                                                                                                                                                               
+		echo $hex_core > /proc/irq/$(expr 15 + $i)/smp_affinity
+		echo $i > /proc/irq/$(expr 15 + $i)/smp_affinity_list
+		echo $i > /proc/irq/$(expr 15 + $i)/smp_affinity_list
+		echo $hex_core > /proc/irq/$(expr 15 + $i)/smp_affinity
+		cat /proc/irq/$(expr 15 + $i)/smp_affinity_list
+		cat /proc/irq/$(expr 15 + $i)/smp_affinity
+	done
+
+	ncpu=$(grep -c processor /proc/cpuinfo)
+	cd /home/benchmark/mutilate
+	sleep 2
+    export RUNSCRIPT_VAR=2
+    /sbin/m5 checkpoint 1
+    /sbin/m5 readfile > /tmp/runscript1.sh
+    /bin/bash /tmp/runscript1.sh
+    /sbin/m5 exit 1
+
+	for((i=1; i <$ncpu ; i++)) do
+		taskset -c $i ./mutilate -s 192.168.0.2:$(expr 11211 + $i) --affinity --loadonly -T 1 -r 100000 &
+	done
+	taskset -c 0 ./mutilate -s 192.168.0.2:11211 --affinity --loadonly -T 1 -r 100000
+	/sbin/m5 resetstats 0
+	for((i=0; i <$ncpu ; i++)) do
+		taskset -c $i ./mutilate -s 192.168.0.2:$(expr 11211 + $i) -t 1 -T 1 --affinity --noload -r 100000 &
+	done
+	for((time=0 ; time < 30; time++)) do
+		cat /proc/interrupts
+		cat /proc/stat
+		sleep 0.1
+	done
+	/sbin/m5 exit 1
 fi
 
 #THIS IS WHERE EXECUTION BEGINS FROM AFTER RESTORING FROM CKPT

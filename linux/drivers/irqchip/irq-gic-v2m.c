@@ -140,16 +140,20 @@ static int gicv2m_irq_gic_domain_alloc(struct irq_domain *domain,
 	struct irq_data *d;
 	int err;
 
+	printk(KERN_ALERT "gicv2m_irq_gic_domain_alloc hwirq %d\n", hwirq);
+
 	if (is_of_node(domain->parent->fwnode)) {
 		fwspec.fwnode = domain->parent->fwnode;
 		fwspec.param_count = 3;
 		fwspec.param[0] = 0;
 		fwspec.param[1] = hwirq - 32;
+		printk(KERN_ALERT "gicv2m_irq_gic_domain_alloc(of node) hwirq %d\n", hwirq - 32);
 		fwspec.param[2] = IRQ_TYPE_EDGE_RISING;
 	} else if (is_fwnode_irqchip(domain->parent->fwnode)) {
 		fwspec.fwnode = domain->parent->fwnode;
 		fwspec.param_count = 2;
 		fwspec.param[0] = hwirq;
+		printk(KERN_ALERT "gicv2m_irq_gic_domain_alloc(of chip) hwirq %d\n", hwirq);
 		fwspec.param[1] = IRQ_TYPE_EDGE_RISING;
 	} else {
 		return -EINVAL;
@@ -196,8 +200,8 @@ static int gicv2m_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
 		return -ENOSPC;
 
 	hwirq = v2m->spi_start + offset;
-	// printk(KERN_INFO "NEPU gicv2m_irq_domain_alloc hwirq %d, spi_st %d, off %d\n",
-	// 					hwirq, v2m->spi_start, offset);
+	printk(KERN_ALERT "NEPU gicv2m_irq_domain_alloc hwirq %d, spi_st %d, off %d\n",
+						hwirq, v2m->spi_start, offset);
 
 	err = iommu_dma_prepare_msi(info->desc,
 				    gicv2m_get_msi_addr(v2m, hwirq));

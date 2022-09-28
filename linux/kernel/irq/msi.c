@@ -126,6 +126,8 @@ static int msi_domain_alloc(struct irq_domain *domain, unsigned int virq,
 	irq_hw_number_t hwirq = ops->get_hwirq(info, arg);
 	int i, ret;
 
+	printk(KERN_ALERT "msi_domain_alloc. virq %d, get_hwirq %d\n", virq, hwirq);
+
 	if (irq_find_mapping(domain, hwirq) > 0)
 		return -EEXIST;
 
@@ -200,6 +202,7 @@ static int msi_domain_ops_init(struct irq_domain *domain,
 			       unsigned int virq, irq_hw_number_t hwirq,
 			       msi_alloc_info_t *arg)
 {
+	printk(KERN_ALERT "msi_domain_ops_init. virq %d, hwirq %d.\n", virq, hwirq);
 	irq_domain_set_hwirq_and_chip(domain, virq, hwirq, info->chip,
 				      info->chip_data);
 	if (info->handler && info->handler_name) {

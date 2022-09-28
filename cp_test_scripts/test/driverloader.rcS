@@ -14,14 +14,17 @@ source /root/.bashrc
 
 MY_ADDR_PADDED=0${MY_ADDR}
 
-insmod /home/nepu1000.ko
+#insmod /home/nepu1000.ko
 /sbin/ifconfig eth0 hw ether 00:90:00:00:00:${MY_ADDR_PADDED}
 /sbin/ifconfig eth0 192.168.0.${MY_ADDR} netmask 255.255.255.0 up
 
 /sbin/ifconfig -a
 
+cat /proc/interrupts
+
+lspci
 # take a checkpoint
-/sbin/m5 checkpoint 1
+/sbin/m5 exit 1
 
 
 

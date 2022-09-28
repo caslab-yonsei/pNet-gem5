@@ -135,6 +135,8 @@ static int platform_msi_alloc_descs_with_irq(struct device *dev, int virq,
 	struct msi_desc *desc;
 	int i, base = 0;
 
+	printk(KERN_ALERT "platform_msi_alloc_descs_with_irq %d\n", virq);
+
 	if (!list_empty(dev_to_msi_list(dev))) {
 		desc = list_last_entry(dev_to_msi_list(dev),
 				       struct msi_desc, list);

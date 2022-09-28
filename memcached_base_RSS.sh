@@ -89,7 +89,7 @@ $GEM5_DIST_SH -n $NNODES                                                     \
                   --kernel=$VMLINUX                                          \
                   --dtb-filename=$DTB                                        \
                   --script=$BOOT_SCRIPT                                      \
-                  --mem-size=16GB   --num-nep-rx-q=0                                \
+                  --mem-size=16GB   --num-nep-rx-q=24                                \
               --cf-args                                                      \
                   $CHKPT_RESTORE --dist-sync-start=1000000t --checkpoint-restore=1
 

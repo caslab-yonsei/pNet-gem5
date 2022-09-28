@@ -1,0 +1,13 @@
+gem5 Simulator System.  http://gem5.org
+gem5 is copyrighted software; use the --copyright option for details.
+
+gem5 version 21.0.0.0
+gem5 compiled Aug 11 2022 21:32:11
+gem5 started Aug 12 2022 09:27:47
+gem5 executing on jshin-Z690-AERO-G, pid 14091
+command line: /home/jshin/research/mQ-gem5/mQ-gem5/gem5/build/ARM/gem5.opt --outdir rundir/atomicboot -re /home/jshin/research/mQ-gem5/mQ-gem5/gem5/configs/example/fs.py --disk-image=/home/jshin/research/mQ-gem5/ubuntu.img --kernel=/home/jshin/research/mQ-gem5/mQ-gem5/linux/vmlinux --machine-type=VExpress_GEM5_V1 --dtb-filename=/home/jshin/research/mQ-gem5/mQ-gem5/gem5/system/arm/dt/armv8_gem5_v1_4cpu.dtb --mem-size=256MB --num-cpus=4 --cpu-type=AtomicSimpleCPU --num-nep-rx-q=4 --script=/home/jshin/research/mQ-gem5/mQ-gem5/cp_test_scripts/test/driverloader.rcS
+
+Global frequency set at 1000000000000 ticks per second
+nepnic
+**** REAL SIMULATION ****
+Exiting @ tick 1052276290000 because m5_exit instruction encountered

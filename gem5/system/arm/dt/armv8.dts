@@ -103,7 +103,52 @@
 		CPU(15)
 		#endif
 		#if CONF_CPUS > 16
-		#error Unsupported number of CPUs
+		CPU(16)
+		#endif
+		#if CONF_CPUS > 17
+		CPU(17)
+		#endif
+		#if CONF_CPUS > 18
+		CPU(18)
+		#endif
+		#if CONF_CPUS > 19
+		CPU(19)
+		#endif
+		#if CONF_CPUS > 20
+		CPU(20)
+		#endif
+		#if CONF_CPUS > 21
+		CPU(21)
+		#endif
+		#if CONF_CPUS > 22
+		CPU(22)
+		#endif
+		#if CONF_CPUS > 23
+		CPU(23)
+		#endif
+		#if CONF_CPUS > 24
+		CPU(24)
+		#endif
+		#if CONF_CPUS > 25
+		CPU(25)
+		#endif
+		#if CONF_CPUS > 26
+		CPU(26)
+		#endif
+		#if CONF_CPUS > 27
+		CPU(27)
+		#endif
+		#if CONF_CPUS > 28
+		CPU(28)
+		#endif
+		#if CONF_CPUS > 29
+		CPU(29)
+		#endif
+		#if CONF_CPUS > 30
+		CPU(30)
+		#endif
+		#if CONF_CPUS > 31
+		CPU(31)
 		#endif
 	};
 };

@@ -87,7 +87,7 @@ struct e1000_adapter;
  */
 #define E1000_CHECK_RESET_COUNT	50
 
-#define NUM_QUEUE 	16
+#define NUM_QUEUE 	32
 
 /* TX/RX descriptor defines */
 #define E1000_DEFAULT_TXD		256

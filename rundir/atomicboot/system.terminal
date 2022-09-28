@@ -1,0 +1,1304 @@
+[    0.000000] Booting Linux on physical CPU 0x0
+[    0.000000] Linux version 4.14.0 (jshin@jshin-Z690-AERO-G) (gcc version 11.2.0 (Ubuntu 11.2.0-17ubuntu1)) #31 SMP PREEMPT Thu Aug 11 21:25:32 KST 2022
+[    0.000000] Boot CPU: AArch64 Processor [410fd070]
+[    0.000000] Machine model: V2P-AARCH64
+[    0.000000] Memory limited to 256MB
+[    0.000000] cma: Reserved 16 MiB at 0x000000008f000000
+[    0.000000] On node 0 totalpages: 65536
+[    0.000000]   DMA zone: 1024 pages used for memmap
+[    0.000000]   DMA zone: 0 pages reserved
+[    0.000000]   DMA zone: 65536 pages, LIFO batch:15
+[    0.000000] random: fast init done
+[    0.000000] percpu: Embedded 21 pages/cpu @ffffffc00ef9b000 s45464 r8192 d32360 u86016
+[    0.000000] pcpu-alloc: s45464 r8192 d32360 u86016 alloc=21*4096
+[    0.000000] pcpu-alloc: [0] 0 [0] 1 [0] 2 [0] 3 
+[    0.000000] Detected PIPT I-cache on CPU0
+[    0.000000] CPU features: enabling workaround for ARM erratum 832075
+[    0.000000] CPU features: enabling workaround for ARM erratum 834220
+[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 64512
+[    0.000000] Kernel command line: earlyprintk=pl011,0x1c090000 console=ttyAMA0 lpj=19988480 norandmaps rw loglevel=8 mem=256MB root=/dev/sda1
+[    0.000000] log_buf_len individual max cpu contribution: 4096 bytes
+[    0.000000] log_buf_len total cpu_extra contributions: 12288 bytes
+[    0.000000] log_buf_len min size: 16384 bytes
+[    0.000000] log_buf_len: 32768 bytes
+[    0.000000] early log buf free: 14916(91%)
+[    0.000000] PID hash table entries: 1024 (order: 1, 8192 bytes)
+[    0.000000] Dentry cache hash table entries: 32768 (order: 6, 262144 bytes)
+[    0.000000] Inode-cache hash table entries: 16384 (order: 5, 131072 bytes)
+[    0.000000] Memory: 218192K/262144K available (5886K kernel code, 466K rwdata, 3236K rodata, 384K init, 260K bss, 27568K reserved, 16384K cma-reserved)
+[    0.000000] Virtual kernel memory layout:
+[    0.000000]     modules : 0xffffff8000000000 - 0xffffff8008000000   (   128 MB)
+[    0.000000]     vmalloc : 0xffffff8008000000 - 0xffffffbebfff0000   (   250 GB)
+[    0.000000]       .text : 0xffffff8008080000 - 0xffffff8008640000   (  5888 KB)
+[    0.000000]     .rodata : 0xffffff8008640000 - 0xffffff8008970000   (  3264 KB)
+[    0.000000]       .init : 0xffffff8008970000 - 0xffffff80089d0000   (   384 KB)
+[    0.000000]       .data : 0xffffff80089d0000 - 0xffffff8008a44808   (   467 KB)
+[    0.000000]        .bss : 0xffffff8008a44808 - 0xffffff8008a858d8   (   261 KB)
+[    0.000000]     fixed   : 0xffffffbefe7fd000 - 0xffffffbefec00000   (  4108 KB)
+[    0.000000]     PCI I/O : 0xffffffbefee00000 - 0xffffffbeffe00000   (    16 MB)
+[    0.000000]     vmemmap : 0xffffffbf00000000 - 0xffffffc000000000   (     4 GB maximum)
+[    0.000000]               0xffffffbf00000000 - 0xffffffbf00400000   (     4 MB actual)
+[    0.000000]     memory  : 0xffffffc000000000 - 0xffffffc010000000   (   256 MB)
+[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+[    0.000000] Preemptible hierarchical RCU implementation.
+[    0.000000] 	RCU restricting CPUs from NR_CPUS=256 to nr_cpu_ids=4.
+[    0.000000] 	Tasks RCU enabled.
+[    0.000000] RCU: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+[    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.000000] GIC: Detected gem5 extensions
+[    0.000000] NEPU Call Test! __irq_domain_alloc_irqs! base -1
+[    0.000000] NEPU Call Test! irq_domain_alloc_irq_data! virq 1
+[    0.000000] before irq_domain_alloc_irqs_hierarchy virq 1, hwirq 0
+[    0.000000] irq_domain_insert_irq hwirq 0
+[    0.000000] gic_irq_domain_alloc. hwirq 25
+[    0.000000] irq_domain_set_hwirq_and_chip. virq 1, hwirq 25.
+[    0.000000] after irq_domain_alloc_irqs_hierarchy virq 1, hwirq 25
+[    0.000000] irq_domain_insert_irq hwirq 25
+[    0.000000] NEPU Call Test! call irq_domain_insert_irq 1
+[    0.000000] irq_domain_insert_irq hwirq 25
+[    0.000000] GICv2m: DT overriding V2M MSI_TYPER (base:256, num:64)
+[    0.000000] GICv2m: range[mem 0x2c1c0000-0x2c1cffff], SPI[256:319]
+[    0.000000] NEPU Call Test! __irq_domain_alloc_irqs! base -1
+[    0.000000] NEPU Call Test! irq_domain_alloc_irq_data! virq 2
+[    0.000000] before irq_domain_alloc_irqs_hierarchy virq 2, hwirq 0
+[    0.000000] irq_domain_insert_irq hwirq 0
+[    0.000000] gic_irq_domain_alloc. hwirq 29
+[    0.000000] irq_domain_set_hwirq_and_chip. virq 2, hwirq 29.
+[    0.000000] after irq_domain_alloc_irqs_hierarchy virq 2, hwirq 29
+[    0.000000] irq_domain_insert_irq hwirq 29
+[    0.000000] NEPU Call Test! call irq_domain_insert_irq 2
+[    0.000000] irq_domain_insert_irq hwirq 29
+[    0.000000] NEPU Call Test! __irq_domain_alloc_irqs! base -1
+[    0.000000] NEPU Call Test! irq_domain_alloc_irq_data! virq 3
+[    0.000000] before irq_domain_alloc_irqs_hierarchy virq 3, hwirq 0
+[    0.000000] irq_domain_insert_irq hwirq 0
+[    0.000000] gic_irq_domain_alloc. hwirq 30
+[    0.000000] irq_domain_set_hwirq_and_chip. virq 3, hwirq 30.
+[    0.000000] after irq_domain_alloc_irqs_hierarchy virq 3, hwirq 30
+[    0.000000] irq_domain_insert_irq hwirq 30
+[    0.000000] NEPU Call Test! call irq_domain_insert_irq 3
+[    0.000000] irq_domain_insert_irq hwirq 30
+[    0.000000] NEPU Call Test! __irq_domain_alloc_irqs! base -1
+[    0.000000] NEPU Call Test! irq_domain_alloc_irq_data! virq 4
+[    0.000000] before irq_domain_alloc_irqs_hierarchy virq 4, hwirq 0
+[    0.000000] irq_domain_insert_irq hwirq 0
+[    0.000000] gic_irq_domain_alloc. hwirq 27
+[    0.000000] irq_domain_set_hwirq_and_chip. virq 4, hwirq 27.
+[    0.000000] after irq_domain_alloc_irqs_hierarchy virq 4, hwirq 27
+[    0.000000] irq_domain_insert_irq hwirq 27
+[    0.000000] NEPU Call Test! call irq_domain_insert_irq 4
+[    0.000000] irq_domain_insert_irq hwirq 27
+[    0.000000] NEPU Call Test! __irq_domain_alloc_irqs! base -1
+[    0.000000] NEPU Call Test! irq_domain_alloc_irq_data! virq 5
+[    0.000000] before irq_domain_alloc_irqs_hierarchy virq 5, hwirq 0
+[    0.000000] irq_domain_insert_irq hwirq 0
+[    0.000000] gic_irq_domain_alloc. hwirq 26
+[    0.000000] irq_domain_set_hwirq_and_chip. virq 5, hwirq 26.
+[    0.000000] after irq_domain_alloc_irqs_hierarchy virq 5, hwirq 26
+[    0.000000] irq_domain_insert_irq hwirq 26
+[    0.000000] NEPU Call Test! call irq_domain_insert_irq 5
+[    0.000000] irq_domain_insert_irq hwirq 26
+[    0.000000] arch_timer: cp15 timer(s) running at 25.16MHz (virt).
+[    0.000000] clocksource: arch_sys_counter: mask: 0xffffffffffffff max_cycles: 0x5cdd39714, max_idle_ns: 440795202620 ns
+[    0.000001] sched_clock: 56 bits at 25MHz, resolution 39ns, wraps every 4398046511084ns
+[    0.000055] Console: colour dummy device 80x25
+[    0.000060] Calibrating delay loop (skipped) preset value.. 9994.24 BogoMIPS (lpj=19988480)
+[    0.000064] pid_max: default: 32768 minimum: 301
+[    0.000097] Mount-cache hash table entries: 512 (order: 0, 4096 bytes)
+[    0.000100] Mountpoint-cache hash table entries: 512 (order: 0, 4096 bytes)
+[    0.016007] ASID allocator initialised with 256 entries
+[    0.024007] Hierarchical SRCU implementation.
+[    0.040017] smp: Bringing up secondary CPUs ...
+[    0.068041] Detected PIPT I-cache on CPU1
+[    0.068050] CPU1: Booted secondary processor [410fd070]
+[    0.096060] Detected PIPT I-cache on CPU2
+[    0.096069] CPU2: Booted secondary processor [410fd070]
+[    0.124079] Detected PIPT I-cache on CPU3
+[    0.124087] CPU3: Booted secondary processor [410fd070]
+[    0.124115] smp: Brought up 1 node, 4 CPUs
+[    0.124126] SMP: Total of 4 processors activated.
+[    0.124129] CPU features: detected feature: Privileged Access Never
+[    0.124133] CPU features: detected feature: 32-bit EL0 Support
+[    0.124197] CPU: All CPU(s) started at EL1
+[    0.124203] alternatives: patching kernel code
+[    0.124530] devtmpfs: initialized
+[    0.124994] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
+[    0.124998] futex hash table entries: 1024 (order: 5, 131072 bytes)
+[    0.125944] NET: Registered protocol family 16
+[    0.156323] cpuidle: using governor menu
+[    0.156345] vdso: 2 pages (1 code @ ffffff8008646000, 1 data @ ffffff80089d4000)
+[    0.156349] hw-breakpoint: found 16 breakpoint and 16 watchpoint registers.
+[    0.156718] DMA: preallocated 256 KiB pool for atomic allocations
+[    0.156721] Serial: AMBA PL011 UART driver
+[    0.156896] NEPU Call Test! __irq_domain_alloc_irqs! base -1
+[    0.156907] NEPU Call Test! irq_domain_alloc_irq_data! virq 6
+[    0.156910] before irq_domain_alloc_irqs_hierarchy virq 6, hwirq 0
+[    0.156913] irq_domain_insert_irq hwirq 0
+[    0.156917] gic_irq_domain_alloc. hwirq 44
+[    0.156920] irq_domain_set_hwirq_and_chip. virq 6, hwirq 44.
+[    0.156924] after irq_domain_alloc_irqs_hierarchy virq 6, hwirq 44
+[    0.156927] irq_domain_insert_irq hwirq 44
+[    0.156931] NEPU Call Test! call irq_domain_insert_irq 6
+[    0.156934] irq_domain_insert_irq hwirq 44
+[    0.156995] NEPU Call Test! __irq_domain_alloc_irqs! base -1
+[    0.157006] NEPU Call Test! irq_domain_alloc_irq_data! virq 7
+[    0.157010] before irq_domain_alloc_irqs_hierarchy virq 7, hwirq 0
+[    0.157013] irq_domain_insert_irq hwirq 0
+[    0.157016] gic_irq_domain_alloc. hwirq 45
+[    0.157020] irq_domain_set_hwirq_and_chip. virq 7, hwirq 45.
+[    0.157024] after irq_domain_alloc_irqs_hierarchy virq 7, hwirq 45
+[    0.157027] irq_domain_insert_irq hwirq 45
+[    0.157030] NEPU Call Test! call irq_domain_insert_irq 7
+[    0.157033] irq_domain_insert_irq hwirq 45
+[    0.157094] NEPU Call Test! __irq_domain_alloc_irqs! base -1
+[    0.157107] NEPU Call Test! irq_domain_alloc_irq_data! virq 8
+[    0.157111] before irq_domain_alloc_irqs_hierarchy virq 8, hwirq 0
+[    0.157114] irq_domain_insert_irq hwirq 0
+[    0.157117] gic_irq_domain_alloc. hwirq 37
+[    0.157120] irq_domain_set_hwirq_and_chip. virq 8, hwirq 37.
+[    0.157125] after irq_domain_alloc_irqs_hierarchy virq 8, hwirq 37
+[    0.157128] irq_domain_insert_irq hwirq 37
+[    0.157131] NEPU Call Test! call irq_domain_insert_irq 8
+[    0.157134] irq_domain_insert_irq hwirq 37
+[    0.157205] 1c090000.uart: ttyAMA0 at MMIO 0x1c090000 (irq = 8, base_baud = 0) is a PL011 rev3
+[    0.157731] console [ttyAMA0] enabled
+[    0.157800] NEPU Call Test! __irq_domain_alloc_irqs! base -1
+[    0.157813] NEPU Call Test! irq_domain_alloc_irq_data! virq 9
+[    0.157818] before irq_domain_alloc_irqs_hierarchy virq 9, hwirq 0
+[    0.157823] irq_domain_insert_irq hwirq 0
+[    0.157828] gic_irq_domain_alloc. hwirq 36
+[    0.157833] irq_domain_set_hwirq_and_chip. virq 9, hwirq 36.
+[    0.157839] after irq_domain_alloc_irqs_hierarchy virq 9, hwirq 36
+[    0.157845] irq_domain_insert_irq hwirq 36
+[    0.157849] NEPU Call Test! call irq_domain_insert_irq 9
+[    0.157854] irq_domain_insert_irq hwirq 36
+[    0.157929] NEPU Call Test! __irq_domain_alloc_irqs! base -1
+[    0.157941] NEPU Call Test! irq_domain_alloc_irq_data! virq 10
+[    0.157947] before irq_domain_alloc_irqs_hierarchy virq 10, hwirq 0
+[    0.157952] irq_domain_insert_irq hwirq 0
+[    0.157957] gic_irq_domain_alloc. hwirq 74
+[    0.157962] irq_domain_set_hwirq_and_chip. virq 10, hwirq 74.
+[    0.157968] after irq_domain_alloc_irqs_hierarchy virq 10, hwirq 74
+[    0.157974] irq_domain_insert_irq hwirq 74
+[    0.157978] NEPU Call Test! call irq_domain_insert_irq 10
+[    0.157984] irq_domain_insert_irq hwirq 74
+[    0.158033] NEPU Call Test! __irq_domain_alloc_irqs! base -1
+[    0.158045] NEPU Call Test! irq_domain_alloc_irq_data! virq 11
+[    0.158051] before irq_domain_alloc_irqs_hierarchy virq 11, hwirq 0
+[    0.158056] irq_domain_insert_irq hwirq 0
+[    0.158061] gic_irq_domain_alloc. hwirq 75
+[    0.158066] irq_domain_set_hwirq_and_chip. virq 11, hwirq 75.
+[    0.158072] after irq_domain_alloc_irqs_hierarchy virq 11, hwirq 75
+[    0.158077] irq_domain_insert_irq hwirq 75
+[    0.158082] NEPU Call Test! call irq_domain_insert_irq 11
+[    0.158087] irq_domain_insert_irq hwirq 75
+[    0.160273] HugeTLB registered 2.00 MiB page size, pre-allocated 0 pages
+[    0.160437] vgaarb: loaded
+[    0.160521] SCSI subsystem initialized
+[    0.160569] libata version 3.00 loaded.
+[    0.160631] usbcore: registered new interface driver usbfs
+[    0.160650] usbcore: registered new interface driver hub
+[    0.160667] usbcore: registered new device driver usb
+[    0.160697] pps_core: LinuxPPS API ver. 1 registered
+[    0.160702] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+[    0.160712] PTP clock support registered
+[    0.160867] clocksource: Switched to clocksource arch_sys_counter
+[    0.163041] NET: Registered protocol family 2
+[    0.163179] TCP established hash table entries: 2048 (order: 2, 16384 bytes)
+[    0.163195] TCP bind hash table entries: 2048 (order: 3, 32768 bytes)
+[    0.163211] TCP: Hash tables configured (established 2048 bind 2048)
+[    0.163232] UDP hash table entries: 256 (order: 1, 8192 bytes)
+[    0.163242] UDP-Lite hash table entries: 256 (order: 1, 8192 bytes)
+[    0.163286] NET: Registered protocol family 1
+[    0.163360] RPC: Registered named UNIX socket transport module.
+[    0.163365] RPC: Registered udp transport module.
+[    0.163369] RPC: Registered tcp transport module.
+[    0.163373] RPC: Registered tcp NFSv4.1 backchannel transport module.
+[    0.163378] PCI: CLS 0 bytes, default 128
+[    0.163501] kvm [1]: HYP mode not available
+[    0.163767] workingset: timestamp_bits=62 max_order=16 bucket_order=0
+[    0.166237] fuse init (API version 7.26)
+[    0.166577] io scheduler noop registered
+[    0.166649] io scheduler cfq registered (default)
+[    0.166654] io scheduler mq-deadline registered
+[    0.166659] io scheduler kyber registered
+[    0.166683] atomic64_test: passed
+[    0.166871] OF: PCI: host bridge /pci ranges:
+[    0.166877] OF: PCI:   No bus range found for /pci, using [bus 00-ff]
+[    0.166886] OF: PCI:    IO 0x2f000000..0x2f00ffff -> 0x00000000
+[    0.166893] OF: PCI:   MEM 0x40000000..0x7fffffff -> 0x00000000
+[    0.166909] pci-host-generic 30000000.pci: ECAM at [mem 0x30000000-0x3fffffff] for [bus 00-ff]
+[    0.166950] pci-host-generic 30000000.pci: PCI host bridge to bus 0000:00
+[    0.166957] pci_bus 0000:00: root bus resource [bus 00-ff]
+[    0.166964] pci_bus 0000:00: root bus resource [io  0x0000-0xffff]
+[    0.166972] pci_bus 0000:00: root bus resource [mem 0x40000000-0x7fffffff] (bus address [0x00000000-0x3fffffff])
+[    0.166979] pci_bus 0000:00: scanning bus
+[    0.166989] pci 0000:00:01.0: [8086:1075] type 00 class 0x020000
+[    0.166998] pci 0000:00:01.0: calling quirk_f0_vpd_link+0x0/0x80
+[    0.167008] pci 0000:00:01.0: reg 0x10: [mem 0x40000000-0x41ffffff]
+[    0.167021] pci 0000:00:01.0: reg 0x30: [mem 0x40000000-0x400007ff pref]
+[    0.167075] pci 0000:00:02.0: [8086:7111] type 00 class 0x010185
+[    0.167085] pci 0000:00:02.0: reg 0x10: [io  0x0000-0x0007]
+[    0.167092] pci 0000:00:02.0: reg 0x14: [io  0x0000-0x0003]
+[    0.167100] pci 0000:00:02.0: reg 0x18: [io  0x0000-0x0007]
+[    0.167108] pci 0000:00:02.0: reg 0x1c: [io  0x0000-0x0003]
+[    0.167115] pci 0000:00:02.0: reg 0x20: [io  0x0000-0x000f]
+[    0.167124] pci 0000:00:02.0: reg 0x30: [mem 0x40000000-0x400007ff pref]
+[    0.167180] pci_bus 0000:00: fixups for bus
+[    0.167186] pci_bus 0000:00: bus scan returning with max=00
+[    0.167195] pci 0000:00:01.0: BAR 0: assigned [mem 0x40000000-0x41ffffff]
+[    0.167203] pci 0000:00:01.0: BAR 6: assigned [mem 0x42000000-0x420007ff pref]
+[    0.167211] pci 0000:00:02.0: BAR 6: assigned [mem 0x42000800-0x42000fff pref]
+[    0.167218] pci 0000:00:02.0: BAR 4: assigned [io  0x1000-0x100f]
+[    0.167226] pci 0000:00:02.0: BAR 0: assigned [io  0x1010-0x1017]
+[    0.167233] pci 0000:00:02.0: BAR 2: assigned [io  0x1018-0x101f]
+[    0.167241] pci 0000:00:02.0: BAR 1: assigned [io  0x1020-0x1023]
+[    0.167249] pci 0000:00:02.0: BAR 3: assigned [io  0x1024-0x1027]
+[    0.167259] pci 0000:00:01.0: calling quirk_e100_interrupt+0x0/0x1ac
+[    0.168285] Serial: 8250/16550 driver, 4 ports, IRQ sharing disabled
+[    0.168761] NEPU Call Test! __irq_domain_alloc_irqs! base -1
+[    0.168775] NEPU Call Test! irq_domain_alloc_irq_data! virq 12
+[    0.168781] before irq_domain_alloc_irqs_hierarchy virq 12, hwirq 0
+[    0.168786] irq_domain_insert_irq hwirq 0
+[    0.168791] gic_irq_domain_alloc. hwirq 102
+[    0.168796] irq_domain_set_hwirq_and_chip. virq 12, hwirq 102.
+[    0.168802] after irq_domain_alloc_irqs_hierarchy virq 12, hwirq 102
+[    0.168807] irq_domain_insert_irq hwirq 102
+[    0.168812] NEPU Call Test! call irq_domain_insert_irq 12
+[    0.168818] irq_domain_insert_irq hwirq 102
+[    0.168824] ata_piix 0000:00:02.0: assign IRQ: got 12
+[    0.168830] ata_piix 0000:00:02.0: version 2.13
+[    0.168837] ata_piix 0000:00:02.0: enabling device (0000 -> 0001)
+[    0.168859] ata_piix 0000:00:02.0: enabling bus mastering
+[    0.168960] -EINVAL 1
+[    0.168964] -EINVAL 2
+[    0.168968] -EINVAL 3
+[    0.168972] -EINVAL 4
+[    0.168976] -EINVAL 5
+[    0.169285] scsi host0: ata_piix
+[    0.169385] scsi host1: ata_piix
+[    0.169438] ata1: PATA max UDMA/33 cmd 0x1010 ctl 0x1020 bmdma 0x1000 irq 12
+[    0.169444] ata2: PATA max UDMA/33 cmd 0x1018 ctl 0x1024 bmdma 0x1008 irq 12
+[    0.169615] libphy: Fixed MDIO Bus: probed
+[    0.169620] nepu1000: NEPURSS Driver - version 7.3.21-k8-NAPI
+[    0.169625] nepu1000: Copyright (c) 1999-2006 Intel Corporation.
+[    0.169642] NEPU Call Test! __irq_domain_alloc_irqs! base -1
+[    0.169655] NEPU Call Test! irq_domain_alloc_irq_data! virq 13
+[    0.169661] before irq_domain_alloc_irqs_hierarchy virq 13, hwirq 0
+[    0.169666] irq_domain_insert_irq hwirq 0
+[    0.169671] gic_irq_domain_alloc. hwirq 101
+[    0.169676] irq_domain_set_hwirq_and_chip. virq 13, hwirq 101.
+[    0.169682] after irq_domain_alloc_irqs_hierarchy virq 13, hwirq 101
+[    0.169687] irq_domain_insert_irq hwirq 101
+[    0.169692] NEPU Call Test! call irq_domain_insert_irq 13
+[    0.169697] irq_domain_insert_irq hwirq 101
+[    0.169704] nepu1000 0000:00:01.0: assign IRQ: got 13
+[    0.169709] NEPU e1000_probe was called. Try to get num of queues
+[    0.169716] nepu1000 0000:00:01.0: enabling device (0000 -> 0002)
+[    0.169724] nepu1000 0000:00:01.0: enabling bus mastering
+[    0.169735] NEPU e1000_probe was called. num of queues is 4
+[    0.169746] e1000_sw_init
+[    0.169750] IRQ ST(BEFORE) 13
+[    0.169754] pci_alloc_irq_vectors is called
+[    0.169759] pci_alloc_irq_vectors_affinity is called
+[    0.169764] FLAGS MSI
+[    0.169768] pci_alloc_irq_vectors_affinity (b) 13
+[    0.169773] __pci_enable_msi_range-before pci_msi_vec_count 13
+[    0.169778] pci_msi_vec_count msgctl fbfa
+[    0.169780] pci_msi_vec_count(dev) nvec 32
+[    0.169787] __pci_enable_msi_range-after pci_msi_vec_count 13
+[    0.169793] NEPU maxvec 32
+[    0.169797] NEPU minvec 32
+[    0.169801] NEPU nvec 32
+[    0.169806] msi_setup_entry. entry->irq 0
+[    0.169811] NEPU CALL TEST! msi_domain_alloc_irqs
+[    0.169816] pci_msi_domain_calc_hwirq. dev->bus->number 0, dev->devfn 8
+[    0.169821] NEPU Call Test! __irq_domain_alloc_irqs! base -1
+[    0.170078] NEPU Call Test! irq_domain_alloc_irq_data! virq 14
+[    0.170083] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170089] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170094] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170099] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170105] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170110] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170115] NEPU Call Test! irq_domain_alloc_irq_data! virq 15
+[    0.170120] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170126] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170131] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170136] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170142] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170147] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170152] NEPU Call Test! irq_domain_alloc_irq_data! virq 16
+[    0.170158] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170163] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170168] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170174] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170180] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170185] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170190] NEPU Call Test! irq_domain_alloc_irq_data! virq 17
+[    0.170196] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170201] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170206] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170212] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170217] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170222] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170228] NEPU Call Test! irq_domain_alloc_irq_data! virq 18
+[    0.170233] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170238] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170243] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170249] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170254] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170259] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170265] NEPU Call Test! irq_domain_alloc_irq_data! virq 19
+[    0.170270] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170275] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170281] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170286] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170291] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170297] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170302] NEPU Call Test! irq_domain_alloc_irq_data! virq 20
+[    0.170307] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170313] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170318] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170323] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170329] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170334] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170339] NEPU Call Test! irq_domain_alloc_irq_data! virq 21
+[    0.170345] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170350] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170355] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170361] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170366] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170371] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170377] NEPU Call Test! irq_domain_alloc_irq_data! virq 22
+[    0.170382] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170387] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170392] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170398] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170403] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170409] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170414] NEPU Call Test! irq_domain_alloc_irq_data! virq 23
+[    0.170419] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170425] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170430] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170435] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170441] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170446] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170451] NEPU Call Test! irq_domain_alloc_irq_data! virq 24
+[    0.170456] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170462] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170467] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170472] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170478] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170483] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170488] NEPU Call Test! irq_domain_alloc_irq_data! virq 25
+[    0.170494] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170499] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170504] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170510] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170515] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170520] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170526] NEPU Call Test! irq_domain_alloc_irq_data! virq 26
+[    0.170531] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170536] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170542] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170547] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170552] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170558] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170563] NEPU Call Test! irq_domain_alloc_irq_data! virq 27
+[    0.170568] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170574] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170579] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170584] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170590] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170595] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170600] NEPU Call Test! irq_domain_alloc_irq_data! virq 28
+[    0.170605] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170611] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170616] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170621] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170627] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170632] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170637] NEPU Call Test! irq_domain_alloc_irq_data! virq 29
+[    0.170643] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170648] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170653] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170659] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170664] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170669] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170675] NEPU Call Test! irq_domain_alloc_irq_data! virq 30
+[    0.170680] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170685] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170691] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170696] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170701] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170707] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170712] NEPU Call Test! irq_domain_alloc_irq_data! virq 31
+[    0.170717] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170723] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170728] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170733] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170739] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170744] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170749] NEPU Call Test! irq_domain_alloc_irq_data! virq 32
+[    0.170754] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170760] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170765] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170770] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170777] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170782] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170787] NEPU Call Test! irq_domain_alloc_irq_data! virq 33
+[    0.170792] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170798] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170803] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170808] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170814] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170819] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170824] NEPU Call Test! irq_domain_alloc_irq_data! virq 34
+[    0.170830] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170835] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170840] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170846] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170851] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170856] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170862] NEPU Call Test! irq_domain_alloc_irq_data! virq 35
+[    0.170867] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170872] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170877] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170883] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170888] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170893] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170899] NEPU Call Test! irq_domain_alloc_irq_data! virq 36
+[    0.170904] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170909] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170915] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170920] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170926] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170931] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170936] NEPU Call Test! irq_domain_alloc_irq_data! virq 37
+[    0.170941] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170947] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170952] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170957] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170963] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170968] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170973] NEPU Call Test! irq_domain_alloc_irq_data! virq 38
+[    0.170979] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.170984] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.170989] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.170995] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.171000] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.171005] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.171011] NEPU Call Test! irq_domain_alloc_irq_data! virq 39
+[    0.171016] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.171021] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.171027] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.171032] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.171037] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.171043] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.171048] NEPU Call Test! irq_domain_alloc_irq_data! virq 40
+[    0.171053] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.171059] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.171064] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.171069] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.171075] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.171080] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.171085] NEPU Call Test! irq_domain_alloc_irq_data! virq 41
+[    0.171090] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.171096] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.171101] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.171106] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.171112] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.171117] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.171123] NEPU Call Test! irq_domain_alloc_irq_data! virq 42
+[    0.171128] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.171133] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.171138] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.171144] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.171149] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.171154] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.171160] NEPU Call Test! irq_domain_alloc_irq_data! virq 43
+[    0.171165] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.171170] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.171176] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.171181] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.171187] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.171192] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.171197] NEPU Call Test! irq_domain_alloc_irq_data! virq 44
+[    0.171202] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.171208] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.171213] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.171218] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.171224] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.171229] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.171234] NEPU Call Test! irq_domain_alloc_irq_data! virq 45
+[    0.171240] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.171245] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.171250] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.171256] NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq 0
+[    0.171261] NEPU Call Test! irq_domain_insert_irq_data! hwirq 0
+[    0.171266] NEPU Call Test! irq_domain_alloc_irq_data! After hwirq 0
+[    0.171272] before irq_domain_alloc_irqs_hierarchy virq 14, hwirq 0
+[    0.171277] irq_domain_insert_irq hwirq 0
+[    0.171282] irq_domain_insert_irq hwirq 0
+[    0.171287] irq_domain_insert_irq hwirq 0
+[    0.171292] before irq_domain_alloc_irqs_hierarchy virq 15, hwirq 0
+[    0.171297] irq_domain_insert_irq hwirq 0
+[    0.171302] irq_domain_insert_irq hwirq 0
+[    0.171307] irq_domain_insert_irq hwirq 0
+[    0.171312] before irq_domain_alloc_irqs_hierarchy virq 16, hwirq 0
+[    0.171317] irq_domain_insert_irq hwirq 0
+[    0.171322] irq_domain_insert_irq hwirq 0
+[    0.171326] irq_domain_insert_irq hwirq 0
+[    0.171332] before irq_domain_alloc_irqs_hierarchy virq 17, hwirq 0
+[    0.171337] irq_domain_insert_irq hwirq 0
+[    0.171342] irq_domain_insert_irq hwirq 0
+[    0.171346] irq_domain_insert_irq hwirq 0
+[    0.171351] before irq_domain_alloc_irqs_hierarchy virq 18, hwirq 0
+[    0.171357] irq_domain_insert_irq hwirq 0
+[    0.171361] irq_domain_insert_irq hwirq 0
+[    0.171366] irq_domain_insert_irq hwirq 0
+[    0.171371] before irq_domain_alloc_irqs_hierarchy virq 19, hwirq 0
+[    0.171377] irq_domain_insert_irq hwirq 0
+[    0.171381] irq_domain_insert_irq hwirq 0
+[    0.171386] irq_domain_insert_irq hwirq 0
+[    0.171391] before irq_domain_alloc_irqs_hierarchy virq 20, hwirq 0
+[    0.171396] irq_domain_insert_irq hwirq 0
+[    0.171401] irq_domain_insert_irq hwirq 0
+[    0.171406] irq_domain_insert_irq hwirq 0
+[    0.171411] before irq_domain_alloc_irqs_hierarchy virq 21, hwirq 0
+[    0.171416] irq_domain_insert_irq hwirq 0
+[    0.171421] irq_domain_insert_irq hwirq 0
+[    0.171426] irq_domain_insert_irq hwirq 0
+[    0.171431] before irq_domain_alloc_irqs_hierarchy virq 22, hwirq 0
+[    0.171436] irq_domain_insert_irq hwirq 0
+[    0.171441] irq_domain_insert_irq hwirq 0
+[    0.171446] irq_domain_insert_irq hwirq 0
+[    0.171451] before irq_domain_alloc_irqs_hierarchy virq 23, hwirq 0
+[    0.171456] irq_domain_insert_irq hwirq 0
+[    0.171461] irq_domain_insert_irq hwirq 0
+[    0.171466] irq_domain_insert_irq hwirq 0
+[    0.171471] before irq_domain_alloc_irqs_hierarchy virq 24, hwirq 0
+[    0.171476] irq_domain_insert_irq hwirq 0
+[    0.171481] irq_domain_insert_irq hwirq 0
+[    0.171485] irq_domain_insert_irq hwirq 0
+[    0.171491] before irq_domain_alloc_irqs_hierarchy virq 25, hwirq 0
+[    0.171496] irq_domain_insert_irq hwirq 0
+[    0.171501] irq_domain_insert_irq hwirq 0
+[    0.171505] irq_domain_insert_irq hwirq 0
+[    0.171510] before irq_domain_alloc_irqs_hierarchy virq 26, hwirq 0
+[    0.171516] irq_domain_insert_irq hwirq 0
+[    0.171520] irq_domain_insert_irq hwirq 0
+[    0.171525] irq_domain_insert_irq hwirq 0
+[    0.171530] before irq_domain_alloc_irqs_hierarchy virq 27, hwirq 0
+[    0.171536] irq_domain_insert_irq hwirq 0
+[    0.171540] irq_domain_insert_irq hwirq 0
+[    0.171545] irq_domain_insert_irq hwirq 0
+[    0.171550] before irq_domain_alloc_irqs_hierarchy virq 28, hwirq 0
+[    0.171555] irq_domain_insert_irq hwirq 0
+[    0.171560] irq_domain_insert_irq hwirq 0
+[    0.171565] irq_domain_insert_irq hwirq 0
+[    0.171570] before irq_domain_alloc_irqs_hierarchy virq 29, hwirq 0
+[    0.171575] irq_domain_insert_irq hwirq 0
+[    0.171580] irq_domain_insert_irq hwirq 0
+[    0.171585] irq_domain_insert_irq hwirq 0
+[    0.171590] before irq_domain_alloc_irqs_hierarchy virq 30, hwirq 0
+[    0.171595] irq_domain_insert_irq hwirq 0
+[    0.171600] irq_domain_insert_irq hwirq 0
+[    0.171605] irq_domain_insert_irq hwirq 0
+[    0.171610] before irq_domain_alloc_irqs_hierarchy virq 31, hwirq 0
+[    0.171615] irq_domain_insert_irq hwirq 0
+[    0.171620] irq_domain_insert_irq hwirq 0
+[    0.171625] irq_domain_insert_irq hwirq 0
+[    0.171630] before irq_domain_alloc_irqs_hierarchy virq 32, hwirq 0
+[    0.171635] irq_domain_insert_irq hwirq 0
+[    0.171640] irq_domain_insert_irq hwirq 0
+[    0.171644] irq_domain_insert_irq hwirq 0
+[    0.171650] before irq_domain_alloc_irqs_hierarchy virq 33, hwirq 0
+[    0.171655] irq_domain_insert_irq hwirq 0
+[    0.171660] irq_domain_insert_irq hwirq 0
+[    0.171664] irq_domain_insert_irq hwirq 0
+[    0.171669] before irq_domain_alloc_irqs_hierarchy virq 34, hwirq 0
+[    0.171675] irq_domain_insert_irq hwirq 0
+[    0.171679] irq_domain_insert_irq hwirq 0
+[    0.171684] irq_domain_insert_irq hwirq 0
+[    0.171689] before irq_domain_alloc_irqs_hierarchy virq 35, hwirq 0
+[    0.171695] irq_domain_insert_irq hwirq 0
+[    0.171699] irq_domain_insert_irq hwirq 0
+[    0.171704] irq_domain_insert_irq hwirq 0
+[    0.171709] before irq_domain_alloc_irqs_hierarchy virq 36, hwirq 0
+[    0.171715] irq_domain_insert_irq hwirq 0
+[    0.171719] irq_domain_insert_irq hwirq 0
+[    0.171724] irq_domain_insert_irq hwirq 0
+[    0.171729] before irq_domain_alloc_irqs_hierarchy virq 37, hwirq 0
+[    0.171734] irq_domain_insert_irq hwirq 0
+[    0.171739] irq_domain_insert_irq hwirq 0
+[    0.171744] irq_domain_insert_irq hwirq 0
+[    0.171749] before irq_domain_alloc_irqs_hierarchy virq 38, hwirq 0
+[    0.171754] irq_domain_insert_irq hwirq 0
+[    0.171759] irq_domain_insert_irq hwirq 0
+[    0.171764] irq_domain_insert_irq hwirq 0
+[    0.171769] before irq_domain_alloc_irqs_hierarchy virq 39, hwirq 0
+[    0.171774] irq_domain_insert_irq hwirq 0
+[    0.171779] irq_domain_insert_irq hwirq 0
+[    0.171784] irq_domain_insert_irq hwirq 0
+[    0.171789] before irq_domain_alloc_irqs_hierarchy virq 40, hwirq 0
+[    0.171794] irq_domain_insert_irq hwirq 0
+[    0.171799] irq_domain_insert_irq hwirq 0
+[    0.171803] irq_domain_insert_irq hwirq 0
+[    0.171809] before irq_domain_alloc_irqs_hierarchy virq 41, hwirq 0
+[    0.171814] irq_domain_insert_irq hwirq 0
+[    0.171819] irq_domain_insert_irq hwirq 0
+[    0.171823] irq_domain_insert_irq hwirq 0
+[    0.171828] before irq_domain_alloc_irqs_hierarchy virq 42, hwirq 0
+[    0.171834] irq_domain_insert_irq hwirq 0
+[    0.171838] irq_domain_insert_irq hwirq 0
+[    0.171843] irq_domain_insert_irq hwirq 0
+[    0.171848] before irq_domain_alloc_irqs_hierarchy virq 43, hwirq 0
+[    0.171854] irq_domain_insert_irq hwirq 0
+[    0.171858] irq_domain_insert_irq hwirq 0
+[    0.171863] irq_domain_insert_irq hwirq 0
+[    0.171868] before irq_domain_alloc_irqs_hierarchy virq 44, hwirq 0
+[    0.171874] irq_domain_insert_irq hwirq 0
+[    0.171878] irq_domain_insert_irq hwirq 0
+[    0.171883] irq_domain_insert_irq hwirq 0
+[    0.171888] before irq_domain_alloc_irqs_hierarchy virq 45, hwirq 0
+[    0.171893] irq_domain_insert_irq hwirq 0
+[    0.171898] irq_domain_insert_irq hwirq 0
+[    0.171903] irq_domain_insert_irq hwirq 0
+[    0.171908] msi_domain_alloc. virq 14, get_hwirq 16384
+[    0.171914] NEPU gicv2m_irq_domain_alloc hwirq 256, spi_st 256, off 0
+[    0.171919] gicv2m_irq_gic_domain_alloc hwirq 256
+[    0.171924] gicv2m_irq_gic_domain_alloc(of node) hwirq 224
+[    0.171929] gic_irq_domain_alloc. hwirq 256
+[    0.171934] irq_domain_set_hwirq_and_chip. virq 14, hwirq 256.
+[    0.171940] irq_domain_set_hwirq_and_chip. virq 14, hwirq 256.
+[    0.171945] gicv2m_irq_gic_domain_alloc hwirq 257
+[    0.171950] gicv2m_irq_gic_domain_alloc(of node) hwirq 225
+[    0.171955] gic_irq_domain_alloc. hwirq 257
+[    0.171960] irq_domain_set_hwirq_and_chip. virq 15, hwirq 257.
+[    0.171967] irq_domain_set_hwirq_and_chip. virq 15, hwirq 257.
+[    0.171972] gicv2m_irq_gic_domain_alloc hwirq 258
+[    0.171977] gicv2m_irq_gic_domain_alloc(of node) hwirq 226
+[    0.171982] gic_irq_domain_alloc. hwirq 258
+[    0.171987] irq_domain_set_hwirq_and_chip. virq 16, hwirq 258.
+[    0.171993] irq_domain_set_hwirq_and_chip. virq 16, hwirq 258.
+[    0.171998] gicv2m_irq_gic_domain_alloc hwirq 259
+[    0.172003] gicv2m_irq_gic_domain_alloc(of node) hwirq 227
+[    0.172008] gic_irq_domain_alloc. hwirq 259
+[    0.172013] irq_domain_set_hwirq_and_chip. virq 17, hwirq 259.
+[    0.172019] irq_domain_set_hwirq_and_chip. virq 17, hwirq 259.
+[    0.172025] gicv2m_irq_gic_domain_alloc hwirq 260
+[    0.172030] gicv2m_irq_gic_domain_alloc(of node) hwirq 228
+[    0.172035] gic_irq_domain_alloc. hwirq 260
+[    0.172040] irq_domain_set_hwirq_and_chip. virq 18, hwirq 260.
+[    0.172046] irq_domain_set_hwirq_and_chip. virq 18, hwirq 260.
+[    0.172051] gicv2m_irq_gic_domain_alloc hwirq 261
+[    0.172056] gicv2m_irq_gic_domain_alloc(of node) hwirq 229
+[    0.172061] gic_irq_domain_alloc. hwirq 261
+[    0.172066] irq_domain_set_hwirq_and_chip. virq 19, hwirq 261.
+[    0.172072] irq_domain_set_hwirq_and_chip. virq 19, hwirq 261.
+[    0.172078] gicv2m_irq_gic_domain_alloc hwirq 262
+[    0.172082] gicv2m_irq_gic_domain_alloc(of node) hwirq 230
+[    0.172088] gic_irq_domain_alloc. hwirq 262
+[    0.172093] irq_domain_set_hwirq_and_chip. virq 20, hwirq 262.
+[    0.172099] irq_domain_set_hwirq_and_chip. virq 20, hwirq 262.
+[    0.172104] gicv2m_irq_gic_domain_alloc hwirq 263
+[    0.172109] gicv2m_irq_gic_domain_alloc(of node) hwirq 231
+[    0.172114] gic_irq_domain_alloc. hwirq 263
+[    0.172119] irq_domain_set_hwirq_and_chip. virq 21, hwirq 263.
+[    0.172125] irq_domain_set_hwirq_and_chip. virq 21, hwirq 263.
+[    0.172130] gicv2m_irq_gic_domain_alloc hwirq 264
+[    0.172135] gicv2m_irq_gic_domain_alloc(of node) hwirq 232
+[    0.172140] gic_irq_domain_alloc. hwirq 264
+[    0.172145] irq_domain_set_hwirq_and_chip. virq 22, hwirq 264.
+[    0.172152] irq_domain_set_hwirq_and_chip. virq 22, hwirq 264.
+[    0.172157] gicv2m_irq_gic_domain_alloc hwirq 265
+[    0.172162] gicv2m_irq_gic_domain_alloc(of node) hwirq 233
+[    0.172167] gic_irq_domain_alloc. hwirq 265
+[    0.172172] irq_domain_set_hwirq_and_chip. virq 23, hwirq 265.
+[    0.172178] irq_domain_set_hwirq_and_chip. virq 23, hwirq 265.
+[    0.172183] gicv2m_irq_gic_domain_alloc hwirq 266
+[    0.172188] gicv2m_irq_gic_domain_alloc(of node) hwirq 234
+[    0.172193] gic_irq_domain_alloc. hwirq 266
+[    0.172198] irq_domain_set_hwirq_and_chip. virq 24, hwirq 266.
+[    0.172204] irq_domain_set_hwirq_and_chip. virq 24, hwirq 266.
+[    0.172210] gicv2m_irq_gic_domain_alloc hwirq 267
+[    0.172215] gicv2m_irq_gic_domain_alloc(of node) hwirq 235
+[    0.172220] gic_irq_domain_alloc. hwirq 267
+[    0.172225] irq_domain_set_hwirq_and_chip. virq 25, hwirq 267.
+[    0.172231] irq_domain_set_hwirq_and_chip. virq 25, hwirq 267.
+[    0.172236] gicv2m_irq_gic_domain_alloc hwirq 268
+[    0.172241] gicv2m_irq_gic_domain_alloc(of node) hwirq 236
+[    0.172246] gic_irq_domain_alloc. hwirq 268
+[    0.172251] irq_domain_set_hwirq_and_chip. virq 26, hwirq 268.
+[    0.172257] irq_domain_set_hwirq_and_chip. virq 26, hwirq 268.
+[    0.172262] gicv2m_irq_gic_domain_alloc hwirq 269
+[    0.172267] gicv2m_irq_gic_domain_alloc(of node) hwirq 237
+[    0.172272] gic_irq_domain_alloc. hwirq 269
+[    0.172277] irq_domain_set_hwirq_and_chip. virq 27, hwirq 269.
+[    0.172284] irq_domain_set_hwirq_and_chip. virq 27, hwirq 269.
+[    0.172289] gicv2m_irq_gic_domain_alloc hwirq 270
+[    0.172294] gicv2m_irq_gic_domain_alloc(of node) hwirq 238
+[    0.172299] gic_irq_domain_alloc. hwirq 270
+[    0.172304] irq_domain_set_hwirq_and_chip. virq 28, hwirq 270.
+[    0.172310] irq_domain_set_hwirq_and_chip. virq 28, hwirq 270.
+[    0.172315] gicv2m_irq_gic_domain_alloc hwirq 271
+[    0.172320] gicv2m_irq_gic_domain_alloc(of node) hwirq 239
+[    0.172325] gic_irq_domain_alloc. hwirq 271
+[    0.172330] irq_domain_set_hwirq_and_chip. virq 29, hwirq 271.
+[    0.172336] irq_domain_set_hwirq_and_chip. virq 29, hwirq 271.
+[    0.172342] gicv2m_irq_gic_domain_alloc hwirq 272
+[    0.172347] gicv2m_irq_gic_domain_alloc(of node) hwirq 240
+[    0.172352] gic_irq_domain_alloc. hwirq 272
+[    0.172357] irq_domain_set_hwirq_and_chip. virq 30, hwirq 272.
+[    0.172363] irq_domain_set_hwirq_and_chip. virq 30, hwirq 272.
+[    0.172368] gicv2m_irq_gic_domain_alloc hwirq 273
+[    0.172373] gicv2m_irq_gic_domain_alloc(of node) hwirq 241
+[    0.172378] gic_irq_domain_alloc. hwirq 273
+[    0.172383] irq_domain_set_hwirq_and_chip. virq 31, hwirq 273.
+[    0.172389] irq_domain_set_hwirq_and_chip. virq 31, hwirq 273.
+[    0.172394] gicv2m_irq_gic_domain_alloc hwirq 274
+[    0.172399] gicv2m_irq_gic_domain_alloc(of node) hwirq 242
+[    0.172404] gic_irq_domain_alloc. hwirq 274
+[    0.172410] irq_domain_set_hwirq_and_chip. virq 32, hwirq 274.
+[    0.172416] irq_domain_set_hwirq_and_chip. virq 32, hwirq 274.
+[    0.172421] gicv2m_irq_gic_domain_alloc hwirq 275
+[    0.172426] gicv2m_irq_gic_domain_alloc(of node) hwirq 243
+[    0.172431] gic_irq_domain_alloc. hwirq 275
+[    0.172436] irq_domain_set_hwirq_and_chip. virq 33, hwirq 275.
+[    0.172442] irq_domain_set_hwirq_and_chip. virq 33, hwirq 275.
+[    0.172447] gicv2m_irq_gic_domain_alloc hwirq 276
+[    0.172452] gicv2m_irq_gic_domain_alloc(of node) hwirq 244
+[    0.172457] gic_irq_domain_alloc. hwirq 276
+[    0.172462] irq_domain_set_hwirq_and_chip. virq 34, hwirq 276.
+[    0.172469] irq_domain_set_hwirq_and_chip. virq 34, hwirq 276.
+[    0.172474] gicv2m_irq_gic_domain_alloc hwirq 277
+[    0.172479] gicv2m_irq_gic_domain_alloc(of node) hwirq 245
+[    0.172484] gic_irq_domain_alloc. hwirq 277
+[    0.172489] irq_domain_set_hwirq_and_chip. virq 35, hwirq 277.
+[    0.172495] irq_domain_set_hwirq_and_chip. virq 35, hwirq 277.
+[    0.172500] gicv2m_irq_gic_domain_alloc hwirq 278
+[    0.172505] gicv2m_irq_gic_domain_alloc(of node) hwirq 246
+[    0.172510] gic_irq_domain_alloc. hwirq 278
+[    0.172515] irq_domain_set_hwirq_and_chip. virq 36, hwirq 278.
+[    0.172521] irq_domain_set_hwirq_and_chip. virq 36, hwirq 278.
+[    0.172527] gicv2m_irq_gic_domain_alloc hwirq 279
+[    0.172531] gicv2m_irq_gic_domain_alloc(of node) hwirq 247
+[    0.172537] gic_irq_domain_alloc. hwirq 279
+[    0.172542] irq_domain_set_hwirq_and_chip. virq 37, hwirq 279.
+[    0.172548] irq_domain_set_hwirq_and_chip. virq 37, hwirq 279.
+[    0.172553] gicv2m_irq_gic_domain_alloc hwirq 280
+[    0.172558] gicv2m_irq_gic_domain_alloc(of node) hwirq 248
+[    0.172563] gic_irq_domain_alloc. hwirq 280
+[    0.172568] irq_domain_set_hwirq_and_chip. virq 38, hwirq 280.
+[    0.172574] irq_domain_set_hwirq_and_chip. virq 38, hwirq 280.
+[    0.172579] gicv2m_irq_gic_domain_alloc hwirq 281
+[    0.172584] gicv2m_irq_gic_domain_alloc(of node) hwirq 249
+[    0.172589] gic_irq_domain_alloc. hwirq 281
+[    0.172594] irq_domain_set_hwirq_and_chip. virq 39, hwirq 281.
+[    0.172601] irq_domain_set_hwirq_and_chip. virq 39, hwirq 281.
+[    0.172606] gicv2m_irq_gic_domain_alloc hwirq 282
+[    0.172611] gicv2m_irq_gic_domain_alloc(of node) hwirq 250
+[    0.172616] gic_irq_domain_alloc. hwirq 282
+[    0.172621] irq_domain_set_hwirq_and_chip. virq 40, hwirq 282.
+[    0.172627] irq_domain_set_hwirq_and_chip. virq 40, hwirq 282.
+[    0.172632] gicv2m_irq_gic_domain_alloc hwirq 283
+[    0.172637] gicv2m_irq_gic_domain_alloc(of node) hwirq 251
+[    0.172642] gic_irq_domain_alloc. hwirq 283
+[    0.172647] irq_domain_set_hwirq_and_chip. virq 41, hwirq 283.
+[    0.172653] irq_domain_set_hwirq_and_chip. virq 41, hwirq 283.
+[    0.172659] gicv2m_irq_gic_domain_alloc hwirq 284
+[    0.172664] gicv2m_irq_gic_domain_alloc(of node) hwirq 252
+[    0.172669] gic_irq_domain_alloc. hwirq 284
+[    0.172674] irq_domain_set_hwirq_and_chip. virq 42, hwirq 284.
+[    0.172680] irq_domain_set_hwirq_and_chip. virq 42, hwirq 284.
+[    0.172685] gicv2m_irq_gic_domain_alloc hwirq 285
+[    0.172690] gicv2m_irq_gic_domain_alloc(of node) hwirq 253
+[    0.172695] gic_irq_domain_alloc. hwirq 285
+[    0.172700] irq_domain_set_hwirq_and_chip. virq 43, hwirq 285.
+[    0.172706] irq_domain_set_hwirq_and_chip. virq 43, hwirq 285.
+[    0.172712] gicv2m_irq_gic_domain_alloc hwirq 286
+[    0.172716] gicv2m_irq_gic_domain_alloc(of node) hwirq 254
+[    0.172722] gic_irq_domain_alloc. hwirq 286
+[    0.172727] irq_domain_set_hwirq_and_chip. virq 44, hwirq 286.
+[    0.172733] irq_domain_set_hwirq_and_chip. virq 44, hwirq 286.
+[    0.172738] gicv2m_irq_gic_domain_alloc hwirq 287
+[    0.172743] gicv2m_irq_gic_domain_alloc(of node) hwirq 255
+[    0.172748] gic_irq_domain_alloc. hwirq 287
+[    0.172753] irq_domain_set_hwirq_and_chip. virq 45, hwirq 287.
+[    0.172759] irq_domain_set_hwirq_and_chip. virq 45, hwirq 287.
+[    0.172765] msi_domain_ops_init. virq 14, hwirq 16384.
+[    0.172770] irq_domain_set_hwirq_and_chip. virq 14, hwirq 16384.
+[    0.172775] msi_domain_ops_init. virq 15, hwirq 16385.
+[    0.172781] irq_domain_set_hwirq_and_chip. virq 15, hwirq 16385.
+[    0.172786] msi_domain_ops_init. virq 16, hwirq 16386.
+[    0.172791] irq_domain_set_hwirq_and_chip. virq 16, hwirq 16386.
+[    0.172797] msi_domain_ops_init. virq 17, hwirq 16387.
+[    0.172802] irq_domain_set_hwirq_and_chip. virq 17, hwirq 16387.
+[    0.172807] msi_domain_ops_init. virq 18, hwirq 16388.
+[    0.172813] irq_domain_set_hwirq_and_chip. virq 18, hwirq 16388.
+[    0.172818] msi_domain_ops_init. virq 19, hwirq 16389.
+[    0.172823] irq_domain_set_hwirq_and_chip. virq 19, hwirq 16389.
+[    0.172829] msi_domain_ops_init. virq 20, hwirq 16390.
+[    0.172834] irq_domain_set_hwirq_and_chip. virq 20, hwirq 16390.
+[    0.172840] msi_domain_ops_init. virq 21, hwirq 16391.
+[    0.172845] irq_domain_set_hwirq_and_chip. virq 21, hwirq 16391.
+[    0.172850] msi_domain_ops_init. virq 22, hwirq 16392.
+[    0.172856] irq_domain_set_hwirq_and_chip. virq 22, hwirq 16392.
+[    0.172861] msi_domain_ops_init. virq 23, hwirq 16393.
+[    0.172870] irq_domain_set_hwirq_and_chip. virq 23, hwirq 16393.
+[    0.172875] msi_domain_ops_init. virq 24, hwirq 16394.
+[    0.172881] irq_domain_set_hwirq_and_chip. virq 24, hwirq 16394.
+[    0.172886] msi_domain_ops_init. virq 25, hwirq 16395.
+[    0.172891] irq_domain_set_hwirq_and_chip. virq 25, hwirq 16395.
+[    0.172897] msi_domain_ops_init. virq 26, hwirq 16396.
+[    0.172902] irq_domain_set_hwirq_and_chip. virq 26, hwirq 16396.
+[    0.172907] msi_domain_ops_init. virq 27, hwirq 16397.
+[    0.172913] irq_domain_set_hwirq_and_chip. virq 27, hwirq 16397.
+[    0.172918] msi_domain_ops_init. virq 28, hwirq 16398.
+[    0.172923] irq_domain_set_hwirq_and_chip. virq 28, hwirq 16398.
+[    0.172929] msi_domain_ops_init. virq 29, hwirq 16399.
+[    0.172934] irq_domain_set_hwirq_and_chip. virq 29, hwirq 16399.
+[    0.172940] msi_domain_ops_init. virq 30, hwirq 16400.
+[    0.172945] irq_domain_set_hwirq_and_chip. virq 30, hwirq 16400.
+[    0.172950] msi_domain_ops_init. virq 31, hwirq 16401.
+[    0.172956] irq_domain_set_hwirq_and_chip. virq 31, hwirq 16401.
+[    0.172961] msi_domain_ops_init. virq 32, hwirq 16402.
+[    0.172966] irq_domain_set_hwirq_and_chip. virq 32, hwirq 16402.
+[    0.172972] msi_domain_ops_init. virq 33, hwirq 16403.
+[    0.172977] irq_domain_set_hwirq_and_chip. virq 33, hwirq 16403.
+[    0.172982] msi_domain_ops_init. virq 34, hwirq 16404.
+[    0.172988] irq_domain_set_hwirq_and_chip. virq 34, hwirq 16404.
+[    0.172993] msi_domain_ops_init. virq 35, hwirq 16405.
+[    0.172998] irq_domain_set_hwirq_and_chip. virq 35, hwirq 16405.
+[    0.173004] msi_domain_ops_init. virq 36, hwirq 16406.
+[    0.173009] irq_domain_set_hwirq_and_chip. virq 36, hwirq 16406.
+[    0.173014] msi_domain_ops_init. virq 37, hwirq 16407.
+[    0.173020] irq_domain_set_hwirq_and_chip. virq 37, hwirq 16407.
+[    0.173025] msi_domain_ops_init. virq 38, hwirq 16408.
+[    0.173030] irq_domain_set_hwirq_and_chip. virq 38, hwirq 16408.
+[    0.173036] msi_domain_ops_init. virq 39, hwirq 16409.
+[    0.173041] irq_domain_set_hwirq_and_chip. virq 39, hwirq 16409.
+[    0.173047] msi_domain_ops_init. virq 40, hwirq 16410.
+[    0.173052] irq_domain_set_hwirq_and_chip. virq 40, hwirq 16410.
+[    0.173057] msi_domain_ops_init. virq 41, hwirq 16411.
+[    0.173063] irq_domain_set_hwirq_and_chip. virq 41, hwirq 16411.
+[    0.173068] msi_domain_ops_init. virq 42, hwirq 16412.
+[    0.173073] irq_domain_set_hwirq_and_chip. virq 42, hwirq 16412.
+[    0.173079] msi_domain_ops_init. virq 43, hwirq 16413.
+[    0.173084] irq_domain_set_hwirq_and_chip. virq 43, hwirq 16413.
+[    0.173089] msi_domain_ops_init. virq 44, hwirq 16414.
+[    0.173095] irq_domain_set_hwirq_and_chip. virq 44, hwirq 16414.
+[    0.173100] msi_domain_ops_init. virq 45, hwirq 16415.
+[    0.173105] irq_domain_set_hwirq_and_chip. virq 45, hwirq 16415.
+[    0.173111] after irq_domain_alloc_irqs_hierarchy virq 14, hwirq 16384
+[    0.173116] irq_domain_insert_irq hwirq 16384
+[    0.173122] irq_domain_insert_irq hwirq 256
+[    0.173127] irq_domain_insert_irq hwirq 256
+[    0.173132] after irq_domain_alloc_irqs_hierarchy virq 15, hwirq 16384
+[    0.173138] irq_domain_insert_irq hwirq 16385
+[    0.173143] irq_domain_insert_irq hwirq 257
+[    0.173147] irq_domain_insert_irq hwirq 257
+[    0.173153] after irq_domain_alloc_irqs_hierarchy virq 16, hwirq 16384
+[    0.173158] irq_domain_insert_irq hwirq 16386
+[    0.173163] irq_domain_insert_irq hwirq 258
+[    0.173168] irq_domain_insert_irq hwirq 258
+[    0.173173] after irq_domain_alloc_irqs_hierarchy virq 17, hwirq 16384
+[    0.173178] irq_domain_insert_irq hwirq 16387
+[    0.173183] irq_domain_insert_irq hwirq 259
+[    0.173188] irq_domain_insert_irq hwirq 259
+[    0.173193] after irq_domain_alloc_irqs_hierarchy virq 18, hwirq 16384
+[    0.173199] irq_domain_insert_irq hwirq 16388
+[    0.173204] irq_domain_insert_irq hwirq 260
+[    0.173209] irq_domain_insert_irq hwirq 260
+[    0.173214] after irq_domain_alloc_irqs_hierarchy virq 19, hwirq 16384
+[    0.173219] irq_domain_insert_irq hwirq 16389
+[    0.173224] irq_domain_insert_irq hwirq 261
+[    0.173229] irq_domain_insert_irq hwirq 261
+[    0.173234] after irq_domain_alloc_irqs_hierarchy virq 20, hwirq 16384
+[    0.173240] irq_domain_insert_irq hwirq 16390
+[    0.173245] irq_domain_insert_irq hwirq 262
+[    0.173249] irq_domain_insert_irq hwirq 262
+[    0.173255] after irq_domain_alloc_irqs_hierarchy virq 21, hwirq 16384
+[    0.173260] irq_domain_insert_irq hwirq 16391
+[    0.173265] irq_domain_insert_irq hwirq 263
+[    0.173270] irq_domain_insert_irq hwirq 263
+[    0.173275] after irq_domain_alloc_irqs_hierarchy virq 22, hwirq 16384
+[    0.173280] irq_domain_insert_irq hwirq 16392
+[    0.173285] irq_domain_insert_irq hwirq 264
+[    0.173290] irq_domain_insert_irq hwirq 264
+[    0.173295] after irq_domain_alloc_irqs_hierarchy virq 23, hwirq 16384
+[    0.173301] irq_domain_insert_irq hwirq 16393
+[    0.173306] irq_domain_insert_irq hwirq 265
+[    0.173311] irq_domain_insert_irq hwirq 265
+[    0.173316] after irq_domain_alloc_irqs_hierarchy virq 24, hwirq 16384
+[    0.173321] irq_domain_insert_irq hwirq 16394
+[    0.173326] irq_domain_insert_irq hwirq 266
+[    0.173331] irq_domain_insert_irq hwirq 266
+[    0.173336] after irq_domain_alloc_irqs_hierarchy virq 25, hwirq 16384
+[    0.173342] irq_domain_insert_irq hwirq 16395
+[    0.173347] irq_domain_insert_irq hwirq 267
+[    0.173351] irq_domain_insert_irq hwirq 267
+[    0.173357] after irq_domain_alloc_irqs_hierarchy virq 26, hwirq 16384
+[    0.173362] irq_domain_insert_irq hwirq 16396
+[    0.173367] irq_domain_insert_irq hwirq 268
+[    0.173372] irq_domain_insert_irq hwirq 268
+[    0.173377] after irq_domain_alloc_irqs_hierarchy virq 27, hwirq 16384
+[    0.173382] irq_domain_insert_irq hwirq 16397
+[    0.173387] irq_domain_insert_irq hwirq 269
+[    0.173392] irq_domain_insert_irq hwirq 269
+[    0.173397] after irq_domain_alloc_irqs_hierarchy virq 28, hwirq 16384
+[    0.173403] irq_domain_insert_irq hwirq 16398
+[    0.173408] irq_domain_insert_irq hwirq 270
+[    0.173413] irq_domain_insert_irq hwirq 270
+[    0.173418] after irq_domain_alloc_irqs_hierarchy virq 29, hwirq 16384
+[    0.173423] irq_domain_insert_irq hwirq 16399
+[    0.173428] irq_domain_insert_irq hwirq 271
+[    0.173433] irq_domain_insert_irq hwirq 271
+[    0.173438] after irq_domain_alloc_irqs_hierarchy virq 30, hwirq 16384
+[    0.173444] irq_domain_insert_irq hwirq 16400
+[    0.173449] irq_domain_insert_irq hwirq 272
+[    0.173453] irq_domain_insert_irq hwirq 272
+[    0.173459] after irq_domain_alloc_irqs_hierarchy virq 31, hwirq 16384
+[    0.173464] irq_domain_insert_irq hwirq 16401
+[    0.173469] irq_domain_insert_irq hwirq 273
+[    0.173474] irq_domain_insert_irq hwirq 273
+[    0.173479] after irq_domain_alloc_irqs_hierarchy virq 32, hwirq 16384
+[    0.173484] irq_domain_insert_irq hwirq 16402
+[    0.173489] irq_domain_insert_irq hwirq 274
+[    0.173494] irq_domain_insert_irq hwirq 274
+[    0.173499] after irq_domain_alloc_irqs_hierarchy virq 33, hwirq 16384
+[    0.173505] irq_domain_insert_irq hwirq 16403
+[    0.173510] irq_domain_insert_irq hwirq 275
+[    0.173515] irq_domain_insert_irq hwirq 275
+[    0.173520] after irq_domain_alloc_irqs_hierarchy virq 34, hwirq 16384
+[    0.173525] irq_domain_insert_irq hwirq 16404
+[    0.173530] irq_domain_insert_irq hwirq 276
+[    0.173535] irq_domain_insert_irq hwirq 276
+[    0.173540] after irq_domain_alloc_irqs_hierarchy virq 35, hwirq 16384
+[    0.173546] irq_domain_insert_irq hwirq 16405
+[    0.173551] irq_domain_insert_irq hwirq 277
+[    0.173555] irq_domain_insert_irq hwirq 277
+[    0.173561] after irq_domain_alloc_irqs_hierarchy virq 36, hwirq 16384
+[    0.173566] irq_domain_insert_irq hwirq 16406
+[    0.173571] irq_domain_insert_irq hwirq 278
+[    0.173576] irq_domain_insert_irq hwirq 278
+[    0.173581] after irq_domain_alloc_irqs_hierarchy virq 37, hwirq 16384
+[    0.173586] irq_domain_insert_irq hwirq 16407
+[    0.173591] irq_domain_insert_irq hwirq 279
+[    0.173596] irq_domain_insert_irq hwirq 279
+[    0.173601] after irq_domain_alloc_irqs_hierarchy virq 38, hwirq 16384
+[    0.173607] irq_domain_insert_irq hwirq 16408
+[    0.173612] irq_domain_insert_irq hwirq 280
+[    0.173617] irq_domain_insert_irq hwirq 280
+[    0.173622] after irq_domain_alloc_irqs_hierarchy virq 39, hwirq 16384
+[    0.173627] irq_domain_insert_irq hwirq 16409
+[    0.173632] irq_domain_insert_irq hwirq 281
+[    0.173637] irq_domain_insert_irq hwirq 281
+[    0.173642] after irq_domain_alloc_irqs_hierarchy virq 40, hwirq 16384
+[    0.173648] irq_domain_insert_irq hwirq 16410
+[    0.173653] irq_domain_insert_irq hwirq 282
+[    0.173657] irq_domain_insert_irq hwirq 282
+[    0.173663] after irq_domain_alloc_irqs_hierarchy virq 41, hwirq 16384
+[    0.173668] irq_domain_insert_irq hwirq 16411
+[    0.173673] irq_domain_insert_irq hwirq 283
+[    0.173678] irq_domain_insert_irq hwirq 283
+[    0.173683] after irq_domain_alloc_irqs_hierarchy virq 42, hwirq 16384
+[    0.173688] irq_domain_insert_irq hwirq 16412
+[    0.173693] irq_domain_insert_irq hwirq 284
+[    0.173698] irq_domain_insert_irq hwirq 284
+[    0.173703] after irq_domain_alloc_irqs_hierarchy virq 43, hwirq 16384
+[    0.173709] irq_domain_insert_irq hwirq 16413
+[    0.173714] irq_domain_insert_irq hwirq 285
+[    0.173719] irq_domain_insert_irq hwirq 285
+[    0.173724] after irq_domain_alloc_irqs_hierarchy virq 44, hwirq 16384
+[    0.173729] irq_domain_insert_irq hwirq 16414
+[    0.173734] irq_domain_insert_irq hwirq 286
+[    0.173739] irq_domain_insert_irq hwirq 286
+[    0.173744] after irq_domain_alloc_irqs_hierarchy virq 45, hwirq 16384
+[    0.173750] irq_domain_insert_irq hwirq 16415
+[    0.173755] irq_domain_insert_irq hwirq 287
+[    0.173759] irq_domain_insert_irq hwirq 287
+[    0.173764] NEPU Call Test! call irq_domain_insert_irq 14
+[    0.173769] irq_domain_insert_irq hwirq 16384
+[    0.173774] irq_domain_insert_irq hwirq 256
+[    0.173779] irq_domain_insert_irq hwirq 256
+[    0.173784] NEPU Call Test! call irq_domain_insert_irq 15
+[    0.173789] irq_domain_insert_irq hwirq 16385
+[    0.173794] irq_domain_insert_irq hwirq 257
+[    0.173799] irq_domain_insert_irq hwirq 257
+[    0.173804] NEPU Call Test! call irq_domain_insert_irq 16
+[    0.173809] irq_domain_insert_irq hwirq 16386
+[    0.173814] irq_domain_insert_irq hwirq 258
+[    0.173819] irq_domain_insert_irq hwirq 258
+[    0.173824] NEPU Call Test! call irq_domain_insert_irq 17
+[    0.173829] irq_domain_insert_irq hwirq 16387
+[    0.173834] irq_domain_insert_irq hwirq 259
+[    0.173838] irq_domain_insert_irq hwirq 259
+[    0.173843] NEPU Call Test! call irq_domain_insert_irq 18
+[    0.173849] irq_domain_insert_irq hwirq 16388
+[    0.173853] irq_domain_insert_irq hwirq 260
+[    0.173858] irq_domain_insert_irq hwirq 260
+[    0.173863] NEPU Call Test! call irq_domain_insert_irq 19
+[    0.173868] irq_domain_insert_irq hwirq 16389
+[    0.173873] irq_domain_insert_irq hwirq 261
+[    0.173878] irq_domain_insert_irq hwirq 261
+[    0.173883] NEPU Call Test! call irq_domain_insert_irq 20
+[    0.173888] irq_domain_insert_irq hwirq 16390
+[    0.173893] irq_domain_insert_irq hwirq 262
+[    0.173898] irq_domain_insert_irq hwirq 262
+[    0.173903] NEPU Call Test! call irq_domain_insert_irq 21
+[    0.173908] irq_domain_insert_irq hwirq 16391
+[    0.173913] irq_domain_insert_irq hwirq 263
+[    0.173918] irq_domain_insert_irq hwirq 263
+[    0.173923] NEPU Call Test! call irq_domain_insert_irq 22
+[    0.173928] irq_domain_insert_irq hwirq 16392
+[    0.173933] irq_domain_insert_irq hwirq 264
+[    0.173937] irq_domain_insert_irq hwirq 264
+[    0.173942] NEPU Call Test! call irq_domain_insert_irq 23
+[    0.173947] irq_domain_insert_irq hwirq 16393
+[    0.173952] irq_domain_insert_irq hwirq 265
+[    0.173957] irq_domain_insert_irq hwirq 265
+[    0.173962] NEPU Call Test! call irq_domain_insert_irq 24
+[    0.173967] irq_domain_insert_irq hwirq 16394
+[    0.173972] irq_domain_insert_irq hwirq 266
+[    0.173977] irq_domain_insert_irq hwirq 266
+[    0.173982] NEPU Call Test! call irq_domain_insert_irq 25
+[    0.173987] irq_domain_insert_irq hwirq 16395
+[    0.173992] irq_domain_insert_irq hwirq 267
+[    0.173997] irq_domain_insert_irq hwirq 267
+[    0.174002] NEPU Call Test! call irq_domain_insert_irq 26
+[    0.174007] irq_domain_insert_irq hwirq 16396
+[    0.174012] irq_domain_insert_irq hwirq 268
+[    0.174016] irq_domain_insert_irq hwirq 268
+[    0.174021] NEPU Call Test! call irq_domain_insert_irq 27
+[    0.174027] irq_domain_insert_irq hwirq 16397
+[    0.174031] irq_domain_insert_irq hwirq 269
+[    0.174036] irq_domain_insert_irq hwirq 269
+[    0.174041] NEPU Call Test! call irq_domain_insert_irq 28
+[    0.174046] irq_domain_insert_irq hwirq 16398
+[    0.174051] irq_domain_insert_irq hwirq 270
+[    0.174056] irq_domain_insert_irq hwirq 270
+[    0.174061] NEPU Call Test! call irq_domain_insert_irq 29
+[    0.174066] irq_domain_insert_irq hwirq 16399
+[    0.174071] irq_domain_insert_irq hwirq 271
+[    0.174076] irq_domain_insert_irq hwirq 271
+[    0.174081] NEPU Call Test! call irq_domain_insert_irq 30
+[    0.174086] irq_domain_insert_irq hwirq 16400
+[    0.174091] irq_domain_insert_irq hwirq 272
+[    0.174096] irq_domain_insert_irq hwirq 272
+[    0.174101] NEPU Call Test! call irq_domain_insert_irq 31
+[    0.174106] irq_domain_insert_irq hwirq 16401
+[    0.174111] irq_domain_insert_irq hwirq 273
+[    0.174115] irq_domain_insert_irq hwirq 273
+[    0.174120] NEPU Call Test! call irq_domain_insert_irq 32
+[    0.174125] irq_domain_insert_irq hwirq 16402
+[    0.174130] irq_domain_insert_irq hwirq 274
+[    0.174135] irq_domain_insert_irq hwirq 274
+[    0.174140] NEPU Call Test! call irq_domain_insert_irq 33
+[    0.174145] irq_domain_insert_irq hwirq 16403
+[    0.174150] irq_domain_insert_irq hwirq 275
+[    0.174155] irq_domain_insert_irq hwirq 275
+[    0.174160] NEPU Call Test! call irq_domain_insert_irq 34
+[    0.174165] irq_domain_insert_irq hwirq 16404
+[    0.174170] irq_domain_insert_irq hwirq 276
+[    0.174175] irq_domain_insert_irq hwirq 276
+[    0.174180] NEPU Call Test! call irq_domain_insert_irq 35
+[    0.174185] irq_domain_insert_irq hwirq 16405
+[    0.174190] irq_domain_insert_irq hwirq 277
+[    0.174195] irq_domain_insert_irq hwirq 277
+[    0.174200] NEPU Call Test! call irq_domain_insert_irq 36
+[    0.174205] irq_domain_insert_irq hwirq 16406
+[    0.174209] irq_domain_insert_irq hwirq 278
+[    0.174214] irq_domain_insert_irq hwirq 278
+[    0.174219] NEPU Call Test! call irq_domain_insert_irq 37
+[    0.174224] irq_domain_insert_irq hwirq 16407
+[    0.174229] irq_domain_insert_irq hwirq 279
+[    0.174234] irq_domain_insert_irq hwirq 279
+[    0.174239] NEPU Call Test! call irq_domain_insert_irq 38
+[    0.174244] irq_domain_insert_irq hwirq 16408
+[    0.174249] irq_domain_insert_irq hwirq 280
+[    0.174254] irq_domain_insert_irq hwirq 280
+[    0.174259] NEPU Call Test! call irq_domain_insert_irq 39
+[    0.174264] irq_domain_insert_irq hwirq 16409
+[    0.174269] irq_domain_insert_irq hwirq 281
+[    0.174274] irq_domain_insert_irq hwirq 281
+[    0.174279] NEPU Call Test! call irq_domain_insert_irq 40
+[    0.174284] irq_domain_insert_irq hwirq 16410
+[    0.174289] irq_domain_insert_irq hwirq 282
+[    0.174293] irq_domain_insert_irq hwirq 282
+[    0.174298] NEPU Call Test! call irq_domain_insert_irq 41
+[    0.174304] irq_domain_insert_irq hwirq 16411
+[    0.174308] irq_domain_insert_irq hwirq 283
+[    0.174313] irq_domain_insert_irq hwirq 283
+[    0.174318] NEPU Call Test! call irq_domain_insert_irq 42
+[    0.174323] irq_domain_insert_irq hwirq 16412
+[    0.174328] irq_domain_insert_irq hwirq 284
+[    0.174333] irq_domain_insert_irq hwirq 284
+[    0.174338] NEPU Call Test! call irq_domain_insert_irq 43
+[    0.174343] irq_domain_insert_irq hwirq 16413
+[    0.174348] irq_domain_insert_irq hwirq 285
+[    0.174353] irq_domain_insert_irq hwirq 285
+[    0.174358] NEPU Call Test! call irq_domain_insert_irq 44
+[    0.174363] irq_domain_insert_irq hwirq 16414
+[    0.174368] irq_domain_insert_irq hwirq 286
+[    0.174373] irq_domain_insert_irq hwirq 286
+[    0.174378] NEPU Call Test! call irq_domain_insert_irq 45
+[    0.174383] irq_domain_insert_irq hwirq 16415
+[    0.174388] irq_domain_insert_irq hwirq 287
+[    0.174392] irq_domain_insert_irq hwirq 287
+[    0.174397] msi_domain_alloc_irqs. virq = 14
+[    0.174461] __pci_enable_msi_range-after msi_capability_init 14
+[    0.174467] __pci_enable_msi_range - rc = 0
+[    0.174471] __pci_enable_msi_range - rc = 0
+[    0.174476] pci_alloc_irq_vectors_affinity (a) 14
+[    0.174481] IRQ ST(AFTER) 14
+[    0.174485] NIC HW addr ffffff8022000000
+[    0.328884] ata1.00: ATA-7: M5 IDE Disk, , max UDMA/66
+[    0.328890] ata1.00: 3906250 sectors, multi 0: LBA 
+[    0.328915] ata1.00: configured for UDMA/33
+[    0.328974] scsi 0:0:0:0: Direct-Access     ATA      M5 IDE Disk      n/a  PQ: 0 ANSI: 5
+[    0.329205] sd 0:0:0:0: Attached scsi generic sg0 type 0
+[    0.329224] sd 0:0:0:0: [sda] 3906250 512-byte logical blocks: (2.00 GB/1.86 GiB)
+[    0.329238] sd 0:0:0:0: [sda] Write Protect is off
+[    0.329243] sd 0:0:0:0: [sda] Mode Sense: 00 3a 00 00
+[    0.329264] sd 0:0:0:0: [sda] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
+[    0.329491]  sda: sda1
+[    0.329710] sd 0:0:0:0: [sda] Attached SCSI disk
+[    0.441886] nepu1000 0000:00:01.0 eth0: (PCI:33MHz:32-bit) 00:90:00:00:00:01
+[    0.441894] nepu1000 0000:00:01.0 eth0: Intel(R) PRO/1000 Network Connection
+[    0.441921] ixgbe: Intel(R) 10 Gigabit PCI Express Network Driver - version 5.1.0-k
+[    0.441926] ixgbe: Copyright (c) 1999-2016 Intel Corporation.
+[    0.441968] ixgbevf: Intel(R) 10 Gigabit PCI Express Virtual Function Network Driver - version 4.1.0-k
+[    0.441974] ixgbevf: Copyright (c) 2009 - 2015 Intel Corporation.
+[    0.442011] i40e: Intel(R) Ethernet Connection XL710 Network Driver - version 2.1.14-k
+[    0.442017] i40e: Copyright (c) 2013 - 2014 Intel Corporation.
+[    0.442060] ixgb: Intel(R) PRO/10GbE Network Driver - version 1.0.135-k2-NAPI
+[    0.442065] ixgb: Copyright (c) 1999-2008 Intel Corporation.
+[    0.442086] i40evf: Intel(R) 40-10 Gigabit Virtual Function Network Driver - version 3.0.0-k
+[    0.442091] Copyright (c) 2013 - 2015 Intel Corporation.
+[    0.442223] usbcore: registered new interface driver usb-storage
+[    0.442376] mousedev: PS/2 mouse device common for all mice
+[    0.442433] IR NEC protocol handler initialized
+[    0.442438] IR RC5(x/sz) protocol handler initialized
+[    0.442443] IR RC6 protocol handler initialized
+[    0.442447] IR JVC protocol handler initialized
+[    0.442452] IR Sony protocol handler initialized
+[    0.442457] IR SANYO protocol handler initialized
+[    0.442462] IR Sharp protocol handler initialized
+[    0.442466] IR MCE Keyboard/mouse protocol handler initialized
+[    0.442471] IR XMP protocol handler initialized
+[    0.442502] gem5_energy_ctrl_mc: gem5_mc_init: No energy controller found
+[    0.442712] usbcore: registered new interface driver usbhid
+[    0.442717] usbhid: USB HID core driver
+[    0.442763] NET: Registered protocol family 17
+[    0.442810] -EINVAL 1
+[    0.442814] -EINVAL 2
+[    0.442818] -EINVAL 3
+[    0.442822] -EINVAL 4
+[    0.442826] -EINVAL 5
+[    0.443103] -EINVAL 1
+[    0.443107] -EINVAL 2
+[    0.443111] -EINVAL 3
+[    0.443115] -EINVAL 4
+[    0.443119] -EINVAL 5
+[    0.544949] input: AT Raw Set 2 keyboard as /devices/platform/1c060000.kmi/serio0/input/input0
+[    0.545000] -EINVAL 1
+[    0.545004] -EINVAL 2
+[    0.545008] -EINVAL 3
+[    0.545012] -EINVAL 4
+[    0.545016] -EINVAL 5
+[    0.648886] -EINVAL 1
+[    0.648890] -EINVAL 2
+[    0.648894] -EINVAL 3
+[    0.648898] -EINVAL 4
+[    0.648902] -EINVAL 5
+[    0.956966] input: PS/2 Generic Mouse as /devices/platform/1c070000.kmi/serio1/input/input2
+[    0.957132] EXT4-fs (sda1): couldn't mount as ext3 due to feature incompatibilities
+[    0.989519] EXT4-fs (sda1): recovery complete
+[    0.989543] EXT4-fs (sda1): mounted filesystem with ordered data mode. Opts: (null)
+[    0.989553] VFS: Mounted root (ext4 filesystem) on device 8:1.
+[    0.989596] devtmpfs: mounted
+[    0.989649] Freeing unused kernel memory: 384K
++ mount -t proc - /proc
++ mount -t sysfs - /sys
++ mount -t debugfs - /sys/kernel/debug/
++ [ -e /dev/sdb1 ]
++ [ -e /dev/sdb ]
++ [ -e /dev/vdb1 ]
++ [ -e /dev/vdb ]
++ [ -e /dev/vda1 ]
++ [ -e /dev/vda ]
++ /sbin/m5 readfile
++ chmod 755 /tmp/script
++ [ -s /tmp/script ]
++ exec su root -c /tmp/script
+[    1.027342] NEPU e1000_configure was called
+[    1.027510] -EINVAL 1
+[    1.027514] -EINVAL 2
+[    1.027518] -EINVAL 3
+[    1.027522] -EINVAL 4
+[    1.027526] -EINVAL 5
+[    1.027540] try alloc 14
+[    1.027545] -EINVAL 1
+[    1.027548] -EINVAL 2
+[    1.027552] -EINVAL 3
+[    1.027556] -EINVAL 4
+[    1.027560] -EINVAL 5
+[    1.027575] try alloc mq 15
+[    1.027579] -EINVAL 1
+[    1.027583] -EINVAL 2
+[    1.027587] -EINVAL 3
+[    1.027591] -EINVAL 4
+[    1.027595] -EINVAL 5
+[    1.027610] try alloc mq 16
+[    1.027614] -EINVAL 1
+[    1.027618] -EINVAL 2
+[    1.027622] -EINVAL 3
+[    1.027626] -EINVAL 4
+[    1.027629] -EINVAL 5
+[    1.027644] try alloc mq 17
+[    1.027648] -EINVAL 1
+[    1.027652] -EINVAL 2
+[    1.027656] -EINVAL 3
+[    1.027660] -EINVAL 4
+[    1.027664] -EINVAL 5
+[    1.027679] try alloc mq 18
+eth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        inet 192.168.0.2  netmask 255.255.255.0  broadcast 192.168.0.255
+        ether 00:90:00:00:00:02  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=8<LOOPBACK>  mtu 65536
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+           CPU0       CPU1       CPU2       CPU3       
+  4:        104         64         80         63     GIC-0  27 Level     arch_timer
+  6:          8          0          0          0     GIC-0  44 Level     kmi-pl050
+  7:         94          0          0          0     GIC-0  45 Level     kmi-pl050
+  8:          0          0          0          0     GIC-0  37 Level     uart-pl011
+ 12:       1535          0          0          0     GIC-0 102 Edge      ata_piix
+ 14:          1          0          0          0       MSI 16384 Edge      eth0
+ 15:          2          0          0          0       MSI 16385 Edge      eth0-rx-tx-0
+ 16:          2          0          0          0       MSI 16386 Edge      eth0-rx-tx-1
+ 17:          2          0          0          0       MSI 16387 Edge      eth0-rx-tx-2
+ 18:          2          0          0          0       MSI 16388 Edge      eth0-rx-tx-3
+IPI0:       206        609        266        224       Rescheduling interrupts
+IPI1:         0         39       1456         64       Function call interrupts
+IPI2:         0          0          0          0       CPU stop interrupts
+IPI3:         0          0          0          0       CPU stop (for crash dump) interrupts
+IPI4:         0          0          0          0       Timer broadcast interrupts
+IPI5:         0          0          0          0       IRQ work interrupts
+IPI6:         0          0          0          0       CPU wake-up interrupts
+Err:          0
+[    1.033714] nepu1000: eth0 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: None
+00:01.0 Ethernet controller: Intel Corporation 82547GI Gigabit Ethernet Controller
+00:02.0 IDE interface: Intel Corporation 82371AB/EB/MB PIIX4 IDE

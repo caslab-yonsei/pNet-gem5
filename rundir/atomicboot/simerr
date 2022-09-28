@@ -1,0 +1,54 @@
+warn: iobus.slave is deprecated. `slave` is now called `cpu_side_ports`
+warn: bridge.master is deprecated. `master` is now called `mem_side_port`
+warn: membus.master is deprecated. `master` is now called `mem_side_ports`
+warn: bridge.slave is deprecated. `slave` is now called `cpu_side_port`
+warn: membus.slave is deprecated. `slave` is now called `cpu_side_ports`
+warn: iobus.master is deprecated. `master` is now called `mem_side_ports`
+warn: iobridge.slave is deprecated. `slave` is now called `cpu_side_port`
+warn: membus.slave is deprecated. `slave` is now called `cpu_side_ports`
+warn: iobridge.master is deprecated. `master` is now called `mem_side_port`
+warn: membus.slave is deprecated. `slave` is now called `cpu_side_ports`
+warn: membus.slave is deprecated. `slave` is now called `cpu_side_ports`
+warn: membus.slave is deprecated. `slave` is now called `cpu_side_ports`
+warn: membus.slave is deprecated. `slave` is now called `cpu_side_ports`
+warn: membus.slave is deprecated. `slave` is now called `cpu_side_ports`
+warn: membus.slave is deprecated. `slave` is now called `cpu_side_ports`
+warn: membus.slave is deprecated. `slave` is now called `cpu_side_ports`
+warn: membus.slave is deprecated. `slave` is now called `cpu_side_ports`
+warn: membus.slave is deprecated. `slave` is now called `cpu_side_ports`
+warn: membus.slave is deprecated. `slave` is now called `cpu_side_ports`
+warn: membus.slave is deprecated. `slave` is now called `cpu_side_ports`
+warn: membus.slave is deprecated. `slave` is now called `cpu_side_ports`
+warn: membus.slave is deprecated. `slave` is now called `cpu_side_ports`
+warn: membus.slave is deprecated. `slave` is now called `cpu_side_ports`
+warn: membus.slave is deprecated. `slave` is now called `cpu_side_ports`
+warn: membus.slave is deprecated. `slave` is now called `cpu_side_ports`
+warn: No dot file generated. Please install pydot to generate the dot file and pdf.
+warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (256 Mbytes)
+info: kernel located at: /home/jshin/research/mQ-gem5/mQ-gem5/linux/vmlinux
+system.vncserver: Listening for connections on port 5900
+system.terminal: Listening for connections on port 3456
+system.realview.uart1.device: Listening for connections on port 3457
+system.realview.uart2.device: Listening for connections on port 3458
+system.realview.uart3.device: Listening for connections on port 3459
+0: system.remote_gdb: listening for remote gdb on port 7000
+0: system.remote_gdb: listening for remote gdb on port 7001
+0: system.remote_gdb: listening for remote gdb on port 7002
+0: system.remote_gdb: listening for remote gdb on port 7003
+info: Using bootloader at address 0x10
+info: Using kernel entry physical address at 0x80080000
+info: Loading DTB file: /home/jshin/research/mQ-gem5/mQ-gem5/gem5/system/arm/dt/armv8_gem5_v1_4cpu.dtb at address 0x88000000
+warn: Existing EnergyCtrl, but no enabled DVFSHandler found.
+info: Entering event queue @ 0.  Starting simulation...
+warn: SCReg: Access to unknown device dcc0:site0:pos0:fn7:dev0
+warn: Tried to read RealView I/O at offset 0x60 that doesn't exist
+warn: Tried to read RealView I/O at offset 0x48 that doesn't exist
+warn: Tried to write RVIO at offset 0xa8 (data 0) that doesn't exist
+warn: Tried to write RVIO at offset 0xa8 (data 0) that doesn't exist
+warn: Tried to write RVIO at offset 0xa8 (data 0) that doesn't exist
+warn: Tried to write RVIO at offset 0xa8 (data 0) that doesn't exist
+warn: Tried to read RealView I/O at offset 0x8 that doesn't exist
+warn: Tried to read RealView I/O at offset 0x48 that doesn't exist
+warn: Device specific PCI config space (Capability) for system.realview.ethernet!
+warn: Device specific PCI config space not implemented for system.realview.ethernet!
+warn: exitSimLoop called with a delay and auto serialization. This is currently unsupported.

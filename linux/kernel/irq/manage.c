@@ -1741,6 +1741,7 @@ int request_threaded_irq(unsigned int irq, irq_handler_t handler,
 
 	printk(KERN_ALERT "-EINVAL 2\n");
 	desc = irq_to_desc(irq);
+	//printk(KERN_ALERT "-EINVAL 2. hwirq %d\n", desc->irq_data.hwirq);
 	if (!desc)
 		return -EINVAL;
 
@@ -1748,6 +1749,7 @@ int request_threaded_irq(unsigned int irq, irq_handler_t handler,
 	if (!irq_settings_can_request(desc) ||
 	    WARN_ON(irq_settings_is_per_cpu_devid(desc)))
 		return -EINVAL;
+	//printk(KERN_ALERT "-EINVAL 3. hwirq %d\n", desc->irq_data.hwirq);
 
 	printk(KERN_ALERT "-EINVAL 4\n");
 	if (!handler) {
@@ -1772,14 +1774,18 @@ int request_threaded_irq(unsigned int irq, irq_handler_t handler,
 		kfree(action);
 		return retval;
 	}
+	//printk(KERN_ALERT "-EINVAL 6. hwirq %d\n", desc->irq_data.hwirq);
 
 	retval = __setup_irq(irq, desc, action);
+	//printk(KERN_ALERT "-EINVAL 7. hwirq %d\n", desc->irq_data.hwirq);
 
 	if (retval) {
 		irq_chip_pm_put(&desc->irq_data);
 		kfree(action->secondary);
 		kfree(action);
+		//printk(KERN_ALERT "-EINVAL 8. hwirq %d\n", desc->irq_data.hwirq);
 	}
+
 
 #ifdef CONFIG_DEBUG_SHIRQ_FIXME
 	if (!retval && (irqflags & IRQF_SHARED)) {

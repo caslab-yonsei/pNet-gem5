@@ -1072,6 +1072,7 @@ static int gic_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
 	struct irq_fwspec *fwspec = arg;
 
 	ret = gic_irq_domain_translate(domain, fwspec, &hwirq, &type);
+	printk(KERN_ALERT "gic_irq_domain_alloc. hwirq %d\n", hwirq);
 	if (ret)
 		return ret;
 

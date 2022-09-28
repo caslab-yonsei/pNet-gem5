@@ -319,6 +319,8 @@ struct irq_domain *irq_domain_add_simple(struct device_node *of_node,
 {
 	struct irq_domain *domain;
 
+	printk(KERN_ALERT "irq_domain_add_simple first_irq %d\n", first_irq);
+
 	domain = __irq_domain_add(of_node_to_fwnode(of_node), size, size, 0, ops, host_data);
 	if (!domain)
 		return NULL;
@@ -362,7 +364,7 @@ struct irq_domain *irq_domain_add_legacy(struct device_node *of_node,
 					 void *host_data)
 {
 	struct irq_domain *domain;
-
+	printk(KERN_ALERT "irq_domain_add_legacy first_irq %d\n", first_irq);
 	domain = __irq_domain_add(of_node_to_fwnode(of_node), first_hwirq + size,
 				  first_hwirq + size, 0, ops, host_data);
 	if (domain)
@@ -517,7 +519,7 @@ int irq_domain_associate(struct irq_domain *domain, unsigned int virq,
 {
 	struct irq_data *irq_data = irq_get_irq_data(virq);
 	int ret;
-
+	printk(KERN_ALERT "irq_domain_associate hwirq %d\n", hwirq);
 	if (WARN(hwirq >= domain->hwirq_max,
 		 "error: hwirq 0x%x is too large for %s\n", (int)hwirq, domain->name))
 		return -EINVAL;
@@ -567,6 +569,8 @@ void irq_domain_associate_many(struct irq_domain *domain, unsigned int irq_base,
 {
 	struct device_node *of_node;
 	int i;
+
+	printk(KERN_ALERT "irq_domain_associate_many first_irq %d\n", hwirq_base);
 
 	of_node = irq_domain_get_of_node(domain);
 	pr_debug("%s(%s, irqbase=%i, hwbase=%i, count=%i)\n", __func__,
@@ -697,6 +701,8 @@ int irq_create_strict_mappings(struct irq_domain *domain, unsigned int irq_base,
 {
 	struct device_node *of_node;
 	int ret;
+
+	printk(KERN_ALERT "irq_create_strict_mappings first_irq %d\n", hwirq_base);
 
 	of_node = irq_domain_get_of_node(domain);
 	ret = irq_alloc_descs(irq_base, irq_base, count,
@@ -1154,6 +1160,7 @@ static void irq_domain_insert_irq(int virq)
 		struct irq_domain *domain = data->domain;
 
 		domain->mapcount++;
+		printk(KERN_ALERT "irq_domain_insert_irq hwirq %d\n", data->hwirq);
 		irq_domain_set_mapping(domain, data->hwirq, data);
 
 		/* If not already assigned, give the domain the chip's name */
@@ -1196,6 +1203,8 @@ static struct irq_data *irq_domain_insert_irq_data(struct irq_domain *domain,
 		irq_data->domain = domain;
 	}
 
+	printk("NEPU Call Test! irq_domain_insert_irq_data! hwirq %d\n", irq_data->hwirq);
+
 	return irq_data;
 }
 
@@ -1229,14 +1238,17 @@ static int irq_domain_alloc_irq_data(struct irq_domain *domain,
 	for (i = 0; i < nr_irqs; i++) {
 		irq_data = irq_get_irq_data(virq + i);
 		irq_data->domain = domain;
-
+		printk("NEPU Call Test! irq_domain_alloc_irq_data! virq %d\n", virq + i);
 		for (parent = domain->parent; parent; parent = parent->parent) {
+			printk("NEPU Call Test! irq_domain_alloc_irq_data! Before hwirq %d\n", irq_data->hwirq);
 			irq_data = irq_domain_insert_irq_data(parent, irq_data);
 			if (!irq_data) {
 				irq_domain_free_irq_data(virq, i + 1);
 				return -ENOMEM;
 			}
+			printk("NEPU Call Test! irq_domain_alloc_irq_data! After hwirq %d\n", irq_data->hwirq);
 		}
+		
 	}
 
 	return 0;
@@ -1281,6 +1293,8 @@ int irq_domain_set_hwirq_and_chip(struct irq_domain *domain, unsigned int virq,
 	irq_data->hwirq = hwirq;
 	irq_data->chip = chip ? chip : &no_irq_chip;
 	irq_data->chip_data = chip_data;
+
+	printk(KERN_ALERT "irq_domain_set_hwirq_and_chip. virq %d, hwirq %d.\n", virq, hwirq);
 
 	return 0;
 }
@@ -1401,8 +1415,8 @@ int __irq_domain_alloc_irqs(struct irq_domain *domain, int irq_base,
 			    bool realloc, const struct cpumask *affinity)
 {
 	int i, ret, virq;
-
-	printk("NEPU Call Test! __irq_domain_alloc_irqs! base %d\n", irq_base);
+	struct irq_data *irq_data;
+	printk(KERN_ALERT "NEPU Call Test! __irq_domain_alloc_irqs! base %d\n", irq_base);
 
 	if (domain == NULL) {
 		domain = irq_default_domain;
@@ -1433,14 +1447,29 @@ int __irq_domain_alloc_irqs(struct irq_domain *domain, int irq_base,
 		goto out_free_desc;
 	}
 
+	for (i = 0; i < nr_irqs; i++){
+		irq_data = irq_get_irq_data(virq);
+		printk(KERN_ALERT "before irq_domain_alloc_irqs_hierarchy virq %d, hwirq %d\n", virq+i, irq_data->hwirq);
+		irq_domain_insert_irq(virq + i);
+	}
+
 	mutex_lock(&irq_domain_mutex);
 	ret = irq_domain_alloc_irqs_hierarchy(domain, virq, nr_irqs, arg);
 	if (ret < 0) {
 		mutex_unlock(&irq_domain_mutex);
 		goto out_free_irq_data;
 	}
-	for (i = 0; i < nr_irqs; i++)
+	
+	for (i = 0; i < nr_irqs; i++){
+		irq_data = irq_get_irq_data(virq);
+		printk(KERN_ALERT "after irq_domain_alloc_irqs_hierarchy virq %d, hwirq %d\n", virq+i, irq_data->hwirq);
 		irq_domain_insert_irq(virq + i);
+	}
+
+	for (i = 0; i < nr_irqs; i++){
+		printk(KERN_ALERT "NEPU Call Test! call irq_domain_insert_irq %d\n", virq+i);
+		irq_domain_insert_irq(virq + i);
+	}
 	mutex_unlock(&irq_domain_mutex);
 
 	return virq;

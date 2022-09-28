@@ -550,7 +550,7 @@ msi_setup_entry(struct pci_dev *dev, int nvec, const struct irq_affinity *affd)
 
 	/* MSI Entry Initialization */
 	entry = alloc_msi_entry(&dev->dev, nvec, masks);
-	//printk(KERN_INFO "entry->irq %d\n", entry->irq);
+	printk(KERN_ALERT "msi_setup_entry. entry->irq %d\n", entry->irq);
 	if (!entry)
 		goto out;
 
@@ -1381,6 +1381,9 @@ void pci_msi_domain_write_msg(struct irq_data *irq_data, struct msi_msg *msg)
 irq_hw_number_t pci_msi_domain_calc_hwirq(struct pci_dev *dev,
 					  struct msi_desc *desc)
 {
+	// printk(KERN_ALERT "pci_msi_domain_calc_hwirq. entry_nr %d, PCI_DEVID %d, pci_domain_nr %d\n",
+	// 		desc->msi_attrib.entry_nr, PCI_DEVID(dev->bus->number, dev->devfn), (pci_domain_nr(dev->bus) & 0xFFFFFFFF));
+	printk(KERN_ALERT "pci_msi_domain_calc_hwirq. dev->bus->number %d, dev->devfn %d\n", dev->bus->number, dev->devfn);
 	return (irq_hw_number_t)desc->msi_attrib.entry_nr |
 		PCI_DEVID(dev->bus->number, dev->devfn) << 11 |
 		(pci_domain_nr(dev->bus) & 0xFFFFFFFF) << 27;
