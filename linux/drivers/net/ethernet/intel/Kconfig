@@ -61,6 +61,13 @@ config NEPU1000
 	---help---
 	  This driver support NEPURSS ethernet controller base on intel82574.
 
+config NEPU_MASTER_IRQ
+	tristate "NEPU_MASTER_IRQ NEPUNIC"
+	depends on PCI
+	default n
+	---help---
+	  Use separate IRQ for management device.
+
 config E1000E
 	tristate "Intel(R) PRO/1000 PCI-Express Gigabit Ethernet support"
 	depends on PCI && (!SPARC32 || BROKEN)

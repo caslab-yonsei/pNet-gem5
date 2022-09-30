@@ -1317,6 +1317,7 @@ NepGbE::postInterrupt_MSI(IntTypes t, int queue, bool now)
 
     // Mq Handle
     if (queue < 0){
+        queue = 0;
         //return;
 
         if (t & regs.icr() && !now)
@@ -1590,7 +1591,8 @@ NepGbE::MultiQueueComponentSet::cpuPostMultInt()
     DPRINTF(NepNicIntrMsi, "EINT: Posting interrupt Q %d to CPU now. MSI Vector %#x\n",
         idxComponent,
         igbe->regs.nep_ex_regs[idxComponent].mqicr());
-    igbe->sendingMSI(idxComponent+1);
+    //igbe->sendingMSI(idxComponent+1);
+    igbe->sendingMSI(idxComponent);
 
     lastMultInterrupt = curTick();
     if(igbe->global_int_time<lastMultInterrupt)igbe->global_int_time=lastMultInterrupt;
@@ -1657,7 +1659,8 @@ NepGbE::MultiQueueComponentSet::cpuClearMultiInt()
                 "EINT: Clearing interrupt to CPU now. Vector %#x\n",
                 regs.mqicr());
 
-        igbe->clearMSI(idxComponent+1);
+        igbe->clearMSI(idxComponent);
+        //igbe->clearMSI(idxComponent+1);
     }
 }
 

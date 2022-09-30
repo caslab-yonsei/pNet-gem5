@@ -39,12 +39,14 @@ else
     MY_ADDR_PADDED=${MY_ADDR}
 fi
 
-insmod /home/nepu1000.ko
+#insmod /home/nepu1000.ko
 
 /sbin/ifconfig eth0 hw ether 00:90:00:00:00:${MY_ADDR_PADDED}
 /sbin/ifconfig eth0 192.168.0.${MY_ADDR} netmask 255.255.255.0 up
 
 /sbin/ifconfig -a
+
+cat /proc/interrupts
 
 # take a checkpoint
 if [ "$MY_RANK" == "0" ]

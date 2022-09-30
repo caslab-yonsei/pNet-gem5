@@ -64,7 +64,7 @@ GEM5_DIR=/home/jshin/research/mQ-gem5/mQ-gem5/gem5
 IMG=/home/jshin/research/mQ-gem5/ubuntu.img
 #VMLINUX=/home/nepuko/research/gem5_share/binaries/vmlinux.vexpress_gem5_v1
 VMLINUX=/home/jshin/research/mQ-gem5/mQ-gem5/linux/vmlinux
-DTB=/home/jshin/research/mQ-gem5/mQ-gem5/gem5/system/arm/dt/armv8_gem5_v1_4cpu.dtb
+DTB=/home/jshin/research/mQ-gem5/mQ-gem5/gem5/system/arm/dt/armv8_gem5_v1_$1cpu.dtb
 
 FS_CONFIG=$GEM5_DIR/configs/example/fs.py
 SW_CONFIG=$GEM5_DIR/configs/dist/sw.py
@@ -76,6 +76,7 @@ GEM5_EXE=$GEM5_DIR/build/ARM/gem5.opt
 #BOOT_SCRIPT="/home/caslab/bst/IISWC/mQ-gem5/script/memcached_base.rcS"
 BOOT_SCRIPT="/home/jshin/research/mQ-gem5/mQ-gem5/cp_test_scripts/test/boot.easy.ckpt.rcS"
 #BOOT_SCRIPT="/home/jshin/research/mQ-gem5/mQ-gem5/cp_test_scripts/test/memcached_base.rcS"
+BOOT_SCRIPT="/home/jshin/research/mQ-gem5/mQ-gem5/cp_test_scripts/test/iperf_32.rcS"
 GEM5_DIST_SH=$GEM5_DIR/util/dist/gem5-dist.sh
 
 #DEBUG_FLAGS="--debug-flags=GICV2M,EthernetIntr,GIC,NepNicOthers " #"--debug-flags=DistEthernet"
@@ -86,11 +87,11 @@ NNODES=2
 
 DEBUG_FLAGS="--debug-flags=NepCkpt,GICV2M,NepMsi "
 
-CKPTDIR=$(pwd)/testrun/ckpt/ckpt_$1core_$2_16G-20220928-1721
-RUNDIR=$(pwd)/testrun/test-cp/ckpt_$1core_$2_16G-20220928-1721
+CKPTDIR=$(pwd)/testrun/ckpt/ckpt_$1core_$2_16G-20220930-1721
+RUNDIR=$(pwd)/testrun/test-cp/ckpt_$1core_$2_16G-20220930-test
 
 CP=" --cpu-type=AtomicSimpleCPU --cpu-clock=4GHz "
-TEST=" --cpu-type=ex5_big --cpu-clock=4GHz   --caches   --l2cache --l3cache --l3_size=96MB --mem-type=DDR4_2400_4x16  --mem-channels=4 "
+TEST=" --cpu-type=ex5_big --cpu-clock=4GHz   --caches   --l2cache --l3cache --l3_size=128MB --mem-type=DDR4_2400_4x16  --mem-channels=4 "
 
 mkdir -p $CKPTDIR
 mkdir -p $RUNDIR
@@ -106,7 +107,7 @@ $GEM5_DIST_SH -n $NNODES                                                     \
                  $DEBUG_FLAGS                                                \
               --fs-args                                                      \
                   --ethernet-linkdelay=100ns --ethernet-linkspeed=99Gbps     \
-                  $CP \
+                  $TEST \
 		  --num-cpus=$1                                               \
                   --machine-type=VExpress_GEM5_V1                            \
                   --disk-image=$IMG                                          \
@@ -115,5 +116,5 @@ $GEM5_DIST_SH -n $NNODES                                                     \
                   --script=$BOOT_SCRIPT                                      \
                   --mem-size=16GB   --num-nep-rx-q=$2                                \
               --cf-args                                                      \
-                  $CHKPT_RESTORE --dist-sync-start=1000000t #--checkpoint-restore=2
+                  $CHKPT_RESTORE --dist-sync-start=1000000t --checkpoint-restore=1
 

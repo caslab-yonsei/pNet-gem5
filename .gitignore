@@ -34,3 +34,5 @@ test_out*
 vmlinux*
 /testrun
 /test-cp
+/rundir
+/.vscode

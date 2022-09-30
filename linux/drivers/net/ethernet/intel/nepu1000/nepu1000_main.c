@@ -354,6 +354,8 @@ static int e1000_request_msi_irq(struct e1000_adapter *adapter)
 	
 	//
 
+#ifdef CONFIG_NEPU_MASTER_IRQ
+
 	for (i = 0; i < 1; i ++){
 		err = request_irq(adapter->pdev->irq, handler, irq_flags, netdev->name,
 			  netdev);
@@ -364,7 +366,7 @@ static int e1000_request_msi_irq(struct e1000_adapter *adapter)
 	}	
 	//adapter->pdev->irq = 256;
 
-	
+#endif
 
 	for (i = 0; i < num_queue; i ++){
 		char* irq_name = adapter->irq_names[i];
