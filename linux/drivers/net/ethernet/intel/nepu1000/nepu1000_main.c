@@ -380,7 +380,7 @@ static int e1000_request_msi_irq(struct e1000_adapter *adapter)
 
 		// err = request_irq(adapter->pdev->irq+i, handler_mq, irq_flags, netdev->name,
 		// 	  netdev);
-		err = request_irq(adapter->pdev->irq+i+1, handler_mq, irq_flags, irq_name,
+		err = request_irq(adapter->pdev->irq+i, handler_mq, irq_flags, irq_name,
 			  netdev);
 		printk(KERN_ALERT "try alloc mq %d\n", adapter->pdev->irq+i+1);
 		if (err) {
