@@ -76,17 +76,21 @@ service nginx stop
 # Now that our network interface is configured we can use the usual commands to
 # contact the other systems, e.g. let's try to ping a "neighbour" system
 
-QUEUES=32
+QUEUES=4
 
 if ((MY_RANK < 1))
 then
+	#ping 192.168.0.3 -c 5
 	ncpu=$(grep -c processor /proc/cpuinfo)
 	for((i=0; i < $QUEUES; i++)) do
-		let core=2**$i
-		hex_core=$(printf "%x" $core) 
-		echo $hex_core > /proc/irq/$(expr 14 + $i)/smp_affinity
-		echo "IRQ $(expr 14 + $i)"
-		cat /proc/irq/$(expr 14 + $i)/smp_affinity
+        	let core=2**$i
+        	hex_core=$(printf "%x" $core) 
+        	echo $hex_core > /proc/irq/$(expr 14 + $i)/smp_affinity
+			echo "IRQ $(expr 14 + $i)"
+			cat /proc/irq/$(expr 14 + $i)/smp_affinity
+        	#echo $i > /proc/irq/$(expr 14 + $i)/smp_affinity_list
+        	#echo $i > /proc/irq/$(expr 14 + $i)/smp_affinity_list
+        	#echo $hex_core > /proc/irq/$(expr 14 + $i)/smp_affinity
 	done
 	for((i=0; i < $ncpu; i++)) do
 		taskset -c $i iperf3 -s -p $(expr 5201 + $i) &
@@ -105,19 +109,29 @@ else
 		echo $hex_core > /proc/irq/$(expr 14 + $i)/smp_affinity
 		echo "IRQ $(expr 14 + $i)"
 		cat /proc/irq/$(expr 14 + $i)/smp_affinity
-	done
+		#echo $i > /proc/irq/$(expr 14 + $i)/smp_affinity_list
+		#echo $i > /proc/irq/$(expr 14 + $i)/smp_affinity_list
+		#echo $hex_core > /proc/irq/$(expr 14 + $i)/smp_affinity
+    done
 
-	sleep 2
+	sleep 1
 	#python3 /home/clinet.py
 	/sbin/m5 resetstats 0
 	for((i=0; i < $QUEUES; i++)) do
 		taskset -c $i iperf3 -c 192.168.0.2 -p $(expr 5201 + $i) -t 1 > res$i.txt & 
 	done	
-	for((time=0 ; time < 12; time++)) do
+	for((time=0 ; time < 4; time++)) do
 		cat /proc/interrupts
 		cat /proc/stat
 		sleep 0.1
 	done
+	m5 checkpoint
+	for((time=0 ; time < 6; time++)) do
+		cat /proc/interrupts
+		cat /proc/stat
+		sleep 0.1
+	done
+	wait
 	for((i=0; i < $QUEUES; i++)) do
 		cat res$i.txt
 	done	

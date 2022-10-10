@@ -136,6 +136,9 @@ class MsiSended{
     //void Comlpete_of_child(void*) virtual
     //void CleanComlpete_of_child(void*) virtual
 
+    void serialize(const std::string &base, CheckpointOut &cp) const;
+    void unserialize(const std::string &base, CheckpointIn &cp);
+
 };
 
 class MultiDmaEngine;

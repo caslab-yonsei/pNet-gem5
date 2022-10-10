@@ -3412,6 +3412,11 @@ NepGbE::serialize(CheckpointOut &cp) const
     SERIALIZE_SCALAR(inter_time);
 
     SERIALIZE_SCALAR(pktOffset);
+    int int_mode = etherInt->get_int_mode();
+    SERIALIZE_SCALAR(int_mode);
+
+    rxDescCache.serializeSection(cp, "RxDescCache");
+    
 
     regs.serializeSection(cp, "Regs");
     txDescCache.serializeSection(cp, "TxDescCache");
@@ -3423,7 +3428,7 @@ NepGbE::serialize(CheckpointOut &cp) const
     //     DPRINTF(NepCkpt, "Serialize Nep Regs NepGbE %d\n", i);
     //     regs.nep_ex_regs[i].serialize(cp);
     // }
-    //rxDescCache.serializeSection(cp, "RxDescCache");
+    
 }
 
 void
@@ -3518,11 +3523,16 @@ NepGbE::unserialize(CheckpointIn &cp)
         schedule(interEvent, inter_time);
 
     UNSERIALIZE_SCALAR(pktOffset);
-
+    int int_mode = etherInt->get_int_mode();
+    UNSERIALIZE_SCALAR(int_mode);
+    etherInt->set_int_mode(int_mode);
+    
     regs.unserializeSection(cp, "Regs");
     txDescCache.unserializeSection(cp, "TxDescCache");
     mqManager.unserializeSection(cp, "MultiQueueManager");
-    //rxDescCache.unserializeSection(cp, "RxDescCache");
+    rxDescCache.unserializeSection(cp, "RxDescCache");
+
+
 }
 
 

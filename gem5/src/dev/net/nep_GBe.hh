@@ -823,8 +823,6 @@ class NepGbEInt : public EtherInt
         : EtherInt(name), dev(d), int_mode(INT_LEGACY)
     { }
 
-    
-
     virtual bool recvPacket(EthPacketPtr pkt) { return dev->ethRxPkt(pkt); }
     virtual void sendDone() { dev->ethTxDone(); }
     int set_int_mode(int type) 

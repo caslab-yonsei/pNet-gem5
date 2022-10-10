@@ -780,6 +780,11 @@ PciDevice::serialize(CheckpointOut &cp) const
     paramOut(cp, csprintf("pxcap.pxls"), uint16_t(pxcap.pxls));
     paramOut(cp, csprintf("pxcap.pxdcap2"), uint32_t(pxcap.pxdcap2));
     paramOut(cp, csprintf("pxcap.pxdc2"), uint32_t(pxcap.pxdc2));
+
+    for(int i = 0; i < msi_sended.size(); i++)
+    {
+        msi_sended[i]->serialize(csprintf("msi_sended[%d]", i), cp);
+    }
 }
 
 void
@@ -873,5 +878,25 @@ PciDevice::unserialize(CheckpointIn &cp)
     paramIn(cp, csprintf("pxcap.pxdc2"), tmp32);
     pxcap.pxdc2 = tmp32;
     pioPort.sendRangeChange();
+
+    for(int i = 0; i < msi_sended.size(); i++)
+    {
+        msi_sended[i]->unserialize(csprintf("msi_sended[%d]", i), cp);
+    }
 }
 
+void 
+MsiSended::serialize(const std::string &base, CheckpointOut &cp) const
+{
+    paramOut(cp, base + ".localnum", localnum);
+    paramOut(cp, base + ".sended", sended);
+    paramOut(cp, base + ".cleaned", cleaned);
+}
+
+void 
+MsiSended::unserialize(const std::string &base, CheckpointIn &cp)
+{
+    paramIn(cp, base + ".localnum", localnum);
+    paramIn(cp, base + ".sended", sended);
+    paramIn(cp, base + ".cleaned", cleaned);
+}

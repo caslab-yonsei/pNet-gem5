@@ -382,7 +382,7 @@ static int e1000_request_msi_irq(struct e1000_adapter *adapter)
 		// 	  netdev);
 		err = request_irq(adapter->pdev->irq+i, handler_mq, irq_flags, irq_name,
 			  netdev);
-		printk(KERN_ALERT "try alloc mq %d\n", adapter->pdev->irq+i+1);
+		printk(KERN_ALERT "try alloc mq %d\n", adapter->pdev->irq+i);
 		if (err) {
 			e_err(probe, "Unable to allocate interrupt RXTX Error: %d\n", err);
 		}
@@ -4263,7 +4263,7 @@ static irqreturn_t e1000_msi_mq_intr(int irq, void *data)
 	struct net_device *netdev = data;
 	struct e1000_adapter *adapter = netdev_priv(netdev);
 	struct e1000_hw *hw = &adapter->hw;
-	int qid = irq-(adapter->pdev->irq)-1; // 일단 이렇게 두자... TODO 자동으로 받기
+	int qid = irq-(adapter->pdev->irq); // 일단 이렇게 두자... TODO 자동으로 받기
 	////printk(KERN_ALERT "e1000_msi_mq_intr called! IRQ: %d, qid %d\n", irq, qid);
 
 	//u32 icr = er32(ICR);

@@ -76,7 +76,7 @@ GEM5_EXE=$GEM5_DIR/build/ARM/gem5.opt
 #BOOT_SCRIPT="/home/caslab/bst/IISWC/mQ-gem5/script/memcached_base.rcS"
 BOOT_SCRIPT="/home/jshin/research/mQ-gem5/mQ-gem5/cp_test_scripts/test/boot.easy.ckpt.rcS"
 #BOOT_SCRIPT="/home/jshin/research/mQ-gem5/mQ-gem5/cp_test_scripts/test/memcached_base.rcS"
-BOOT_SCRIPT="/home/jshin/research/mQ-gem5/mQ-gem5/cp_test_scripts/test/iperf_$2.rcS"
+#BOOT_SCRIPT="/home/jshin/research/mQ-gem5/mQ-gem5/cp_test_scripts/test/iperf_32.rcS"
 GEM5_DIST_SH=$GEM5_DIR/util/dist/gem5-dist.sh
 
 #DEBUG_FLAGS="--debug-flags=GICV2M,EthernetIntr,GIC,NepNicOthers " #"--debug-flags=DistEthernet"
@@ -85,12 +85,12 @@ GEM5_DIST_SH=$GEM5_DIR/util/dist/gem5-dist.sh
 NNODES=2
 #DEBUG_FLAGS="--debug-flags=MMU,GICV2M,NepMsi,NepNicIntr,NepNicOthers,NepNicRxManager,NepNicIntrMsi,PciDevice,MSIXBar,Ethernet,EthernetIntr "
 
-#DEBUG_FLAGS="--debug-flags=NepCkpt,GICV2M,Ethernet,EthernetIntr,NepNicIntrMsi,NepMsi,NepNicRxManager,NepNicOthers "
+DEBUG_FLAGS="--debug-flags=NepCkpt,GICV2M,NepMsi "
 
 CKPTDIR=$(pwd)/testrun/ckpt/ckpt_$1core_$2_16G-20221007-1705
-RUNDIR=$(pwd)/testrun/test-cp/ckpt_$1core_$2_16G-20221007-1705-ATOMIC
+RUNDIR=$(pwd)/testrun/test-cp/ckpt_$1core_$2_16G-20221007-1705-CP
 
-CP=" --cpu-type=AtomicSimpleCPU --cpu-clock=2GHz "
+CP=" --cpu-type=AtomicSimpleCPU --cpu-clock=4GHz "
 TEST=" --cpu-type=ex5_big --cpu-clock=4GHz   --caches   --l2cache --l3cache --l3_size=128MB --mem-type=DDR4_2400_4x16  --mem-channels=4 "
 
 mkdir -p $CKPTDIR
@@ -116,5 +116,5 @@ $GEM5_DIST_SH -n $NNODES                                                     \
                   --script=$BOOT_SCRIPT                                      \
                   --mem-size=16GB   --num-nep-rx-q=$2                                \
               --cf-args                                                      \
-                  $CHKPT_RESTORE --dist-sync-start=1000000t --checkpoint-restore=1
+                  $CHKPT_RESTORE --dist-sync-start=1000000t #--checkpoint-restore=1
 
