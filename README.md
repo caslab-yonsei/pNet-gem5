@@ -11,8 +11,8 @@ This project is based on the [gem5](https://www.gem5.org/) simulator. This repos
 ## Installation & Setup
 It is built based on gem5, and installation and execution are almost the same as gem5.
 ### Prerequisites
-- Recommended (and tested) operating system: 
-- Required dependencies:
+- Recommended (and tested) operating system: Ubuntu 20.04
+- Required dependencies: [Official Docs](https://www.gem5.org/documentation/general_docs/building) 
 
 ### Building the Simulator
 ```bash
@@ -20,7 +20,11 @@ It is built based on gem5, and installation and execution are almost the same as
 git clone https://github.com/caslab-yonsei/pNet-gem5.git
 cd pNet-gem5
 
+# Install dependencies
+# Please visit https://www.gem5.org/documentation/general_docs/building
+
 # Build gem5 (ARM only)
+# For Ubuntu 18.04
 scons build/ARM/gem5.opt -j$(nproc)
 ```
 
