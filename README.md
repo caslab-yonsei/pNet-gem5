@@ -24,11 +24,32 @@ cd pNet-gem5
 # Please visit https://www.gem5.org/documentation/general_docs/building
 
 # Build gem5 (ARM only)
-# For Ubuntu 18.04
+# For Ubuntu 20.04
+cd <pNet-gem5 root>/gem5
 scons build/ARM/gem5.opt -j$(nproc)
 ```
 
+### Building the kernel
+The NIC in pNet-gem5 requires a modified e1000 based driver.
+We modified Linux to control the NIC of pNet-gem5 and use the MSI controller of pNet-gem5. In order to run pNet-gem5 in a full-system environment, we need to use the kernel we modified.
+The provided config has options pre-set for using pNet-gem5.
+To use the NIC of pNet-gem5, you need to set the following options.
+- CONFIG_PCI_MSI=y
+- CONFIG_GENERIC_MSI_IRQ=y
+- CONFIG_NEPU1000=y/m (m recommended)
+- CONFIG_E1000=n/m (m recommended)
+Do not load both e1000 driver and nepu1000 driver. Please load the one that matches the device you are going to use.
+```bash
+# move to linux path
+cd <pNet-gem5 root>/linux
+./build.sh
+```
+
 ## To be written
+### Resources
+
+
 ### Running gem5
+
 ```bash
 ```
