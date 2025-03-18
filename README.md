@@ -29,7 +29,7 @@ cd <pNet-gem5 root>/gem5
 scons build/ARM/gem5.opt -j$(nproc)
 ```
 
-### Building the kernel
+### pNet-gem5 Kernel
 The NIC in pNet-gem5 requires a modified e1000 based driver.
 We modified Linux to control the NIC of pNet-gem5 and use the MSI controller of pNet-gem5. In order to run pNet-gem5 in a full-system environment, we need to use the kernel we modified.
 The provided config has options pre-set for using pNet-gem5.
@@ -45,11 +45,37 @@ cd <pNet-gem5 root>/linux
 ./build.sh
 ```
 
-## To be written
-### Resources
+### Other Resources
+You will need the usual resources for a full system simulation: Linux kernel (requires kernel for pNet-gem5), boot binary (included with gem5), DTB (for pNet-gem5), disk image. You 
+#### DTB and binaries
+can build the required binaries and DTB as follows:
+```bash
+# Build DTB.
+# If If device-tree-compiler(dtc) is not installed, install it first.
+# Ubuntu
+sudo apt install dtc
 
+# Build DTB
+cd <pNet-gem5 root>/gem5/system/arm/dt
+make
+
+# Build binaries
+cd <pNet-gem5 root>/gem5/system/arm/binaries
+make
+```
+#### Disk Image
+The disk image is not terribly important, but to avoid unexpected problems, it is recommended to use an image with a somewhat older version of Ubuntu installed.
+You can create the disk image yourself, but you can also download the image from [gem5_guest_binaries](https://www.gem5.org/documentation/general_docs/fullsystem/guest_binaries).
+Or you can download the latest images from [gem5-resources](https://resources.gem5.org/).
+
+### Config gem5
+Instead of IGbE_e1000, which is the NIC model of gem5, use NepGbE_base.
+Here is an example config:
+```python
+self.realview.ethernet = NepGbE_base(pci_bus=0, pci_dev=0, pci_func=0,
+                    num_of_queues=4, num_msi_engine = 4, MSICAPMsgCtrl = 0xFBFB,
+                    port_specific=port_specific_, dist_rank=dist_rank)
+```
 
 ### Running gem5
-
-```bash
-```
+It's not much different from running dist-gem5. For a detailed example, see the run script we provided.
